@@ -1,0 +1,23 @@
+
+.full-width-div {
+    position: absolute;
+    width: 100%;
+    left: 0;
+}
+
+.tbl-center {
+    border-radius: 5px;
+    /* width: 100%; */
+    margin: 0px auto;
+    float: none; 
+ }
+
+ /* for card dahbord */
+
+ /* .my-card
+{
+    position:absolute;
+    left:40%;
+    top:-20px;
+    border-radius:50%;
+} */

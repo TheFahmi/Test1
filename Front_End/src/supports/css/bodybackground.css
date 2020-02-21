@@ -1,0 +1,44 @@
+body {
+    /* font-family: 'roboto'; */
+    margin:0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    /* background-image: url('http://wallpapers.ae/wp-content/uploads/2014/10/Black-Pattern-Background-Wallpaper.jpg'); */
+    /* background-color: silver; */
+    background-size: "cover";
+    background-repeat: "no-repeat";
+}
+
+.bgthird {
+    height: 400px;
+    background-image: url("http://cdn.laptopmag.com/images/uploads/5586/g/lipad-pro-015.jpg");
+    background-repeat: no-repeat;
+    background-position: -75px -65px;   
+}
+
+.firstBackground {
+    background-image: url("https://www.befren.com/wp-content/uploads/2018/12/iPhone.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: -28px 0
+
+}
+
+.firstBackground2 {
+    background-image: url("https://mondrian.mashable.com/uploads%252Fcard%252Fimage%252F115012%252FApple_Watch_Edits_No_Watermark-2.jpg%252F950x534__filters%253Aquality%252890%2529.jpg?signature=EBFpFygpU5fXeHs8fBsCxncXa6Q=&source=https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+}
+
+.full-width-div {
+    position: absolute;
+    width: 100%;
+    left: 0;
+}
+
+.tables {
+    margin: auto;
+    width: 50% !important; 
+ }
