@@ -119,7 +119,7 @@ module.exports = {
 
             var paymentinvoice = invoice;
             var mailOptions = {
-                from: 'iGadget Store <budiyahmed@gmail.com>',
+                from: 'iGadget Store <hello.fahmihassan@gmail.com>',
                 to: email,
                 subject: 'Email For Payment Confirmation',
                 html: `berikut ini adalah kode invoice kamu. <br/> <h1 color="blue">${paymentinvoice}</h1>

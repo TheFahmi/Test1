@@ -109,7 +109,7 @@ class ProductsGridView extends Component {
                             </div>
                             <br/><br/>
                             <div className="row justify-content-center">
-                                <div className="col-lg-10">
+                                <div className="col-lg-8">
                                         {this.renderListProducts()}
                                 </div>
                                 <div style={{paddingRight: "500px", paddingLeft: "500px"}}>

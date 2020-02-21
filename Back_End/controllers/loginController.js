@@ -76,7 +76,7 @@ module.exports = {
 
                     var linkVerifikasi = `http://localhost:3000/verified?username=${username}&password=${hashPassword}`;
                     var mailOptions = {
-                        from: 'iGadget Store <budiyahmed@gmail.com>',
+                        from: 'iGadget Store <hello.fahmihassan@gmail.com>',
                         to: email,
                         subject: 'User Account Verification',
                         html: `Please Click this link to verification your account : <a href="${linkVerifikasi}">Account Verification!</a>`
