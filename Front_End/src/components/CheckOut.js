@@ -20,6 +20,7 @@ class CheckOut extends Component {
 
     getCartList = () => {
         axios.get("http://localhost:2002/cart/cart?username=" + this.props.username)
+        
         .then((res) => {
             var harga = 0;
             var kuantiti = 0;
@@ -29,6 +30,7 @@ class CheckOut extends Component {
             });
             this.setState({ cartList: res.data, selectedIdEdit: 0, totalPrice: harga, totalQty: kuantiti })
             console.log(this.state.cartList)
+            
         }).catch((err) => {
             console.log(err)
         })
@@ -38,14 +40,16 @@ class CheckOut extends Component {
                 var currentdate = new Date();
                 var date = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate() 
                 // + " " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-                var invoice = `${currentdate.getFullYear()}${(currentdate.getMonth() + 1)}${currentdate.getDate()}${currentdate.getHours()}${currentdate.getMinutes()}${currentdate.getSeconds()}`;
+
+                
+                var invoice = `INV-${currentdate.getFullYear()}${(currentdate.getMonth() + 1)}${currentdate.getDate()}${currentdate.getHours()}${currentdate.getMinutes()}${currentdate.getSeconds()}`;
 
                 axios.post('http://localhost:2002/listorder/listorder', {
                     username: this.props.username,
                     date,
                     totalprice: this.state.totalPrice,
                     totalquantity: this.state.totalQty,
-                    status: "Pending",
+                    status: "pending",
                     invoice,
                     email: this.props.email
                         
@@ -89,7 +93,7 @@ class CheckOut extends Component {
                     <td className="font-weight-bold" style={{ fontSize: '14px', }}>{item.Nama_product}</td>
                     <td style={{ fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
                     <td style={{ fontSize: '14px', }}>Quantity : {item.kuantiti}</td>
-                    {/* <td className="text-center" style={{ fontSize: '14px', }}>{myCurrency.format(item.harga * item.kuantiti)}</td> */}
+                    <td className="text-center" style={{ fontSize: '14px', }}>{myCurrency.format(item.harga * item.kuantiti)}</td>
                 </tr>
             )
 
@@ -113,13 +117,13 @@ class CheckOut extends Component {
                     <h2 className="section-heading text-uppercase text-center pt-5">Checkout</h2>
                             <table align="center" className="col-md-4 table table-striped table-hover bordered shadow mt-5">
                                 <thead className="thead-light">
-                                    {/* <tr>
-                                        <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>ID</center></th>
+                                    <tr>
+                                        {/* <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>ID</center></th> */}
                                         <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>Produk</center></th>
                                         <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>Harga</center></th>
                                         <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>Kuantiti</center></th>
                                         <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>Total Harga</center></th>
-                                    </tr> */}
+                                    </tr>
                                 </thead>
                                 <tbody>
                                         {this.renderListCart()}

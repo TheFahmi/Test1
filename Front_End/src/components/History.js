@@ -34,15 +34,15 @@ class History extends Component {
         })
     }
 
-    deleteTrx = (id) => {
-        axios.delete('http://localhost:2002/trx/deletetrx/' + id)
-            .then((res) => {
-                console.log(res);
-                this.showOrders();
-            }).catch((err) => {
-                console.log(err);
-            })
-    }
+    // deleteTrx = (id) => {
+    //     axios.delete('http://localhost:2002/trx/deletetrx/' + id)
+    //         .then((res) => {
+    //             console.log(res);
+    //             this.showOrders();
+    //         }).catch((err) => {
+    //             console.log(err);
+    //         })
+    // }
 
     userOrderDetails = (id) => {
         axios.get('http://localhost:2002/orderdetail/orderdetail?idtrx=' + id)
@@ -71,9 +71,9 @@ class History extends Component {
                         <td>
                             <button className="btn btn-info" style={{borderRadius: '30px', height: '30px', width: '30px'}} title="see detail" onClick={() => this.userOrderDetails(item.id)}><i className="fa fa-info fa-md" style={{fontSize: '14px', }}></i></button>
                         </td>
-                        <td>
+                        {/* <td>
                             <button className="btn btn-danger" style={{borderRadius: '30px', height: '30px', width: '30px'}} title="delete" onClick={() => this.deleteTrx(item.id)}><i style={{fontSize: '14px', }} className="fa fa-trash fa-md"></i></button>                            
-                        </td>
+                        </td> */}
                     </tr>
                 )
             })        
@@ -91,7 +91,7 @@ class History extends Component {
                     <td style={{fontSize: '14px', }}>{item.namaproduk}</td>
                     <td style={{fontSize: '14px', }}>{myCurrency.format(item.hargaproduk)}</td>
                     <td style={{fontSize: '14px', }}>Qty: {item.kuantiti}</td>
-                    <td style={{fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100}/>{item.gambar}</td>
+                    <td style={{fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}}/>{item.gambar}</td>
                 </tr>
             )
 

@@ -60,7 +60,7 @@ class AllWishList extends Component {
                         {/* <td className="text-center" style={{ fontSize: '14px', }}><center>{item.id}</center></td> */}
                         <td style={{ fontSize: '14px', }}>{item.Nama_product}</td>
                         <td style={{ fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
-                        <td><center><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100} /></center></td>
+                        <td><center><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}} /></center></td>
                         <td style={{ fontSize: '14px', }}>{item.username}</td>
                         <td>
                             <center>

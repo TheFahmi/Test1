@@ -106,7 +106,7 @@ class ConcessionListView extends Component {
                         {/* <td className="text-center" style={{fontSize: '14px', }}>{item.id}</td> */}
                         <td className="text-center" style={{fontSize: '14px', }}>{item.Nama_product}</td>
                         <td className="text-center" style={{fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
-                        <td><center><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100} /></center></td>
+                        <td><center><img src={`http://localhost:2002${item.image}`} height='10' width='10' /></center></td>
                         <td className="text-center" style={{fontSize: '14px', }}><input type="number" defaultValue={item.kuantiti}  size="4" 
                         ref="quantity" className="form-control" /></td>
                         <td className="text-center" style={{fontSize: '14px', }}>{myCurrency.format(item.harga * item.kuantiti)}</td>
@@ -132,7 +132,8 @@ class ConcessionListView extends Component {
                     {/* <td className="text-center" style={{fontSize: '14px', }}>{item.id}</td> */}
                     <td className="text-center" style={{fontSize: '14px', }}>{item.Nama_product}</td>
                     <td className="text-center" style={{fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
-                    <td><center><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100} /></center></td>
+                    
+                    <td><center><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}} /></center></td>
                     <td className="text-center" style={{fontSize: '14px', }}>{item.kuantiti}</td>
                     <td className="text-center" style={{fontSize: '14px', }}>{myCurrency.format(item.harga * item.kuantiti)}</td>
                     <td>

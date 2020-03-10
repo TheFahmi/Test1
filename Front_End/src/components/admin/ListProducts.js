@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import ProductsList from './ProductsList';
 
-class ListProducts extends Component {
+class ManageProducts extends Component {
 
     render() {
     
@@ -13,8 +13,8 @@ class ListProducts extends Component {
             <div className="row">
               <div className="col-lg-2" style={{ marginBottom: "20px" }}>
                 <div className="list-group">
-                  {/* <a href="/admin/dashbord" className="list-group-item">Dashbord</a> */}
-                  <a href="/admin/productslist" className="list-group-item active">Manage Products</a>
+                  {/* <a href="/admin/Dashboard" className="list-group-item">Dashboard</a> */}
+                  <a href="/admin/manageproducts" className="list-group-item active">Manage Products</a>
                   <a href="/admin/manageusers" className="list-group-item">Manage Users</a>
                 </div>
               </div>
@@ -31,9 +31,9 @@ class ListProducts extends Component {
               <div className="row">
                 <div className="col-lg-2" style={{ marginBottom: "20px" }}>
                 <div className="list-group">
-                    <a href="/admin/dashbord" className="list-group-item">Dashbord</a>
-                    <a href="/admin/confirmtransaction" className="list-group-item">Transaction Confirmation</a>
-                    <a href="/admin/productslist" className="list-group-item active">Manage Products</a>
+                    <a href="/admin/Dashboard" className="list-group-item">Dashboard</a>
+                    <a href="/admin/confirmtransaction" className="list-group-item">Transactions Confirmation</a>
+                    <a href="/admin/manageproducts" className="list-group-item active">Manage Products</a>
                     <a href="/admin/manageusers" className="list-group-item">Manage Users</a>
                     <a href="/admin/managetrx" className="list-group-item">Manage Transaction</a>
                     <a href="/admin/managewishlist" className="list-group-item">See Wishlist</a>
@@ -59,4 +59,4 @@ const mapStateToProps = (state) => {
   return { username: state.auth.username, myRole: state.auth.role }
 }
 
-export default connect(mapStateToProps)(ListProducts);
+export default connect(mapStateToProps)(ManageProducts);

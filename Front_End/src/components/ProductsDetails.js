@@ -4,6 +4,7 @@ import axios from 'axios';
 import { select_products } from '../actions';
 import queryString from 'query-string';
 import { Button, InputGroup, InputGroupAddon } from 'reactstrap';
+import { toast } from 'react-toastify'
 // import { Redirect } from 'react-router-dom';
 
 
@@ -58,8 +59,13 @@ class ProductsDetails extends Component {
                     }).catch((err) => {
                         console.log(err);
                     })
-                    alert('Succes add to cart!')
+                    toast(`Success add to cart`, {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                        className: 'toast-container'
+                        
+                    })
                     window.location = "/cart";
+                    
                 } else {
                     axios.post("http://localhost:2002/cartplus/cartplus", {
                         user_id : this.props.id,

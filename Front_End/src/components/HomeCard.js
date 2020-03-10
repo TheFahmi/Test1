@@ -4,7 +4,7 @@ class HomeCard extends Component {
     render() {
         return(
             <div>
-            <div className="row">
+            {/* <div className="row">
                 <div className="col col-md-6 firstBackground" style={{height: '400px'}}>
                 </div>
                 <div className="col col-md-6 bg-light border">
@@ -45,7 +45,7 @@ class HomeCard extends Component {
                     </a>
                     </center>
                 </div>
-            </div>
+            </div> */}
             </div>
         )
     }

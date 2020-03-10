@@ -1,13 +1,14 @@
 const productRouter = require('./productRouter');
 const cartRouter = require('./cartRouter');
-const categoryRouter = require('./categoryRouter');
-const genderRouter = require('./genderRouter');
+const dashboardRouter = require('./dashboardRouter');
+const userRouter = require('./userRouter');
+const transRouter = require('./transRouter');
 // const userController = require('./userRouter')
 
 module.exports = {
     productRouter,
     cartRouter,
-    categoryRouter,
-    genderRouter,
-    // userController
+    dashboardRouter,
+    transRouter,
+    userRouter
 }

@@ -168,7 +168,7 @@ class WIshlistCart extends Component {
                     <tr>
                     <td style={{ fontSize: '14px', }}>{item.Nama_product}</td>
                     <td style={{ fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
-                        <td><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100} /></td>
+                        <td><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}} /></td>
                     <td>
                         <center>
                             <button className="btn btn-danger" style={{borderRadius: '30px', height: '30px', width: '30px'}}
@@ -195,7 +195,7 @@ class WIshlistCart extends Component {
                     return (
                         <article className="card-body mx-auto" style={{height: "700px"}}>
                             <div className="col-lg-12 text-center">
-                                <h2 className="section-heading text-uppercase">WIshlist</h2>
+                                <h2 className="section-heading text-uppercase">Wishlist</h2>
                                 <br />
                             </div>
                             <br />

@@ -26,9 +26,11 @@ import ConfirmTrx from './components/admin/ConfirmTrx';
 import ListProducts from './components/admin/ListProducts';
 import ConfirmOrder from './components/ConfirmOrder';
 import SeeWishlist from './components/admin/SeeWishlist';
-import Dashbord from './components/admin/Dashbord';
+import Dashboard from './components/admin/Dashboard';
 import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
+import './App.css';
+import './assets/css/material-kit.css';
 
 const cookies = new Cookies();
 
@@ -73,7 +75,7 @@ class App extends Component {
         <Route path="/admin/confirmtransaction" component={ConfirmTrx}/>
         <Route path="/admin/productslist" component={ListProducts}/>
         <Route path="/admin/managewishlist" component={SeeWishlist} />
-        <Route path="/admin/dashbord" component={Dashbord} />
+        <Route path="/admin/Dashboard" component={Dashboard} />
         <Route path="*" component={PageNotFound} />
         </Switch>
           </div>

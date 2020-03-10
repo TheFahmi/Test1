@@ -323,11 +323,11 @@ module.exports = {
     },
 
     getConfirm: (req, res) => {
-        var sql = `SELECT 
-        konfirmasiorder.username AS nama, konfirmasiorder.id AS idConfirm, image, status,
+        var sql = `SELECT konfirmasiorder.username AS nama, konfirmasiorder.id AS idConfirm, image, status,
         daftarorder.id AS id, daftarorder.invoice AS invoice, date, totalquantity, totalprice
         FROM daftarorder
-        JOIN konfirmasiorder ON konfirmasiorder.invoice = daftarorder.invoice`;
+        JOIN konfirmasiorder ON konfirmasiorder.invoice = daftarorder.invoice
+        WHERE STATUS = 'pending'`;
         db.query(sql, (err, result) => {
             if (err) throw err;
             res.send(result);

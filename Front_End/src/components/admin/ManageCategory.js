@@ -15,7 +15,7 @@
 //                             <div className="list-group">
 //                               <a href="/admin/confirmtransaction" className="list-group-item">Konfirmasi Transaksi</a>
 //                               <a href="/admin/manageproducts" className="list-group-item">Manage Produk</a>
-//                               <a href="/admin/productslist" className="list-group-item">List Produk</a>
+//                               <a href="/admin/manageproducts" className="list-group-item">List Produk</a>
 //                               <a href="/admin/manageusers" className="list-group-item">Manage User</a>
 //                               <a href="/admin/managetrx" className="list-group-item">Manage Transaksi</a>
 //                               <a href="/admin/managecategory" className="list-group-item active">Manage Kategori</a>

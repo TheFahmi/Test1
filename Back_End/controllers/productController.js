@@ -22,7 +22,7 @@ module.exports = {
         })
     },
     // tampilkan list product sebelum di join
-    listProducts: (req, res) => {
+    ManageProducts: (req, res) => {
         var sql = `select * from products`;
         db.query(sql, (err, result) => {
             if (err) throw err;

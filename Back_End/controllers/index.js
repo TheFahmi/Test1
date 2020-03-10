@@ -1,13 +1,15 @@
 const productController = require('./productController');
 const loginController = require('./loginController');
 const cartController = require('./cartController');
-const allCategories = require('./categoryController');
-const allGender = require('./genderController');
+const alldashboard = require('./dashboardController');
+const allUser = require('./userController');
+const allTrans = require('./transController')
 
 module.exports = {
     productController,
     loginController,
     cartController,
-    allCategories,
-    allGender,
+    alldashboard,
+    allUser,
+    allTrans
 }

@@ -101,7 +101,7 @@ class ListConfirm extends Component {
                     <td style={{ fontSize: '14px', }}>
                         <select ref="editStatus">
                             <option>Pending</option>
-                            <option>Confirm</option>
+                            <option>sent</option>
                         </select>
                     </td>
                     <td style={{ fontSize: '14px', }}>
@@ -125,7 +125,7 @@ class ListConfirm extends Component {
                     {/* <td className="text-center" style={{ fontSize: '14px', }}>{item.id}</td>
                     <td className="text-center" style={{ fontSize: '14px', }}>{item.idConfirm}</td> */}
                     <td style={{ fontSize: '14px', }}>{item.nama}</td>
-                    <td style={{ fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100}/></td>
+                    <td style={{ fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}}/></td>
                     <td style={{ fontSize: '14px', }}>{item.invoice}</td>
                     <td style={{ fontSize: '14px', }}>{this.props.convertdate(item.date)}</td>
                     <td style={{ fontSize: '14px', }}>{item.totalquantity}</td>
@@ -200,7 +200,7 @@ class ListConfirm extends Component {
                                 activePage={this.state.activePage}
                                 itemsCountPerPage={this.state.itemPerPage}
                                 totalItemsCount={this.state.searchList.length}
-                                pageRangeDisplayed={5}
+                                pageRangeDisplayed={2}
                                 onChange={this.handlePageChange.bind(this)}
                             />
                         </div>

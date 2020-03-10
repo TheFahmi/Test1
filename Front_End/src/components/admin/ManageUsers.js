@@ -13,8 +13,8 @@ class ManageUsers extends Component {
             <div className="row">
               <div className="col-lg-2" style={{ marginBottom: "20px" }}>
                 <div className="list-group">
-                  {/* <a href="/admin/dashbord" className="list-group-item">Dashbord</a> */}
-                  <a href="/admin/productslist" className="list-group-item">Manage Products</a>
+                  {/* <a href="/admin/Dashboard" className="list-group-item">Dashboard</a> */}
+                  <a href="/admin/manageproducts" className="list-group-item">Manage Products</a>
                   <a href="/admin/manageusers" className="list-group-item active">Manage Users</a>
                 </div>
               </div>
@@ -31,11 +31,11 @@ class ManageUsers extends Component {
               <div className="row">
                 <div className="col-lg-2" style={{ marginBottom: "20px" }}>
                 <div className="list-group">
-                    <a href="/admin/dashbord" className="list-group-item">Dashbord</a>
-                    <a href="/admin/confirmtransaction" className="list-group-item">Transaction Confirmation</a>
-                    <a href="/admin/productslist" className="list-group-item">Manage Product</a>
+                    <a href="/admin/Dashboard" className="list-group-item">Dashboard</a>
+                    <a href="/admin/confirmtransaction" className="list-group-item">Transactions Confirmation</a>
+                    <a href="/admin/manageproducts" className="list-group-item">Manage Products</a>
                     <a href="/admin/manageusers" className="list-group-item active">Manage Users</a>
-                    <a href="/admin/managetrx" className="list-group-item">Manage Transacion</a>
+                    <a href="/admin/managetrx" className="list-group-item">Manage Transactions</a>
                     <a href="/admin/managewishlist" className="list-group-item">See Wishlist</a>
                 </div>
                 </div>

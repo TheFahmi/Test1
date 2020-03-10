@@ -17,7 +17,7 @@ router.get('/listproduct', productController.getProduct);
 // router.post('/addjoinproduct', productController.addJoinProduct);
 // router.get('/getjoinproduct', productController.getJoinProduct)
 // manage product sebelum di join 
-router.get('/getproducts', productController.listProducts)
+router.get('/getproducts', productController.ManageProducts)
 router.delete('/deleteproduct/:id', productController.deleteProduct);
 router.put('/editproduct/:id', productController.editProduct);
 router.post('/addproduct', productController.addProduct)

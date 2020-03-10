@@ -151,7 +151,7 @@ class HistoryList extends Component {
                     <td className="text-center" style={{fontSize: '14px', }}>{item.namaproduk}</td>
                     <td className="text-center" style={{ fontSize: '14px', }}>{myCurrency.format(item.hargaproduk)}</td>
                     <td className="text-center" style={{fontSize: '14px', }}>Qty: {item.kuantiti}</td>
-                    <td className="text-center" style={{fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100}/>{item.gambar}</td>
+                    <td className="text-center" style={{fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}}/>{item.gambar}</td>
                 </tr>
             )
 

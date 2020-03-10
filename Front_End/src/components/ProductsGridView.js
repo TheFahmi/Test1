@@ -7,8 +7,8 @@ import Pagination from 'react-js-pagination';
 
 class ProductsGridView extends Component {
     
-    state = {   listProducts: [], 
-                searchListProducts: [], 
+    state = {   ManageProducts: [], 
+                searchManageProducts: [], 
                 totalQty: 0, 
                 activePage: 1,
                 itemPerPage: 9
@@ -28,8 +28,8 @@ class ProductsGridView extends Component {
         .then((res) => {
             console.log(res);
             this.setState({ 
-                listProducts: res.data, 
-                searchListProducts: res.data,
+                ManageProducts: res.data, 
+                searchManageProducts: res.data,
             });
         }).catch((err) => {
             console.log(err);
@@ -42,7 +42,7 @@ class ProductsGridView extends Component {
         // var hargaMin = this.refs.hargaMinSearch.value;
         // var hargaMax = this.refs.hargaMaxSearch.value;
 
-        var arrSearch = this.state.listProducts.filter((item) => {
+        var arrSearch = this.state.ManageProducts.filter((item) => {
             // return item.merk.toLowerCase().includes(merk.toLowerCase())
             //     && item.harga.toLowerCase() >= hargaMin.toLowerCase()
             //     && item.harga.toLowerCase() <= hargaMax.toLowerCase()
@@ -50,14 +50,14 @@ class ProductsGridView extends Component {
             return item.nama.toLowerCase().includes(nama.toLowerCase())
         })
 
-        this.setState({ searchListProducts: arrSearch })
+        this.setState({ searchManageProducts: arrSearch })
     }
 
 // render produk dengan isi yang diimport dari file productitem
-    renderListProducts = () => {
+    renderManageProducts = () => {
         var lastIndex = this.state.activePage * this.state.itemPerPage;
         var firstIndex = lastIndex - this.state.itemPerPage;
-        var renderedProjects = this.state.searchListProducts.slice(firstIndex, lastIndex);
+        var renderedProjects = this.state.searchManageProducts.slice(firstIndex, lastIndex);
         var listJSXProducts = renderedProjects.map((item) => {
             return (
                 <ProductsItems products={item} />
@@ -69,7 +69,7 @@ class ProductsGridView extends Component {
 
 // redirect ke page admin jiko role yang login adalah "ADMIN"
     adminToManage = () => {
-        return window.location = "/admin/productslist";
+        return window.location = "/admin/manageproducts";
     }
 
     render() { 
@@ -110,13 +110,13 @@ class ProductsGridView extends Component {
                             <br/><br/>
                             <div className="row justify-content-center">
                                 <div className="col-lg-8">
-                                        {this.renderListProducts()}
+                                        {this.renderManageProducts()}
                                 </div>
                                 <div style={{paddingRight: "500px", paddingLeft: "500px"}}>
                                 <Pagination
                                         activePage={this.state.activePage}
                                         itemsCountPerPage={this.state.itemPerPage}
-                                        totalItemsCount={this.state.searchListProducts.length}
+                                        totalItemsCount={this.state.searchManageProducts.length}
                                         pageRangeDisplayed={5}
                                         onChange={this.handlePageChange.bind(this)}
                                     />

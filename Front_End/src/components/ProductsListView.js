@@ -9,7 +9,7 @@ class ProductsListView extends Component {
     state = {   
                 listJoinProduct: [], 
                 selectedIdEdit: 0, 
-                searchListProducts: [],
+                searchManageProducts: [],
                 listProduct: [],
                 listCategories: [],
                 listVarian: [],
@@ -38,7 +38,7 @@ class ProductsListView extends Component {
                 console.log(res);
                 this.setState({ 
                     listJoinProduct: res.data, 
-                    searchListProducts: res.data, 
+                    searchManageProducts: res.data, 
                     selectedIdEdit: 0 
                 });
             }).catch((err) => {
@@ -140,7 +140,7 @@ class ProductsListView extends Component {
             
         })
 
-        this.setState({ searchListProducts: arrSearch })
+        this.setState({ searchManageProducts: arrSearch })
 
     }
 
@@ -171,7 +171,7 @@ class ProductsListView extends Component {
             return item.nama.toLowerCase().includes(nama.toLowerCase())
         })
 
-        this.setState({ searchListProducts: arrSearch })
+        this.setState({ searchManageProducts: arrSearch })
     }
 
     adminAddAction = () => {
@@ -205,7 +205,7 @@ class ProductsListView extends Component {
     renderlistJoinProduct = () => {
         var indexOfLastTodo = this.state.activePage * this.state.itemPerPage;
         var indexOfFirstTodo = indexOfLastTodo - this.state.itemPerPage;
-        var renderedProjects = this.state.searchListProducts.slice(indexOfFirstTodo, indexOfLastTodo);
+        var renderedProjects = this.state.searchManageProducts.slice(indexOfFirstTodo, indexOfLastTodo);
         var listJSXLocation = renderedProjects.map((item) => {
 
         if(item.id === this.state.selectedIdEdit) {
@@ -313,7 +313,7 @@ class ProductsListView extends Component {
                         <Pagination
                             activePage={this.state.activePage}
                             itemsCountPerPage={this.state.itemPerPage}
-                            totalItemsCount={this.state.searchListProducts.length}
+                            totalItemsCount={this.state.searchManageProducts.length}
                             pageRangeDisplayed={5}
                             onChange={this.handlePageChange.bind(this)}
                             />

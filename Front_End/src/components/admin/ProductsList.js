@@ -221,7 +221,7 @@ class ProductsList extends Component {
                     {/* <td style={{ fontSize: '14px', }}>{item.id}</td> */}
                     <td style={{ fontSize: '14px', }}>{item.nama}</td>
                     <td style={{ fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
-                    <td><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100} /></td>
+                    <td><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}} /></td>
                     <td style={{ fontSize: '14px', }}>{item.deskripsi}</td>
                     <td className="text-center" style={{ fontSize: '14px', }}>
                         <button className="btn btn-info" title="edit" style={{borderRadius: '30px', height: '30px', width: '30px'}}

@@ -52,9 +52,11 @@ class ConfirmOrder extends Component {
             }
             formData.append('data', JSON.stringify(data))
 
+            
+
             axios.post("http://localhost:2002/confirm/confirmorder", formData, headers)
             .then((res) => {
-                // alert("Konfirmasi Sukses, Silahkan Duduk Manis dan Barang Pesanan Anda Akan Segera Tiba..")
+                alert("Konfirmasi Sukses, Silahkan Duduk Manis dan Barang Pesanan Anda Akan Segera Tiba..")
             })
             .catch((err) =>{
                 console.log(err)
@@ -63,7 +65,7 @@ class ConfirmOrder extends Component {
         else {
             alert('Image harus diisi!')
         }
-        alert("Payment Confirm Success!!! Please wait few minutes.")
+        // alert("Payment Confirm Success!!! Please wait few minutes.")
         window.location = '/productsgridview'
     }
 
@@ -100,8 +102,8 @@ class ConfirmOrder extends Component {
                                         <thead className="thead-light border">
                                             <tr>
                                                 <th scope="col" colSpan="3" className="font-weight-bold" style={{ fontSize: '16px', }}><center>Invoice</center></th>
-                                                    {/* <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>Bukti Transfer</center></th>
-                                                    <th></th> */}
+                                                    <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>Bukti Transfer</center></th>
+                                                    <th></th>
                                             </tr>
                                         </thead>
                                             <tbody>
