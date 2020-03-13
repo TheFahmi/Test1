@@ -38,20 +38,27 @@ class ListConfirm extends Component {
                     searchList: res.data,
                     selectedIdEdit: 0 
                 });
+                console.log(this.state.listConfirm[0].email)
             }).catch((err) => {
                 console.log(err);
             })
     }
 
-    adminConfirm = (id) => {    
-        const status = this.refs.editStatus.value
-        axios.put(`http://localhost:2002/confirm/editadmin/${id}`, {
-            status
-        }).then((res) => {
-            this.showListConfirm()
-        }).catch((err) => {
-            console.log(err);
-        })
+    adminConfirm = (id) => {
+        for(let i = 0; i < this.state.listConfirm.length; i++) {
+            // this.state.listConfirm[i]
+            const status = this.refs.editStatus.value
+            const email = this.state.listConfirm[i].email
+            const invoice = this.state.listConfirm[i].invoice
+            axios.put(`http://localhost:2002/confirm/editadmin/${id}`, {
+                status, invoice, email
+            }).then((res) => {
+                this.showListConfirm()
+            }).catch((err) => {
+                console.log(err);
+            })
+        }         
+       
             
     }
 
@@ -85,6 +92,7 @@ class ListConfirm extends Component {
         var indexOfLastTodo = this.state.activePage * this.state.itemPerPage;
         var indexOfFirstTodo = indexOfLastTodo - this.state.itemPerPage;
         var renderedProjects = this.state.searchList.slice(indexOfFirstTodo, indexOfLastTodo);
+        // console.log(this.state.listConfirm.id)
         var listJSXCategory = renderedProjects.map((item) => {
 
         if (item.id === this.state.selectedIdEdit) {
@@ -93,6 +101,7 @@ class ListConfirm extends Component {
                     {/* <td style={{ fontSize: '14px', }}>{item.id}</td>
                     <td style={{ fontSize: '14px', }}>{item.idConfirm}</td> */}
                     <td style={{ fontSize: '14px', }}>{item.nama}</td>
+                    <td style={{ fontSize: '14px', }}>{item.email}</td>
                     <td style={{ fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100}/></td>
                     <td style={{ fontSize: '14px', }}>{item.invoice}</td>
                     <td style={{ fontSize: '14px', }}>{this.props.convertdate(item.date)}</td>
@@ -125,6 +134,7 @@ class ListConfirm extends Component {
                     {/* <td className="text-center" style={{ fontSize: '14px', }}>{item.id}</td>
                     <td className="text-center" style={{ fontSize: '14px', }}>{item.idConfirm}</td> */}
                     <td style={{ fontSize: '14px', }}>{item.nama}</td>
+                    <td style={{ fontSize: '14px', }}>{item.email}</td>
                     <td style={{ fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}}/></td>
                     <td style={{ fontSize: '14px', }}>{item.invoice}</td>
                     <td style={{ fontSize: '14px', }}>{this.props.convertdate(item.date)}</td>
@@ -182,6 +192,7 @@ class ListConfirm extends Component {
                                     {/* <th scope="col" className="font-weight-bold" style={{ fontSize: '14px', }}><center>ID</center></th>
                                     <th scope="col" className="font-weight-bold" style={{ fontSize: '14px', }}><center>ID Konfirmasi</center></th> */}
                                     <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '14px', }}>User</th>
+                                    <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '14px', }}>Email</th>
                                     <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '14px', }}>Transfer Payment</th>
                                     <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '14px', }}>Invoice</th>
                                     <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '14px', }}>Date Trx</th>

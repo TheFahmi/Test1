@@ -55,6 +55,7 @@ app.use('/orders', cartRouter);
 app.use('/orderdetail', cartRouter);
 app.use('/confirm', cartRouter);
 app.use('/confirmtrx', cartRouter);
+app.use('/invoice',cartRouter);
 // app.use('/category', categoryRouter);
 app.use('/users', userRouter);
 app.use('/trx', transRouter);

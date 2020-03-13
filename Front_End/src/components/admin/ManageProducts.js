@@ -35,7 +35,7 @@ class ManageProducts extends Component {
                     <a href="/admin/confirmtransaction" className="list-group-item">Transactions Confirmation</a>
                     <a href="/admin/manageproducts" className="list-group-item active">Manage Products</a>
                     <a href="/admin/manageusers" className="list-group-item">Manage Users</a>
-                    <a href="/admin/managetrx" className="list-group-item">Manage Transaction</a>
+                    <a href="/admin/managetrx" className="list-group-item">Manage Transactions</a>
                     <a href="/admin/managewishlist" className="list-group-item">See Wishlist</a>
                 </div>
                 </div>
@@ -56,7 +56,8 @@ class ManageProducts extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { username: state.auth.username, myRole: state.auth.role }
+  return { username: state.auth.username, 
+           myRole: state.auth.role }
 }
 
 export default connect(mapStateToProps)(ManageProducts);

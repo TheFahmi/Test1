@@ -11,7 +11,7 @@ class Footer extends Component {
     render() {
         return (
             
-            <footer class="footer footer-black footer-big">
+            <footer className="footer footer-black footer-big">
             <div className="container ">
 
                 <div className="content">

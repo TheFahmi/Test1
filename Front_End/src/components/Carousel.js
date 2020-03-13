@@ -17,7 +17,7 @@ class Carousels extends Component {
                     <a href="/productsgridview">
                     <h1 style={{color: 'white'}}>Apple Watch Series</h1>
                     <img src="https://i.ytimg.com/vi/naIaW4pk_-o/maxresdefault.jpg"
-                        alt="adidas-nmd-x-bape" width={'500px'} height={'300px'} className="img-responsive" />
+                        alt="adidas-nmd-x-bape" width={500} height={300} className="img-responsive" />
                     </a>
                 </div>
                 <a href="/productsgridview">

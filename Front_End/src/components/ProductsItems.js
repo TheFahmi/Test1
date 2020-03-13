@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { select_products } from '../actions';
-import { Card, Col, CardText,CardTitle } from 'reactstrap';
+// import { Card, Col, CardText,CardTitle } from 'reactstrap';
 import { Link } from 'react-router-dom';
 // import { FaHeart } from "react-icons/fa";
 
@@ -13,7 +13,7 @@ class ProductsItems extends Component {
     componentDidMount() {
         axios.get('http://localhost:2002/product/getproducts')
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 this.setState({
                     listProducts: res.data
                 });
@@ -26,18 +26,29 @@ class ProductsItems extends Component {
         this.props.select_products(this.props.products);
     }
 
-    renderListProducts = () => {
-        var listJSXCategory = this.state.listProducts.map((item) => {
-            return (
-                <div>
-                    <h1>{item.nama}</h1>
-                    <h2>{item.harga}</h2>
-                    <h4><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100} /></h4>
-                </div>
+    // renderListProducts = () => {
+    //     var listJSXCategory = this.state.listProducts.map((item) => {
+    //         return (
+    //             <div>
+    //                 <h1>{item.nama}</h1>
+    //                 <h2>{item.harga}</h2>
+    //                 <h4><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100} /></h4>
+    //             </div>
 
-            )
-        })
-        return listJSXCategory;
+    //         )
+    //     })
+    //     return listJSXCategory;
+    // }
+
+    StockCheck = () => {
+
+        if (this.state.listProducts[0].stok < 1){
+            var stock = "Out of Stock"
+        }
+        else{
+            var stock = "ready"
+        }
+        return stock
     }
 
     
@@ -92,14 +103,11 @@ class ProductsItems extends Component {
                         <p className="card-description">Bergaransi Resmi iBox Indonesia selama 1 Tahun, Dapatkan segera</p>
                         <div className="footer">
                             <div className="price-container">
-                                
+                            
                                 <span className="price price-new">{rupiah.format(harga)}</span>
                             </div>
                             <div className="stats">
-                                {/* <FaHeart className="btn btn-just-icon btn-simple btn-rose" />
-                                <button fa type="button" title="Saved to Wishlist"  className="FaHeart btn btn-just-icon btn-simple btn-rose" >
-                                    <i className="material-icons"></i>
-                                </button> */}
+                            <button disabled className='rounded-pill px-2 btn-primary' >{this.StockCheck}</button>
                                  <span className="" >
                                <button className="btn btn-info" title="Add To Cart" onClick={this.onItemClick} style={{borderRadius: '40px', height: '40px', width: '40px'}}><i className="fa fa-shopping-cart fa-lg fa-2x" /></button>
                            </span>

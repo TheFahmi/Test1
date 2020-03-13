@@ -63,7 +63,8 @@ class History extends Component {
                 return (
                     <tr>
                         {/* <td className="text-center" style={{fontSize: '12px', }}>{item.id}</td> */}
-                        <td style={{fontSize: '14px', }}>{item.username}</td>
+                        {/* <td style={{fontSize: '14px', }}>{item.username}</td> */}
+                        <td style={{fontSize: '14px', }}>{item.invoice}</td>
                         <td style={{fontSize: '14px', }}>{this.props.convertdate(item.date)}</td>
                         <td style={{fontSize: '14px', }}>{item.totalquantity}</td>
                         <td style={{fontSize: '14px', }}>{myCurrency.format(item.totalprice)}</td>
@@ -113,7 +114,8 @@ class History extends Component {
                                     <thead className="thead-light">
                                         <tr>
                                             {/* <th scope="col" className="font-weight-bold text-uppercase" ><center>ID Transaksi</center></th> */}
-                                            <th scope="col" className="font-weight-bold" style={{fontSize: '15px'}}>Username</th>
+                                            {/* <th scope="col" className="font-weight-bold" style={{fontSize: '15px'}}>Username</th> */}
+                                            <th scope="col" className="font-weight-bold" style={{fontSize: '15px'}}>Invoice</th>
                                             <th scope="col" className="font-weight-bold" style={{fontSize: '15px'}}>Transaction Date</th>
                                             <th scope="col" className="font-weight-bold" style={{fontSize: '15px'}}>Total Qty</th>
                                             <th scope="col" className="font-weight-bold" style={{fontSize: '15px'}}>Total Price</th>

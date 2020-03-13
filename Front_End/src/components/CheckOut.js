@@ -29,6 +29,7 @@ class CheckOut extends Component {
                 kuantiti += element.kuantiti;
             });
             this.setState({ cartList: res.data, selectedIdEdit: 0, totalPrice: harga, totalQty: kuantiti })
+            // console.log(this.state.cartList)
             console.log(this.state.cartList)
             
         }).catch((err) => {
@@ -41,15 +42,14 @@ class CheckOut extends Component {
                 var date = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate() 
                 // + " " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
 
-                
-                var invoice = `INV-${currentdate.getFullYear()}${(currentdate.getMonth() + 1)}${currentdate.getDate()}${currentdate.getHours()}${currentdate.getMinutes()}${currentdate.getSeconds()}`;
+                var invoice = `INV-${currentdate.getFullYear()}${(currentdate.getMonth() + 1)}${currentdate.getDate()}${currentdate.getHours()}${currentdate.getMinutes()}${currentdate.getSeconds()}-${this.state.cartList[0].id}`;
 
                 axios.post('http://localhost:2002/listorder/listorder', {
                     username: this.props.username,
                     date,
                     totalprice: this.state.totalPrice,
                     totalquantity: this.state.totalQty,
-                    status: "pending",
+                    status: "unpaid",
                     invoice,
                     email: this.props.email
                         

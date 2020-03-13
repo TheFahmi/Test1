@@ -8,12 +8,12 @@ import {
     NavItem,
     // NavLink
 } from 'reactstrap';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { onUserLogout } from '../actions';
 import Cookies from 'universal-cookie';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faArchive, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faSearch, faArchive, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 
 const cookies = new Cookies();
 

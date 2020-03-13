@@ -24,5 +24,7 @@ router.get('/getconfirm', cartController.getConfirm);
 // router.put('/confirm/:id', cartController.adminConfirmOrder);
 router.put('/editadmin/:id', cartController.editAdmin)
 router.delete('/deleteorderbyadmin/:invoice', cartController.deleteOrderConfirm);
+router.put('/editstatus/', cartController.editStatus)
+// router.get('/invoice',cartController.invoice)
 
 module.exports = router;

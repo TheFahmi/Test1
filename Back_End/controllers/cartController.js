@@ -19,6 +19,29 @@ module.exports = {
         })
     }, 
 
+    editStatus: (req, res) => {
+        var {status,invoice} = req.body;
+        var sql = `update daftarorder set status = '${status}' where invoice = '${invoice}'`;
+        db.query(sql, (err, results) => {
+            if (err) throw err;
+            res.send(results)
+        })
+    },
+
+    invoice: (req,res) => {
+        var user = req.query.username;
+        var sql = `select f.invoice as invoice, p.id as idproduct, p.nama as namaproduk, totalprice, qty, status from detailorder d
+        join daftarorder f 
+        on d.idtrx = f.id
+        join products p 
+        on d.idproduct = p.id
+        where username = '${user}' and status = 'unpaid';`
+        db.query(sql, (err,result)=>{
+            if(err) throw err;
+            res.send(result)
+        })
+    },
+
     cartProduct: (req, res) => {
         var usr = req.query.username;
         var product = req.query.product_id
@@ -63,7 +86,7 @@ module.exports = {
 
     protectCart: (req, res) => {
         var idcart = req.params.id
-        var data = req.body;
+        var data  = req.body;
         var sql = `select * from cart where id = ${idcart}`;
         db.query(sql, (err, result) => {
             if (err) throw err;
@@ -324,7 +347,7 @@ module.exports = {
 
     getConfirm: (req, res) => {
         var sql = `SELECT konfirmasiorder.username AS nama, konfirmasiorder.id AS idConfirm, image, status,
-        daftarorder.id AS id, daftarorder.invoice AS invoice, date, totalquantity, totalprice
+        daftarorder.id AS id, daftarorder.invoice AS invoice, date, totalquantity, totalprice,email
         FROM daftarorder
         JOIN konfirmasiorder ON konfirmasiorder.invoice = daftarorder.invoice
         WHERE STATUS = 'pending'`;
@@ -336,21 +359,56 @@ module.exports = {
 
     editAdmin: (req, res) => {
         var idcat = req.params.id;
-        var data = req.body;
+        var {email,status,invoice} = req.body;
+
         var sql = `select * from daftarorder where id = ${idcat}`;
         db.query(sql, (err, result) => {
             if (err) throw err;
             if (result.length > 0) {
-                var sql = `update daftarorder set ? where id = ${idcat}`;
-                db.query(sql, data, (err1, results) => {
+                var sql = `update daftarorder set status = '${status}' where id = ${idcat}`;
+                db.query(sql, (err1, results) => {
                     if (err1) throw err1;
                     res.send(results)
+
+                    var mailOptions = {
+                        from: 'iGadget Store <hello.fahmihassan@gmail.com>',
+                        to: email,
+                        subject: 'Your order has been sent',
+                        html: `berikut ini adalah kode invoice kamu. <br/> <h1 color="blue">${invoice}</h1>
+                        <br/> Gunakan kode invoice tersebut untuk konfirmasi pembayaran!`
+                    }
+        
+                    transporter.sendMail(mailOptions, (err2, res2) => {
+                        if (err2) {
+                            console.log(err2)
+                            throw err2;
+                        }
+                        else {
+                            console.log('Success!')
+                            res.send(result)
+                        }
+                    })
                 })
             } else {
                 res.send('Data does not exist.');
             }
         })
     },
+
+    
+
+    // invoice: (req,res) => {
+    //     var user = req.query.username;
+    //     var sql = `select invoice, p.id as idproduct, p.nama as Nama_product, from detailorder do
+    //     join daftarorder df 
+    //     on do.idtrx
+    //     join products p 
+    //     on do.idproduct = p.id where username = '${user}';`
+    //     db.query(sql, (err,result)=>{
+    //         if(err) throw err;
+    //         res.send(result)
+    //     })
+    // },
 
     deleteOrderConfirm: (req, res) => {
         var deleteid = req.params.invoice;

@@ -18,6 +18,10 @@
   color: white;
 }
 
+.text-orange {
+  color: #ff5722!important
+}
+
 .App-link {
   color: #61dafb;
 }
@@ -29,4 +33,50 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Product detail styling */
+.qty-input {
+  padding-right: 0px;
+  max-width: 17%;
+}
+
+.product-data {
+  padding-left: 45px;
+}
+
+
+/* Search results styling */
+@media (max-width: 767px){
+  .filter-position {
+      margin-bottom: 30px
+  }
+}
+
+.word-break {
+  width: 100%;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical
+}
+
+.card-decoration {
+  box-shadow: 0;
+  transition: box-shadow 0.3s;
+  border: 0;
+}
+
+.card-decoration:hover {
+  box-shadow: 0px 0px 7px -2px rgba(0,0,0,0.75);
+}
+
+.list-padding {
+  padding-left: 10px;
+  padding-right: 10px
+}
+
+.row-list {
+ margin-left: -10px;
+ margin-right: -10px; 
 }

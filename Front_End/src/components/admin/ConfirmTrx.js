@@ -33,15 +33,15 @@ class ConfirmTrx extends Component {
               <div className="col-lg-2" style={{ marginBottom: "20px"}}>
                 <div className="list-group">
                     <a href="/admin/Dashboard" className="list-group-item">Dashboard</a>
-                    <a href="/admin/confirmtransaction" className="list-group-item active">Transaction Confirmation</a>
+                    <a href="/admin/confirmtransaction" className="list-group-item active">Transactions Confirmation</a>
                     <a href="/admin/manageproducts" className="list-group-item">Manage Products</a>
                     <a href="/admin/manageusers" className="list-group-item">Manage Users</a>
-                    <a href="/admin/managetrx" className="list-group-item">Manage Transsction</a>
+                    <a href="/admin/managetrx" className="list-group-item">Manage Transactions</a>
                     <a href="/admin/managewishlist" className="list-group-item">See Wishlist</a>
                 </div>
                 </div>
                 <div className="col-lg-10 card bg-light border">
-                  <h1 className="text-center pt-5 pb-4 text-uppercase">transaction confirmation</h1>
+                  <h1 className="text-center pt-5 pb-4 text-uppercase">transactions confirmation</h1>
                 <div>
                   <ListConfirm />
                 </div>

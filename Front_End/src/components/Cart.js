@@ -30,7 +30,7 @@ class ConcessionListView extends Component {
     showCart = () => {
         axios.get("http://localhost:2002/cart/cart?username=" + this.props.username)
                 .then((res) => {
-                    console.log(res);
+                    console.log(res.data[0].id);
                     this.setState({ 
                         listCart: res.data,
                         selectedIdEdit: 0 
@@ -106,7 +106,7 @@ class ConcessionListView extends Component {
                         {/* <td className="text-center" style={{fontSize: '14px', }}>{item.id}</td> */}
                         <td className="text-center" style={{fontSize: '14px', }}>{item.Nama_product}</td>
                         <td className="text-center" style={{fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
-                        <td><center><img src={`http://localhost:2002${item.image}`} height='10' width='10' /></center></td>
+                        <td><center><img src={`http://localhost:2002${item.image}`} alt={item.image} height='10' width='10' /></center></td>
                         <td className="text-center" style={{fontSize: '14px', }}><input type="number" defaultValue={item.kuantiti}  size="4" 
                         ref="quantity" className="form-control" /></td>
                         <td className="text-center" style={{fontSize: '14px', }}>{myCurrency.format(item.harga * item.kuantiti)}</td>
@@ -219,7 +219,7 @@ class ConcessionListView extends Component {
                     return (
                         <div  style={{height: '239px'}}>
                         <div className="d-flex justify-content-center" style={{marginTop: '130px'}}>
-                            <div className="alert alert-warning col-md-4 mt-5 border shadow-lg" style={{ fontSize: "20px" }}>
+                            <div className="alert alert-danger col-md-4 mt-5 border shadow-lg" style={{ fontSize: "30px"}}>
                                 <center><b>Upps, Your shopping cart is empty!!!</b><br/></center>
                             </div>
                         </div>
