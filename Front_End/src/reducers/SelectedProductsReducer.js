@@ -8,9 +8,9 @@ const INITIAL_STATE = {
                         price: 0,
                         category: '', 
                         img: 0, 
-                        gender: '', 
+                        user: '', 
                         description: '', 
-                        stock: '', 
+                        stok: '', 
                     };
 
 export default (state = INITIAL_STATE, action) => {

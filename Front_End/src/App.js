@@ -30,6 +30,7 @@ import Dashboard from './components/admin/Dashboard';
 import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/material-kit.css';
 
 const cookies = new Cookies();

@@ -10,7 +10,7 @@ class WIshlistCart extends Component {
     state = {
         wishlist: [],
         activePage: 1,
-        itemPerPage: 3
+        itemPerPage: 5
     }
 
     handlePageChange(pageNumb) {
@@ -138,13 +138,43 @@ class WIshlistCart extends Component {
                 })
         }
     }
-    
+
+    // enabled = () => {
+        
+        
+
+    //         if (stok > 0) {
+    //             const enabled
+    //         }
+    //     }
+    // }
+    // onStock = () => {
+    //     var stock = 0
+    //     for(let i = 0; i < this.state.wishlist.length; i++ ){
+
+    //         stock = this.state.wishlist[i].stok
+    //         console.log(stock)
+    //     }
+    //     return stock
+    // }
 
   
     renderWishlist = () => {
+
+        // {
+        //     for(let i = 0; i < this.props.wishlist.length; i++) {
+        //     var stok = this.state.wishlist[i].stok
+        // }
+        
+        
+        // const enabled = stok > 0
+
+        // var {stok} = this.state.wishlist
+        
         var lastIndex = this.state.activePage * this.state.itemPerPage;
         var firstIndex = lastIndex - this.state.itemPerPage;
         var renderedProjects = this.state.wishlist.slice(firstIndex, lastIndex);
+        // const enabled = stok > 0
         var listJSXCart = renderedProjects.map((item) => {
             // if (this.props.myRole === 'SUPERADMIN' || this.props.myRole === 'ADMIN PAYMENT') {
             //     return (
@@ -165,6 +195,7 @@ class WIshlistCart extends Component {
             //     )
             // } else {
                 return (
+                    
                     <tr>
                     <td style={{ fontSize: '14px', }}>{item.Nama_product}</td>
                     <td style={{ fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
@@ -175,10 +206,19 @@ class WIshlistCart extends Component {
                                 onClick={() => this.btnDeleteClick(item.id)}>
                                 <i className="fa fa-trash" style={{ fontSize: '13px', }}></i>
                             </button>
-                            <button className="btn btn-primary" style={{borderRadius: '30px', height: '30px', width: '30px'}}
-                                onClick={() => this.btnMoveToCart(item.harga, item.product_id, item.id)}>
-                                <i className="fa fa-cart-plus" style={{ fontSize: '14px', }}></i>
-                            </button>
+                            {
+                                item.stok === 0 ?
+
+                                    <button className="btn btn-primary" disabled style={{borderRadius: '30px', height: '30px', width: '30px'}}
+                                        onClick={() => this.btnMoveToCart(item.harga, item.product_id, item.id)}>
+                                        <i className="fa fa-cart-plus" style={{ fontSize: '14px', }}></i>
+                                    </button>
+                                    : 
+                                    <button className="btn btn-primary" style={{borderRadius: '30px', height: '30px', width: '30px'}}
+                                        onClick={() => this.btnMoveToCart(item.harga, item.product_id, item.id)}>
+                                        <i className="fa fa-cart-plus" style={{ fontSize: '14px', }}></i>
+                                    </button>
+                             }
                         </center>
                     </td>
                 </tr>
@@ -202,7 +242,7 @@ class WIshlistCart extends Component {
                             <div className="full-width-div table-responsive card shadow mb-5 bg-white rounded pt-5" style={{ marginTop: '-20px' }}>
                             <h2 className="section-heading text-uppercase text-center">WIshlist</h2>
                                 <table align="center" className="table table-striped table-hover bordered shadow col-lg-8 justify-content-center mt-5">
-                                    <thead className="thead-light">
+                                    <thead className="thead-dark">
                                         <tr>
                                             {/* <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>ID</center></th> */}
                                             <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}>Prouduct</th>

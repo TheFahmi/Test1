@@ -20,6 +20,7 @@ const INITIAL_STATE = {
                         errorRegister: '',
                         errorLogin: '',
                         loading: false, 
+                        islogin:false,
                         cookie: false,
                     };
 

@@ -6,7 +6,7 @@ var { uploader } = require('../helpers/uploader');
 module.exports = {
     cart: (req, res) => {
         var user = req.query.username;
-        var sql = `select u.username as Username, p.id as idproduct, p.nama as Nama_product, kuantiti, harga, total_harga as Total, image,
+        var sql = `select u.username as Username, p.id as idproduct, p.nama as Nama_product, kuantiti, harga, total_harga as Total, image, stok,
                     c.id as id from cart c
                     join user u 
                     on c.user_id = u.id
@@ -62,6 +62,16 @@ module.exports = {
         var newProd = req.body;
         var sql = `insert into cart set ?;`
         db.query(sql, newProd, (err, result) => {
+            if (err) throw err;
+            res.send(result)
+        })
+    },
+
+    editStock: (req, res) => {
+        var {stok,id,qty} = req.body;
+        var hasil = stok - qty
+        var sql = `update products set stok = ${hasil} where id = ${id}`;
+        db.query(sql, (err, result) => {
             if (err) throw err;
             res.send(result)
         })
@@ -182,7 +192,7 @@ module.exports = {
 
     getWishlist: (req, res) => {
         var user = req.query.username;
-        var sql = `select w.id as id, product_id, u.username as username, p.nama as Nama_product, image,
+        var sql = `select w.id as id, product_id, u.username as username, p.nama as Nama_product, image, stok,
         harga from wishlist w
         join user u 
         on w.user_id = u.id

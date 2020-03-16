@@ -21,14 +21,14 @@ class ProductsDetails extends Component {
     componentDidMount() {
         var params = queryString.parse(this.props.location.search);
         var id = params.id;
-        console.log('Params id = ' + id)
+        // console.log('Params id = ' + id)
         axios.get('http://localhost:2002/productdetail/productdetail', {
             params: {
                 id
             }
         }).then((res) => {
             this.setState({ productdetail: res.data[0] })
-            console.log(res.data)
+            console.log(this.state.productdetail.stok)
         }).catch((err) => {
             console.log(err)
         })
@@ -57,6 +57,7 @@ class ProductsDetails extends Component {
                         total_harga
                     }).then((res) => {
                         console.log(res.data)
+                        console.log(this.state.listCart[0].stok)
                     }).catch((err) => {
                         console.log(err);
                     })
@@ -88,7 +89,15 @@ class ProductsDetails extends Component {
         }
     }
     
+    CheckStock = () => {
+        // var stok = this.state.productdetail.stok
+        var arr = []
 
+        for(let i = 1; i <= this.state.productdetail.stok; i++) {
+            arr.push(<option>{i}</option>)
+        }
+        return arr
+    }
 
     btnAddWishlist = (id) => {
         var currentdate = new Date();
@@ -177,12 +186,12 @@ class ProductsDetails extends Component {
             // </div>
             
 
-            <div className="container">
+            <div className="container" style={{paddingTop: '100px'}}>
                 <div className="col-sm-10 bg" style={{ height: '500px', paddingTop: '30px', paddingBottom: '30px' }}>
-                    <div className="row row-top row-bottom">
-                        <div className="card col-5 mx-auto" >
-                            <div className="row">
-                                <img src={`http://localhost:2002${image}`} alt={image} className="col-12" />
+                    <div className="row row-top row-bottom" >
+                        <div className="card col-5 mx-auto" style={{height: '350px'}}>
+                            <div className="row" >
+                                <img src={`http://localhost:2002${image}`} alt={image}style={{height: 'auto', width: 'auto'}}className="col-12" />
                             </div>
                         </div>
                         <div className="col-7 product-data">
@@ -193,17 +202,18 @@ class ProductsDetails extends Component {
                                 <span className="price price-new">{rupiah.format(harga)}</span>
                             </div>
                             </h3>
-                            <p className="mt-5 mb-4">{deskripsi}</p>
+                            <hr style={{width:'auto'}}></hr>
+                            <h3 className="mt-5 mb-2">Deskripsi</h3>
+                            <p className="mt-1 mb-4" style={{height: '300px'}}>{deskripsi}</p>
                             <div className="row">
                                 <div className="col-3">
+                                    
                                     <InputGroup size="lg">
                                         <InputGroupAddon addonType="prepend">Quantity</InputGroupAddon>
                                         <select defaultValue="1" ref="quantity" innerRef="addqty" type="number">
-                                            {
-                                                this.state.productdetai.map((val)=>{
-                                                    return ( <option value={val.stok} >{val.stok} </option>)
-                                                })
-                                            }
+                                        
+                                       {this.CheckStock()}
+                                        
                                         </select>
                                     </InputGroup>
                                 </div>

@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+// import * as serviceWorker from './registerServiceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reducers from './reducers';
 import ReduxThunk from 'redux-thunk';
 import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 // mdbreact
 // import 'font-awesome/css/font-awesome.min.css';
@@ -27,6 +28,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 // import './js/sb-admin.min.js';
 // import './vendor/fontawesome-free/css/all.min.css';
 // import './css/sb-admin.css';
+import registerServiceWorker from './registerServiceWorker'
 // import './supports/css/bodybackground.css';
 
 const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
@@ -42,4 +44,4 @@ document.getElementById('root'));
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.register();
+registerServiceWorker()

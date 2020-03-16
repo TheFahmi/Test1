@@ -7,7 +7,7 @@ import Pagination from 'react-js-pagination';
 class ProductsListView extends Component {
 
     state = {   
-                listJoinProduct: [], 
+                // listJoinProduct: [], 
                 selectedIdEdit: 0, 
                 searchManageProducts: [],
                 listProduct: [],

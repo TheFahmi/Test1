@@ -3,6 +3,16 @@ var fs = require('fs');
 var { uploader } = require('../helpers/uploader');
 
 module.exports = {
+
+
+    getCategory: (req, res) => {
+        var sql = `SELECT * FROM category`;
+        
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            res.send(result);
+        })
+    },
     
     productdetail: (req, res) => {
         var product = req.query.id
@@ -21,9 +31,12 @@ module.exports = {
             res.send(result);
         })
     },
-    // tampilkan list product sebelum di join
+
+
     ManageProducts: (req, res) => {
-        var sql = `select * from products`;
+        var sql = `select p.id as id, p.nama as nama, deskripsi, image, stok, harga, c.nama as namacategory, c.id as idcat from products p 
+        join category c 
+        on p.idcategory = c.id`;
         db.query(sql, (err, result) => {
             if (err) throw err;
             res.send(result);

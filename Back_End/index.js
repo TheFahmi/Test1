@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/testencrypt', (req,res) => {
-    var hashPassword = Crypto.createHmac("sha256", "kucingbertasbih")
+    var hashPassword = Crypto.createHmac("sha256", "fahmi")
                             .update(req.query.password).digest("hex");
     console.log(hashPassword);
     res.send(`Panjang= ${hashPassword.length} Password anda ${req.query.password} di encrypt menjadi ${hashPassword}`)
@@ -63,6 +63,7 @@ app.use('/trx', transRouter);
 app.use('/join', productRouter);
 // manage products sebelum di join 
 app.use('/productlist', productRouter);
+app.use('/category', productRouter);
 // dashboard
 app.use('/dashboard', dashboardRouter);
 

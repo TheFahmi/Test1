@@ -102,7 +102,7 @@ class ProductsGridView extends Component {
 
         return (
             <div>
-                <div className="input-group mb-3 col-md-2 mx-auto" style={{ paddingTop: '60px', }}>
+                <div className="input-group mb-3 col-md-2 mx-auto" style={{ paddingTop: '100px', width: '100%', display:'flex' }}>
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1" style={{ fontSize: '15px' }}><i class="fa fa-search"></i></span>
                     </div>
