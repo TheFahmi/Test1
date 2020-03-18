@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { CustomInput } from 'reactstrap';
+import { APIURL } from '../supports/APiUrl';
 // import Footer from './Footer';
 
 class ConfirmOrder extends Component {
@@ -54,29 +55,23 @@ class ConfirmOrder extends Component {
             }
             formData.append('data', JSON.stringify(data))
 
-
-
-
-
-
-
-            axios.post("http://localhost:2002/confirm/confirmorder", formData, headers)
+            axios.post(`${APIURL}/confirm/confirmorder`, formData, headers)
                 .then((res) => {
-                    console.log(res);               
+                    console.log(res);
 
 
                 })
                 .catch((err) => {
                     console.log(err)
                 })
-                axios.put("http://localhost:2002/confirm/editstatus/", {
-                    invoice: this.refs.invoice.value,
-                    status: "pending"
-                }).then((res) => {
-                    console.log(res)
-                }).catch((err) => {
-                    console.log(err);
-                })
+            axios.put(`${APIURL}/confirm/editstatus/`, {
+                invoice: this.refs.invoice.value,
+                status: "pending"
+            }).then((res) => {
+                console.log(res)
+            }).catch((err) => {
+                console.log(err);
+            })
 
 
 
@@ -85,7 +80,7 @@ class ConfirmOrder extends Component {
             alert('Image harus diisi!')
         }
         alert("Payment Confirm Success!!! Please wait few minutes.")
-        window.location = '/productsgridview'
+        window.location = '/'
     }
 
     adminAddAction = () => {
@@ -102,7 +97,8 @@ class ConfirmOrder extends Component {
                     </td>
                     <td colSpan="2"><center><button className="btn btn-success" style={{ fontSize: "12px" }}
                         onClick={() => this.onBtnConfirm()}>
-                        <i className="fa fa-plus"></i> Add</button></center></td>
+                        <i className="fa fa-plus"></i> Add</button></center>
+                    </td>
                 </tr>
             )
         }
@@ -113,15 +109,18 @@ class ConfirmOrder extends Component {
             if (this.props.status === 'Verified') {
                 return (
                     <div style={{ height: '700px' }}>
-                        <div className="full-width-div card bg-light pb-5">
-                            {/* <div className="table-responsive card shadow p-3 mb-5 bg-white rounded"> */}
-                            <h2 className="section-heading text-uppercase text-center pt-5">Thank You</h2>
-                            <h3 className="section-subheading text-muted text-center pb-5">Please Confirm Your Payment Below.</h3>
-                            <table align="center" className="col-md-5 table table-striped table-hover border shadow">
+                        {/* <div className="full-width-div card bg-light pb-5"> */}
+                        {/* <div className="table-responsive card shadow p-3 mb-5 bg-white rounded"> */}
+                        <h2 className="section-heading text-uppercase text-center pt-5">Thank You</h2>
+                        <h3 className="section-subheading text-muted text-center pb-5">Please Confirm Your Payment Below.</h3>
+                        <div className="row justify-content-center">
+
+
+                            <table className="col-md-5 table table-striped table-hover border shadow " style={{ marginTop: "100px" }}>
                                 <thead className="thead-light border">
                                     <tr>
                                         <th scope="col" colSpan="3" className="font-weight-bold" style={{ fontSize: '16px', }}><center>Invoice</center></th>
-                                        <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>Bukti Transfer</center></th>
+                                        {/* <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>Bukti Transfer</center></th> */}
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -131,6 +130,7 @@ class ConfirmOrder extends Component {
                                 </tbody>
                             </table>
                         </div>
+                        {/* </div> */}
                     </div>
                 )
             } else {

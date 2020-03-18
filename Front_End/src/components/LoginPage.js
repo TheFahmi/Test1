@@ -6,6 +6,7 @@ import { Link, Redirect } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import Spinner from './Spinner';
 import axios from 'axios';
+import { APIURL } from '../supports/APiUrl';
 
 const cookies = new Cookies();
 
@@ -16,8 +17,8 @@ class LoginPage extends Component {
       var username = this.refs.username.value;
       var password = this.refs.password.value;
       this.props.onUserLogin({username, password})
-      // axios.post("http://localhost:2002/user/user", {username , password})
-      axios.post("http://localhost:2002/user/user", {
+      // axios.post("${APIURL}/user/user", {username , password})
+      axios.post(`${APIURL}/user/user`, {
         username, 
         password
       }).then((res) => {

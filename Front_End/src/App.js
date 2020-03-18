@@ -29,6 +29,8 @@ import SeeWishlist from './components/admin/SeeWishlist';
 import Dashboard from './components/admin/Dashboard';
 import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
+import PageReport from './components/admin/PageReport';
+import SeeSuccessTrx from './components/admin/SeeSuccessTrx';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/material-kit.css';
@@ -60,7 +62,7 @@ class App extends Component {
         <Route path="/register" component={RegisterPage} />
         <Route path="/waitingverification" component={WaitingVerification} />
         <Route path="/verified" component={Verified}/>
-        <Route path="/productslistview" component={ProductsListView}/>
+        {/* <Route path="/productslistview" component={ProductsListView}/> */}
         <Route path="/productsgridview" component={ProductsGridView}/>
         <Route path="/productsdetails" component={ProductsDetails}/>
         <Route path="/cart" component={Cart} />
@@ -77,6 +79,9 @@ class App extends Component {
         <Route path="/admin/productslist" component={ListProducts}/>
         <Route path="/admin/managewishlist" component={SeeWishlist} />
         <Route path="/admin/Dashboard" component={Dashboard} />
+        <Route path="/admin/pagereport" component={PageReport} />
+        <Route path="/admin/seesuccesstrx" component={SeeSuccessTrx} />
+        
         <Route path="*" component={PageNotFound} />
         </Switch>
           </div>

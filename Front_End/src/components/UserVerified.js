@@ -3,6 +3,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
 import { onUserVerified } from '../actions';
+import { APIURL } from '../supports/APiUrl';
 
 class Verified extends Component {
     state = { verified: false, loading: true }
@@ -12,7 +13,7 @@ class Verified extends Component {
         console.log(params)
         var username = params.username;
         var password = params.password;
-        axios.post(`http://localhost:2002/auth/verified`, {
+        axios.post(`${APIURL}/auth/verified`, {
             username,
             password
         }).then((res) => {

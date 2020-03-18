@@ -24,7 +24,7 @@ module.exports = {
         })
     },
     totalOrderNeedConfirmation: (req, res) => {
-        var sql = `select * from daftarorder where status = 'pending' or status = 'unpaid'`;
+        var sql = `select * from daftarorder where status = 'pending'`;
         db.query(sql, (err, result) => {
             if (err) throw err;
             res.send(result);

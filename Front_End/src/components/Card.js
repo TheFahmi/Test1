@@ -20,7 +20,7 @@ class Card extends Component {
     }
 
     getdataiphone=()=>{
-        axios.get('http://localhost:2002/product/getproducts')
+        axios.get('${APIURL}/product/getproducts')
             .then((res) => {
                 // console.log(res);
                 this.setState({
@@ -46,7 +46,7 @@ class Card extends Component {
                             <div className="card-image">
                             {/* <Link to="#" onClick={this.onItemClick}>*/}
                             <b style={{ fontSize: 'medium' }}> 
-                               <img src={`http://localhost:2002${item.image}`} alt={item.image} className="img-responsive" />
+                               <img src={`${APIURL}${item.image}`} alt={item.image} className="img-responsive" />
                                </b>
                             </div>
                             {/* </Link> */}

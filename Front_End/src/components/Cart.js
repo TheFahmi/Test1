@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Pagination from 'react-js-pagination';
+import { CartAction } from '../actions';
+import { APIURL } from '../supports/APiUrl';
 
 const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 class ConcessionListView extends Component {
@@ -11,56 +13,89 @@ class ConcessionListView extends Component {
         listCart: [],
         selectedIdEdit: 0,
         activePage: 1,
-        itemPerPage: 3
+        itemPerPage: 3,
+        Promo: [],
+        kode: '',
+        namapromo: '',
+        totalpotongan: 0
     }
 
     handlePageChange(pageNumb) {
         console.log(`active page is ${pageNumb}`);
-        this.setState({activePage: pageNumb});
+        this.setState({ activePage: pageNumb });
     }
-    
+
     componentDidMount() {
         this.showCart();
+        // this.CheckPromo();
+
+        console.log(this.state.kode)
     }
 
     onBtnCheckout = () => {
-            window.location = '/checkout';
+        window.location = "/checkout"
     }
 
     showCart = () => {
-        axios.get("http://localhost:2002/cart/cart?username=" + this.props.username)
-                .then((res) => {
-                    console.log(res);
-                    this.setState({ 
-                        listCart: res.data,
-                        selectedIdEdit: 0 
-                    });
-                }).catch((err) => {
-                    console.log(err);
-                })
+        axios.get(`${APIURL}/cart/cart?username=` + this.props.username)
+            .then((res) => {
+                console.log(res);
+                this.setState({
+                    listCart: res.data,
+                    selectedIdEdit: 0
+                });
+                this.props.CartAction(this.state.listCart.length);
+            }).catch((err) => {
+                console.log(err);
+            })
     }
 
     totalPrice = () => {
-        var total = 0;
-        for(let i = 0; i < this.state.listCart.length; i++) {
-            total += this.state.listCart[i].kuantiti * this.state.listCart[i].harga;
+        var totalx = 0
+        for (let i = 0; i < this.state.listCart.length; i++) { ;
+            totalx += this.state.listCart[i].kuantiti * this.state.listCart[i].harga
         }
-        return total;
+        return totalx;
+        
     }
-    
+
+    totalPotong = () => {
+        var totalpotong = 0;
+        var promo = this.state.totalpotongan
+        for (let i = 0; i < this.state.listCart.length; i++) {
+            totalpotong += this.state.listCart[i].kuantiti * this.state.listCart[i].harga * (promo/100) ;
+
+            
+        }
+        
+        return totalpotong
+
+    }
+
+    totalSubtotal = () => {
+        var totalpotong = 0;
+        var totaly = 0
+        var promo = this.state.totalpotongan
+        for (let i = 0; i < this.state.listCart.length; i++) {
+            totalpotong += this.state.listCart[i].kuantiti * this.state.listCart[i].harga * (promo/100) ;
+            totaly += this.state.listCart[i].kuantiti * this.state.listCart[i].harga - totalpotong
+        }
+        return totaly;
+    }
+
     onBtnSaveClick = (name) => {
-    var kuantiti = parseInt(this.refs.quantity.value);
-    var stok = this.state.listCart[0].stok
-    if (kuantiti <= 0) {
-        window.alert('Quantity harus di isi!')
-    } 
-    else if 
-        (kuantiti > stok) {
+        var kuantiti = parseInt(this.refs.quantity.value);
+        var stok = this.state.listCart[0].stok
+        if (kuantiti <= 0) {
+            window.alert('Quantity harus di isi!')
+        }
+        else if
+            (kuantiti > stok) {
             window.alert(`stock sisa ${stok}`)
         }
-    
-    else{
-            axios.put("http://localhost:2002/editcart/editcart/" + name.id, {
+
+        else {
+            axios.put(`${APIURL}/editcart/editcart/` + name.id, {
                 name, kuantiti
             }).then((res) => {
                 this.showCart();
@@ -71,8 +106,8 @@ class ConcessionListView extends Component {
     }
 
     onBtnDeleteClick = (id) => {
-        if(window.confirm('Are you sure want to delete:?')) {
-            axios.delete("http://localhost:2002/deletecart/deletecart/" + id)
+        if (window.confirm('Are you sure want to delete:?')) {
+            axios.delete(`${APIURL}/deletecart/deletecart/` + id)
                 .then((res) => {
                     console.log(res);
                     this.showCart();
@@ -83,16 +118,39 @@ class ConcessionListView extends Component {
         }
     }
 
-    onStockCheck = () => {
-        var stock = this.state.listCart.stok
-        console.log(stock)
-        var isi = parseInt(this.refs.quantity.value)
-        console.log(isi)
+    CheckPromo = () => {
 
-        // if (isi > stock){
-        //     isi = stock
-        // }
+        axios.get(`${APIURL}/order/getpromo?namapromo=`+this.state.namapromo
+
+        )
+            .then((res) => {
+                
+                var potongan = 0
+                
+                res.data.forEach(element => {
+                    potongan = element.jenis
+                });
+                this.setState({
+                    Promo: res.data, 
+                    totalpotongan: potongan
+                });
+            }).catch((err) => {
+                console.log(err);
+                
+            })
+
     }
+
+    // onStockCheck = () => {
+    //     var stock = this.state.listCart.stok
+    //     console.log(stock)
+    //     var isi = parseInt(this.refs.quantity.value)
+    //     console.log(isi)
+
+    //     // if (isi > stock){
+    //     //     isi = stock
+    //     // }
+    // }
 
     onBtnCS = () => {
         return window.location = '/productsgridview';
@@ -100,46 +158,52 @@ class ConcessionListView extends Component {
 
     btnCustom = () => {
         var btnCustom;
-        if(!this.state.listCart.length) {
-            btnCustom = <button className="btn btn-success" style={{ fontSize: "13px" }} onClick={ () => this.onBtnCS() }>Shop Again?</button>
+        if (!this.state.listCart.length) {
+            btnCustom = <button className="btn btn-success" style={{ fontSize: "13px" }} onClick={() => this.onBtnCS()}>Shop Again?</button>
         } else {
-            btnCustom = <div>
-                <button className="btn btn-info btn-lg btn-block" style={{ fontSize: "13px"}} onClick={() => this.onBtnCS()}>Buy other products?</button>
+            btnCustom = 
+            <div>
+                <button className="btn btn-info btn-lg btn-block" style={{ fontSize: "13px" }} onClick={() => this.onBtnCS()}>Buy other products?</button>
                 <br />
-                <button className="btn btn-success btn-lg btn-block" style={{ fontSize: "13px"}} onClick={() => this.onBtnCheckout()}>Pay</button>
+                <input onChange={e => this.setState({namapromo: e.target.value})} defaultValue={this.props.namapromo} onKeyUp={this.CheckPromo} type="text" className="form-control" style={{ fontSize: "15px" }}
+                                placeholder="Kode Promo"
+                                ref="kode" />
+                                <br/>
+                                
+                <button className="btn btn-success btn-lg btn-block" style={{ fontSize: "13px" }} onClick={() => this.onBtnCheckout()}>Pay</button>
             </div>
         }
         return btnCustom;
     }
-  
+
     renderListCart = () => {
         var lastIndex = this.state.activePage * this.state.itemPerPage;
         var firstIndex = lastIndex - this.state.itemPerPage;
         var renderedProjects = this.state.listCart.slice(firstIndex, lastIndex);
         var listJSXCart = renderedProjects.map((item) => {
 
-            if(item.id === this.state.selectedIdEdit) {
+            if (item.id === this.state.selectedIdEdit) {
                 return (
                     <tr>
                         {/* <td className="text-center" style={{fontSize: '14px', }}>{item.id}</td> */}
-                        <td className="text-center" style={{fontSize: '14px', }}>{item.Nama_product}</td>
-                        <td className="text-center" style={{fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
-                        <td><center><img src={`http://localhost:2002${item.image}`} height='10' width='10' /></center></td>
-                        <td className="text-center" style={{fontSize: '14px', }}><input type="number" defaultValue={item.kuantiti}  size="4" 
-                        ref="quantity"  className="form-control" /></td>
+                        <td className="text-center" style={{ fontSize: '14px', }}>{item.Nama_product}</td>
+                        <td className="text-center" style={{ fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
+                        <td><center><img src={`${APIURL}${item.image}`} height='10' width='10' /></center></td>
+                        <td className="text-center" style={{ fontSize: '14px', }}><input type="number" defaultValue={item.kuantiti} size="4"
+                            ref="quantity" className="form-control" /></td>
                         {/* onChange={this.onStockCheck()} */}
-                        <td className="text-center" style={{fontSize: '14px', }}>{myCurrency.format(item.harga * item.kuantiti)}</td>
+                        <td className="text-center" style={{ fontSize: '14px', }}>{myCurrency.format(item.harga * item.kuantiti)}</td>
                         <td>
                             <center>
-                            <button className="btn btn-success" style={{borderRadius: '30px', height: '30px', width: '30px'}}
-                                onClick={() => this.onBtnSaveClick(item)}>
-                                <i className="fa fa-save" style={{fontSize: '14px'}}></i>
-                            </button>
+                                <button className="btn btn-success" style={{ borderRadius: '30px', height: '30px', width: '30px' }}
+                                    onClick={() => this.onBtnSaveClick(item)}>
+                                    <i className="fa fa-save" style={{ fontSize: '14px' }}></i>
+                                </button>
                             &nbsp;
-                            <button className="btn btn-warning" style={{borderRadius: '30px', height: '30px', width: '30px'}}
-                                onClick={() => this.setState( { selectedIdEdit: 0 } )}>
-                                <i style={{fontSize: '14px'}} className="fa fa-times"></i>
-                            </button>
+                            <button className="btn btn-warning" style={{ borderRadius: '30px', height: '30px', width: '30px' }}
+                                    onClick={() => this.setState({ selectedIdEdit: 0 })}>
+                                    <i style={{ fontSize: '14px' }} className="fa fa-times"></i>
+                                </button>
                             </center>
                         </td>
                     </tr>
@@ -149,55 +213,55 @@ class ConcessionListView extends Component {
             return (
                 <tr>
                     {/* <td className="text-center" style={{fontSize: '14px', }}>{item.id}</td> */}
-                    <td className="text-center" style={{fontSize: '14px', }}>{item.Nama_product}</td>
-                    <td className="text-center" style={{fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
-                    
-                    <td><center><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}} /></center></td>
-                    <td className="text-center" style={{fontSize: '14px', }}>{item.kuantiti}</td>
-                    <td className="text-center" style={{fontSize: '14px', }}>{myCurrency.format(item.harga * item.kuantiti)}</td>
+                    <td className="text-center" style={{ fontSize: '14px', }}>{item.Nama_product}</td>
+                    <td className="text-center" style={{ fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
+
+                    <td><center><img src={`${APIURL}${item.image}`} alt={item.image} style={{ width: '100px' }} /></center></td>
+                    <td className="text-center" style={{ fontSize: '14px', }}>{item.kuantiti}</td>
+                    <td className="text-center" style={{ fontSize: '14px', }}>{myCurrency.format(item.harga * item.kuantiti)}</td>
                     <td>
                         <center>
-                        <button className="btn btn-info" style={{borderRadius: '30px', height: '30px', width: '30px'}} 
-                            onClick={ () => this.setState({ selectedIdEdit: item.id }) }>
-                            <i className="fa fa-edit" style={{fontSize: '14px'}}></i>
-                        </button>
+                            <button className="btn btn-info" style={{ borderRadius: '30px', height: '30px', width: '30px' }}
+                                onClick={() => this.setState({ selectedIdEdit: item.id })}>
+                                <i className="fa fa-edit" style={{ fontSize: '14px' }}></i>
+                            </button>
                         &nbsp;
-                        <button className="btn btn-danger" style={{borderRadius: '30px', height: '30px', width: '30px'}}
-                            onClick={ () => this.onBtnDeleteClick(item.id, item.Nama_product) }>
-                            <i className="fa fa-trash" style={{fontSize: '14px', }}></i>
-                        </button>
+                        <button className="btn btn-danger" style={{ borderRadius: '30px', height: '30px', width: '30px' }}
+                                onClick={() => this.onBtnDeleteClick(item.id, item.Nama_product)}>
+                                <i className="fa fa-trash" style={{ fontSize: '14px', }}></i>
+                            </button>
                         </center>
                     </td>
                 </tr>
             )
 
         })
-        
+
         return listJSXCart;
     }
-        
+
     render() {
-        
-        if(this.props.username !== '') {
-            if(this.props.status === 'Verified'){
+
+        if (this.props.username !== '') {
+            if (this.props.status === 'Verified') {
                 if (this.state.listCart.length > 0) {
-                return (
-                    <div style={{height: "700px"}}>
-                        <div className="full-width-div table-responsive card shadow col-md-12">
+                    return (
+                        <div full-width-div table-responsive card shadow col-md-12 style={{ height: "700px", marginTop: "100px" }}>
+
                             <h2 className="section-heading text-center text-uppercase" style={{ marginTop: '50px' }}>Hello, {this.props.username}</h2>
                             <h3 className="section-subheading text-muted text-center pb-5">Happy Shopping</h3>
                             <div className="row justify-content-center">
                                 <table className="col-md-7 table table-striped table-hover border shadow">
-                                <thead className="thead-light">
-                                <tr>
-                                    <th scope="col" className="font-weight-bold text-uppercase" style={{fontSize: '16px', }}><center>Product</center></th>
-                                    <th scope="col" className="font-weight-bold text-uppercase" style={{fontSize: '16px', }}><center>Price</center></th>
-                                    <th scope="col" className="font-weight-bold text-uppercase" style={{fontSize: '16px', }}><center>Image</center></th>
-                                    <th scope="col" className="font-weight-bold text-uppercase" style={{fontSize: '16px', }}><center>Qty</center></th>
-                                    <th scope="col" className="font-weight-bold text-uppercase" style={{fontSize: '16px', }}><center>Total Price</center></th>
-                                    <th scope="col" className="font-weight-bold text-uppercase" style={{fontSize: '16px', }}><center>Options</center></th>
-                                </tr>
-                                </thead>
+                                    <thead className="thead-light">
+                                        <tr>
+                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Product</center></th>
+                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Price</center></th>
+                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Image</center></th>
+                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Qty</center></th>
+                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Total Price</center></th>
+                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Options</center></th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         {this.renderListCart()}
                                     </tbody>
@@ -206,14 +270,33 @@ class ConcessionListView extends Component {
                                     <table className="table table-striped table-hover bordered shadow">
                                         <thead className="thead-light">
                                             <tr>
-                                                <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Total Price</center></th>
+                                                <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Detail Price</center></th>
                                             </tr>
                                         </thead>
                                         <tr>
                                             <td colSpan="8">
-                                                <div className="text-center" style={{ fontSize: '14px', }}>{myCurrency.format(this.totalPrice())}</div>
+                                                <div className="text-center" style={{ fontSize: '14px', }}>Total Harga : {myCurrency.format(this.totalPrice())}</div>
+                                            </td>
+                                            
+                                        </tr>
+                                        <tr>
+                                        <td colSpan="8">
+                                                <div className="text-center" style={{ fontSize: '14px', }}>Total Potongan : {myCurrency.format(this.totalPotong())}</div>
                                             </td>
                                         </tr>
+                                        <tr>
+                                        <td colSpan="8">
+                                                <div className="text-center" style={{ fontSize: '14px', }}>Subtotal : {myCurrency.format(this.totalSubtotal())}</div>
+                                            </td>
+                                        </tr>
+                                        
+                                        {/* <tr>
+                                            <td colSpan="8">
+                                                <input type="text" className="form-control" style={{ fontSize: "12px" }}
+                                                    placeholder="Input Kode Promo"
+                                                    ref="searchbyname" onKeyUp={this.onBtnSearchClick} />
+                                            </td>
+                                        </tr> */}
                                         <tr>
                                             <td colSpan="8">
                                                 <div align="center">{this.btnCustom()}</div>
@@ -222,7 +305,7 @@ class ConcessionListView extends Component {
                                     </table>
                                 </div>
                             </div>
-                            <div className="mx-auto">
+                            <div className="row justify-content-center">
                                 <Pagination
                                     activePage={this.state.activePage}
                                     itemsCountPerPage={this.state.itemPerPage}
@@ -231,17 +314,17 @@ class ConcessionListView extends Component {
                                     onChange={this.handlePageChange.bind(this)}
                                 />
                             </div>
+
                         </div>
-                    </div>
-                )
+                    )
                 } else {
                     return (
-                        <div  style={{height: '239px'}}>
-                        <div className="d-flex justify-content-center" style={{marginTop: '130px'}}>
-                            <div className="alert alert-warning col-md-4 mt-5 border shadow-lg" style={{ fontSize: "20px" }}>
-                                <center><b>Upps, Your shopping cart is empty!!!</b><br/></center>
+                        <div style={{ height: '600px' }}>
+                            <div className="d-flex justify-content-center" style={{ marginTop: '130px' }}>
+                                <div className="alert alert-warning col-md-4 mt-5 border shadow-lg" style={{ fontSize: "20px" }}>
+                                    <center><b>Upps, Your shopping cart is empty!!!</b><br /></center>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     )
                 }
@@ -260,11 +343,13 @@ class ConcessionListView extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return { 
-        username: state.auth.username, 
+    return {
+        username: state.auth.username,
         myRole: state.auth.role,
-        status: state.auth.status
+        status: state.auth.status,
+        Cart: state.Cart.cart,
+        totalpotongan: state.Cart.totalpotongan
     }
 }
 
-export default connect(mapStateToProps)(ConcessionListView);
+export default connect(mapStateToProps, { CartAction })(ConcessionListView);

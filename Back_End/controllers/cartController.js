@@ -17,18 +17,18 @@ module.exports = {
             if (err) throw err;
             res.send(result)
         })
-    }, 
+    },
 
     editStatus: (req, res) => {
-        var {status,invoice} = req.body;
-        var sql = `update daftarorder set status = '${status}' where invoice = '${invoice}'`;
+        var { id, status } = req.body;
+        var sql = `update daftarorder set status = '${status}' where id = '${id}'`;
         db.query(sql, (err, results) => {
             if (err) throw err;
             res.send(results)
         })
     },
 
-    invoice: (req,res) => {
+    invoice: (req, res) => {
         var user = req.query.username;
         var sql = `select f.invoice as invoice, p.id as idproduct, p.nama as namaproduk, totalprice, qty, status from detailorder d
         join daftarorder f 
@@ -36,8 +36,8 @@ module.exports = {
         join products p 
         on d.idproduct = p.id
         where username = '${user}' and status = 'unpaid';`
-        db.query(sql, (err,result)=>{
-            if(err) throw err;
+        db.query(sql, (err, result) => {
+            if (err) throw err;
             res.send(result)
         })
     },
@@ -68,7 +68,7 @@ module.exports = {
     },
 
     editStock: (req, res) => {
-        var {stok,id,qty} = req.body;
+        var { id, stok, qty } = req.body;
         var hasil = stok - qty
         var sql = `update products set stok = ${hasil} where id = ${id}`;
         db.query(sql, (err, result) => {
@@ -77,13 +77,54 @@ module.exports = {
         })
     },
 
+    TambahStock: (req, res) => {
+        var { id, stok } = req.body;
+        var sql = `update products set stok = ${stok} where id = ${id}`;
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            res.send(result)
+        })
+    },
+
+    editStatus: (req, res) => {
+        var { id, status } = req.body;
+        var sql = `update daftarorder set status = '${status}' where id = '${id}'`;
+        db.query(sql, (err, results) => {
+            if (err) throw err;
+            res.send(results)
+        })
+    },
+
+    editStatusExpired: (req, res) => {
+        var { id, status } = req.body;
+        var sql = `update daftarorder set status = '${status}' where id = '${id}'`;
+        db.query(sql, (err, results) => {
+            if (err) throw err;
+            res.send(results)
+        })
+    },
+
+    joinDaftarOrder: (req, res) => {
+
+        var sql = `select idtrx,idproduct, dor.id as idtrans, qty,stok,waktuexp,p.id as idprod,status from detailorder dtl 
+        join daftarorder  dor
+        on dtl.idtrx = dor.id
+        join products p
+        on dtl.idproduct = p.id `
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            res.send(result)
+        })
+
+    },
+
     editcart: (req, res) => {
         var idcart = req.params.id
         var { kuantiti } = req.body;
         var sql = `select * from cart where id = ${idcart}`;
         db.query(sql, (err, result) => {
             if (err) throw err;
-            
+
             if (result.length > 0) {
                 var sql = `update cart set kuantiti =  ${kuantiti} where id = ${idcart}`;
                 db.query(sql, (err, results) => {
@@ -96,11 +137,11 @@ module.exports = {
 
     protectCart: (req, res) => {
         var idcart = req.params.id
-        var data  = req.body;
+        var data = req.body;
         var sql = `select * from cart where id = ${idcart}`;
         db.query(sql, (err, result) => {
             if (err) throw err;
-            
+
             if (result.length > 0) {
                 var sql = `update cart set ? where id = ${idcart}`;
                 db.query(sql, data, (err, results) => {
@@ -110,14 +151,14 @@ module.exports = {
             }
         })
     },
-    
+
     deleteCart: (req, res) => {
         var deletecart = req.params.id;
         console.log(deletecart)
         var sql = `select * from cart where id = ${deletecart}`;
         db.query(sql, (err, result) => {
             if (err) throw err;
-            
+
             if (result.length > 0) {
                 var sql = `delete from cart where id = ${deletecart};`
                 db.query(sql, (err, results) => {
@@ -125,6 +166,26 @@ module.exports = {
                     res.send(results);
                 })
             }
+        })
+    },
+
+    getDaftarorder: (req, res) => {
+        var sql = 'select * from daftarorder'
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            res.send(result)
+        })
+    },
+
+    getPromo: (req, res) => {
+        var namapromo = req.query.namapromo
+        var sql = `select * from promo where namapromo = '${namapromo}'`
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+
+            res.send(result);
+
+
         })
     },
 
@@ -136,7 +197,7 @@ module.exports = {
         //     alert("Copied the text: " + copyText.value);
         // }
 
-        var { username, date, totalprice, totalquantity, invoice, status, email } = req.body;
+        var { username, date, totalprice, totalquantity, invoice, status, email, waktuexp } = req.body;
         var data = {
             username,
             date,
@@ -144,7 +205,8 @@ module.exports = {
             totalquantity,
             invoice,
             status,
-            email
+            email,
+            waktuexp
         }
         var sql = `insert into daftarorder set ? ;`
         db.query(sql, data, (err, result) => {
@@ -172,7 +234,7 @@ module.exports = {
         })
     },
 
-    detailOrder:  (req, res) => {
+    detailOrder: (req, res) => {
         var data = req.body
         var sql = `insert into detailorder set ? ;`
         db.query(sql, data, (err, result) => {
@@ -228,7 +290,7 @@ module.exports = {
         var sql = `select * from wishlist where id = ${idwishlist}`;
         db.query(sql, (err, result) => {
             if (err) throw err;
-            
+
             if (result.length > 0) {
                 var sql = `update wishlist set ? where id = ${idwishlist}`;
                 db.query(sql, data, (err, results) => {
@@ -252,13 +314,13 @@ module.exports = {
         })
     },
 
-    deleteWishlist:  (req, res) => {
+    deleteWishlist: (req, res) => {
         var deletewish = req.params.id;
         console.log(deletewish)
         var sql = `select * from wishlist where id = ${deletewish}`;
         db.query(sql, (err, result) => {
             if (err) throw err;
-            
+
             if (result.length > 0) {
                 var sql = `delete from wishlist where id = ${deletewish};`
                 db.query(sql, (err, results) => {
@@ -269,13 +331,13 @@ module.exports = {
         })
     },
 
-    deleteAllWishlist:  (req, res) => {
+    deleteAllWishlist: (req, res) => {
         var deletewish = req.params.id;
         console.log(deletewish)
         var sql = `select * from wishlist where user_id = ${deletewish}`;
         db.query(sql, (err, result) => {
             if (err) throw err;
-            
+
             if (result.length > 0) {
                 var sql = `delete from wishlist where user_id = ${deletewish};`
                 db.query(sql, (err, results) => {
@@ -290,67 +352,68 @@ module.exports = {
         var user = req.query.username
         var sql = `SELECT * FROM daftarorder where username = '${user}'`;
         db.query(sql, (err, results) => {
-            if(err){
-                return res.status(500).json({ 
-                    message: "There's an error on the server. Please contact the administrator.", 
-                    error: err.message 
+            if (err) {
+                return res.status(500).json({
+                    message: "There's an error on the server. Please contact the administrator.",
+                    error: err.message
                 });
             }
             res.send(results);
-        })   
+        })
     },
 
     detailOrders: (req, res) => {
         var idtrx = req.query.idtrx;
         var sql = `SELECT 
-                    detailorder.id AS iddetailorder,
-                    products.id AS idproduct,
-                    products.nama AS namaproduk,
-                    products.harga AS hargaproduk,
-                    products.image AS image,
-                    detailorder.qty AS kuantiti
-                    FROM products
-                    JOIN detailorder ON detailorder.idproduct = products.id
-                    JOIN daftarorder ON daftarorder.id = detailorder.idtrx
-                    WHERE idtrx = ${idtrx}`;
+        detailorder.id AS iddetailorder,
+        products.id AS idproduct,
+        products.nama AS namaproduk,
+        products.harga AS hargaproduk,
+        products.image AS image,
+        products.stok as stok,
+        detailorder.qty AS kuantiti
+        FROM products
+        JOIN detailorder ON detailorder.idproduct = products.id
+        JOIN daftarorder ON daftarorder.id = detailorder.idtrx
+        WHERE idtrx = ${idtrx}`;
         db.query(sql, (err, resulth) => {
             if (err) throw err;
             res.send(resulth)
         })
     },
 
-    confirmOrder: (req,res) => {
+    confirmOrder: (req, res) => {
         try {
             const path = '/products/confirmtrx'; //file save path
-            const upload = uploader(path, 'TRX').fields([{ name: 'image'}]); //uploader(path, 'default prefix')
-    
+            const upload = uploader(path, 'TRX').fields([{ name: 'image' }]); //uploader(path, 'default prefix')
+
             upload(req, res, (err) => {
-                if(err){
+                if (err) {
                     return res.status(500).json({ message: 'Upload picture failed !', error: err.message });
                 }
-    
+
                 const { image } = req.files;
                 console.log(image)
                 const imagePath = image ? path + '/' + image[0].filename : null;
                 console.log(imagePath)
-    
+
                 console.log(req.body.data)
                 const data = JSON.parse(req.body.data);
                 console.log(data)
                 data.image = imagePath;
-                
+
                 var sql = 'INSERT INTO konfirmasiorder SET ?';
                 db.query(sql, data, (err, results) => {
-                    if(err) {
+                    if (err) {
                         console.log(err.message)
                         fs.unlinkSync('./public' + imagePath);
                         return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
                     }
-                   
+
                     console.log(results);
-                })    
+                })
             })
-        } catch(err) {
+        } catch (err) {
             return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
         }
     },
@@ -369,7 +432,7 @@ module.exports = {
 
     editAdmin: (req, res) => {
         var idcat = req.params.id;
-        var {email,status,invoice} = req.body;
+        var { email, status, invoice } = req.body;
 
         var sql = `select * from daftarorder where id = ${idcat}`;
         db.query(sql, (err, result) => {
@@ -387,7 +450,7 @@ module.exports = {
                         html: `berikut ini adalah kode invoice kamu. <br/> <h1 color="blue">${invoice}</h1>
                         <br/> Gunakan kode invoice tersebut untuk konfirmasi pembayaran!`
                     }
-        
+
                     transporter.sendMail(mailOptions, (err2, res2) => {
                         if (err2) {
                             console.log(err2)
@@ -405,7 +468,7 @@ module.exports = {
         })
     },
 
-    
+
 
     // invoice: (req,res) => {
     //     var user = req.query.username;
@@ -435,5 +498,5 @@ module.exports = {
                 res.send('Data not exist')
             }
         })
-    } 
+    }
 }

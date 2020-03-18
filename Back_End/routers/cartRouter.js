@@ -18,6 +18,7 @@ router.get('/protectwishlist/:id', cartController.protectWishlist);
 router.delete('/deletewishlist/:id', cartController.deleteWishlist);
 router.delete('/deleteallwishlist/:id', cartController.deleteAllWishlist)
 router.get('/daftarorder', cartController.listOrder);
+router.get('/joindaftarorder', cartController.joinDaftarOrder)
 router.get('/orderdetail', cartController.detailOrders);
 router.post('/confirmorder', cartController.confirmOrder);
 router.get('/getconfirm', cartController.getConfirm);
@@ -25,7 +26,11 @@ router.get('/getconfirm', cartController.getConfirm);
 router.put('/editadmin/:id', cartController.editAdmin)
 router.delete('/deleteorderbyadmin/:invoice', cartController.deleteOrderConfirm);
 router.put('/editstatus', cartController.editStatus)
+router.put('/editstatusexpired', cartController.editStatusExpired)
 router.put('/editStock',cartController.editStock)
+router.put('/tambahStock',cartController.TambahStock)
+router.get('/getdaftarorder',cartController.getDaftarorder)
+router.get('/getpromo',cartController.getPromo)
 // router.get('/invoice',cartController.invoice)
 
 module.exports = router;

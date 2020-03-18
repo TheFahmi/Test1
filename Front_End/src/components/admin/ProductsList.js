@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Cookies from 'universal-cookie'
 import Pagination from 'react-js-pagination';
-import { CustomInput,Modal,ModalBody,ModalFooter,ModalHeader,Button,Table } from 'reactstrap';
+import { APIURL } from '../../supports/APiUrl';
+import { CustomInput, Modal, ModalBody, ModalFooter, ModalHeader, Button, Table } from 'reactstrap';
+const cookie = new Cookies()
 
 const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 class ProductsList extends Component {
@@ -13,6 +16,7 @@ class ProductsList extends Component {
         listCategory: [],
         selectedIdEdit: 0,
         EditBrandImage: 'Choose Image',
+        EditBrandImageFile:'',
         AddBrandImage: 'Choose Image',
         searchListProducts: [],
         filterForm: '',
@@ -22,10 +26,10 @@ class ProductsList extends Component {
         images: [],
         activePage: 1,
         itemPerPage: 5,
-        isModaladdOpen:false,
-        isModaleditopen:false,
-        indexedit:0,
-        indexdelete:-1,
+        isModaladdOpen: false,
+        isModaleditopen: false,
+        indexedit: 0,
+        indexdelete: -1,
     }
 
     handlePageChange(pageNumber) {
@@ -35,22 +39,25 @@ class ProductsList extends Component {
 
     componentDidMount() {
         this.showProducts();
+
         this.rendercategory();
+        
     }
 
     showProducts = () => {
-        axios.get('http://localhost:2002/productlist/getproducts')
+        axios.get(`${APIURL}/productlist/getproducts`)
             .then((res) => {
                 console.log(res);
                 this.setState({
                     listProducts: res.data,
                     searchListProducts: res.data,
-                    selectedIdEdit: 0
+                    selectedIdEdit: 0,
+                    indexedit: 0
                 });
             }).catch((err) => {
                 console.log(err);
             })
-            axios.get('http://localhost:2002/category/getcategory')
+        axios.get(`${APIURL}/category/getcategory`)
             .then((res) => {
                 console.log(res);
                 this.setState({
@@ -62,8 +69,19 @@ class ProductsList extends Component {
     }
 
     // showCategory = () => {
-        
+
     // }
+
+    oneditImageFileChange=(event)=>{
+        // console.log(document.getElementById('addImagePost').files[0])
+        console.log(event.target.files[0])
+        var file=event.target.files[0]
+        if(file){
+            this.setState({EditBrandImage:file.name,EditBrandImageFile:event.target.files[0]})
+        }else{
+            this.setState({EditBrandImage:'Select Image...',EditBrandImageFile:undefined})
+        }
+      }
 
     onBtnAddClick = () => {
 
@@ -71,7 +89,8 @@ class ProductsList extends Component {
             var formData = new FormData()
             var headers = {
                 headers:
-                    { 'Content-Type': 'multipart/form-data' }
+                    { 'Content-Type': 'multipart/form-data',
+                    Authorization: cookie.get('token') }
             }
 
             var data = {
@@ -87,11 +106,11 @@ class ProductsList extends Component {
             }
             formData.append('data', JSON.stringify(data))
 
-            axios.post("http://localhost:2002/productlist/addproduct", formData, headers)
+            axios.post(`${APIURL}/productlist/addproduct`, formData, headers)
                 .then((res) => {
                     alert("Add Brand Success")
                     this.showProducts();
-                    this.setState({listProducts:res.data,isModaladdOpen:false})
+                    this.setState({ listProducts: res.data, isModaladdOpen: false })
                 })
                 .catch((err) => {
                     console.log(err)
@@ -101,6 +120,9 @@ class ProductsList extends Component {
             alert('Image harus diisi!')
         }
     }
+
+    
+
 
     onEditFileImageChange = () => {
         if (document.getElementById("EditBrandImage").files[0] !== undefined) {
@@ -121,7 +143,7 @@ class ProductsList extends Component {
         var data = {
             nama: this.refs.updatenama.value,
             harga: this.refs.updateharga.value,
-            category: this.refs.updatecategory.value,
+            idcategory: this.refs.updatecategory.value,
             deskripsi: this.refs.updatedeskripsi.value,
             stok: this.refs.updatestok.value
         }
@@ -131,26 +153,28 @@ class ProductsList extends Component {
         }
         formData.append('data', JSON.stringify(data))
 
-        axios.put("http://localhost:2002/productlist/editproduct/" + id, formData, headers)
+        axios.put(`${APIURL}/productlist/editproduct/` + id, formData, headers)
             .then((res) => {
                 alert("Edit Brand Success")
                 this.showProducts();
+                console.log(res)
+                this.setState({ isModaleditopen: false })
             })
             .catch((err) => {
                 console.log(err)
             })
     }
-    toogleadd=()=>{
-        this.setState({isModaladdOpen:!this.state.isModaladdOpen})
+    toogleadd = () => {
+        this.setState({ isModaladdOpen: !this.state.isModaladdOpen })
     }
 
-    toggleedit=()=>{
-        this.setState({isModaleditopen:!this.state.isModaleditopen})
+    toggleedit = () => {
+        this.setState({ isModaleditopen: !this.state.isModaleditopen })
     }
 
     onBtnDeleteClick = (id) => {
         if (window.confirm('Are you sure want to delete: ?')) {
-            axios.delete('http://localhost:2002/productlist/deleteproduct/' + id)
+            axios.delete(`${APIURL}/productlist/deleteproduct/`+id)
                 .then((res) => {
                     console.log(res);
                     this.showProducts();
@@ -164,6 +188,7 @@ class ProductsList extends Component {
     onAddFileImageChange = () => {
         if (document.getElementById("AddBrandImage").files[0] !== undefined) {
             this.setState({ AddBrandImage: document.getElementById("AddBrandImage").files[0].name })
+             // console.log(document.getElementById('addImagePost').files[0])
         }
         else {
             this.setState({ AddBrandImage: 'Pilih Gambar' })
@@ -171,7 +196,7 @@ class ProductsList extends Component {
     }
 
     rendercategory = () => {
-        return this.state.listCategory.map((item,index)=>{
+        return this.state.listCategory.map((item, index) => {
             return <option key={index} ref="addcategory" style={{ fontSize: "13px" }} value={item.id}>{item.nama}</option>
         })
     }
@@ -202,8 +227,8 @@ class ProductsList extends Component {
     //                     </td>
     //                     <td>
     //                     <select defaultValue="1" ref="quantity" innerRef="addcategory" style={{ fontSize: "13px" }} type="number">
-                                        
-                            
+
+
     //                         {this.rendercategory()}
     //                      </select>
     //                     </td>
@@ -231,108 +256,110 @@ class ProductsList extends Component {
         this.setState({ searchListProducts: arrSearch })
     }
 
-    renderProduct = () =>{
-        const {listProducts} =this.state 
+    renderProduct = () => {
+        const { listProducts, indexedit } = this.state
         var indexOfLastTodo = this.state.activePage * this.state.itemPerPage;
         var indexOfFirstTodo = indexOfLastTodo - this.state.itemPerPage;
         var renderedProjects = this.state.searchListProducts.slice(indexOfFirstTodo, indexOfLastTodo);
-        var iniListProduct = renderedProjects.map((val,index)=>{
+        var iniListProduct = renderedProjects.map((val, index) => {
+
+            // if(val.id === indexedit){
+
             return (
-                <tr key={index}>
-                    <th scope="row">{index+1}</th>
+                <tr>
+                    {/* <td>{index + 1}</td> */}
                     <td>{val.nama}</td>
                     <td>{val.harga}</td>
                     <td>{val.namacategory}</td>
-                    <td>{val.stok}</td>                    
-                    <td><img src={`http://localhost:2002${val.image}`} alt={val.image} style={{ width: '100px' }}/></td>
-                    
+                    <td>{val.stok}</td>
+                    <td><img src={`${APIURL}${val.image}`} alt={val.image} style={{ width: '100px' }} /></td>
+
                     <td>{val.deskripsi}</td>
                     <td>
-                        <button className='btn btn-primary' onClick={()=>this.onEditClick(index)} >Edit</button>
-                        <button className='btn btn-danger' onClick={()=>this.deleteconfirm(index,val.id)}>Delete</button>
+                        <button className='btn btn-primary' onClick={() => this.setState({isModaleditopen: true, selectedIdEdit: val.id})}  >Edit</button>
+                        <button className='btn btn-danger' onClick={() => this.onBtnDeleteClick(val.id)}>Delete</button>
                     </td>
                 </tr>
             )
+            // }
+
         })
+
         return iniListProduct
     }
 
-    // renderListCategory = () => {
-    //     var indexOfLastTodo = this.state.activePage * this.state.itemPerPage;
-    //     var indexOfFirstTodo = indexOfLastTodo - this.state.itemPerPage;
-    //     var renderedProjects = this.state.searchListProducts.slice(indexOfFirstTodo, indexOfLastTodo);
-    //     var listJSXCategory = renderedProjects.map((item) => {
+    renderListCategory = () => {
+        var indexOfLastTodo = this.state.activePage * this.state.itemPerPage;
+        var indexOfFirstTodo = indexOfLastTodo - this.state.itemPerPage;
+        var renderedProjects = this.state.searchListProducts.slice(indexOfFirstTodo, indexOfLastTodo);
+        var listJSXCategory = renderedProjects.map((item) => {
 
-    //         if (item.id === this.state.selectedIdEdit) {
-    //             return (
-    //                 <tr>
-    //                     {/* <td className="text-center" style={{ fontSize: '14px', }}>{item.id}</td> */}
-                        
-    //                     <td style={{ fontSize: '14px', }}><input type="text" defaultValue={item.nama} size="4" style={{ fontSize: "13px" }} ref="updatenama"className="form-control"></input></td>
-                        
-    //                     <td style={{ fontSize: '14px', }}><input type="number" defaultValue={item.harga} size="4" style={{ fontSize: "13px" }} ref="updateharga" className="form-control"></input></td>
+            if (item.id === this.state.selectedIdEdit) {
+                return (
+                    <Modal isOpen={this.state.isModaleditopen} toggle={this.toggleedit}>
+                        <ModalHeader toggle={this.toggleedit}>edit data {item.id}</ModalHeader>
+                        <ModalBody>
+                            <input type="text" ref='updatenama' defaultValue={item.nama} placeholder='Product name' className='form-control mt-2 ' />
+                            <input type="number" ref='updateharga' defaultValue={item.harga} placeholder='Harga' className='form-control mt-2' />
+                            <input type="number" ref='updatestok' defaultValue={item.stok} placeholder='jumlah stok' className='form-control mt-2' />
+                            <CustomInput type="file" id="EditBrandImage" name="EditBrandImage" label={this.state.EditBrandImage} onChange={this.oneditImageFileChange} />
+                            <select ref='updatecategory' defaultValue={item.id} className='form-control mt-2'>
+                                
+                                {this.rendercategory()}
+                            </select>
+                            <input type="number" defaultValue={item.harga} ref='updatedesc' placeholder='Harga ' className='form-control mt-2' />
+                            <textarea cols="20" rows="5" defaultValue={item.deskripsi} ref='updatedeskripsi' className='form-control mt-2' placeholder='deskripsi' ></textarea>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={() => this.onBtnSaveClick(item.id)}>Save</Button>
+                            <Button color="secondary" onClick={this.toggleedit}>Cancel</Button>
+                        </ModalFooter>
+                    </Modal>
 
-    //                     <td style={{ fontSize: '14px', }}><input type="number" defaultValue={item.stok} size="4" style={{ fontSize: "13px" }} ref="updatestok" className="form-control"></input></td>
-                        
-    //                     <td style={{ fontSize: '14px', }}>
-    //                         <input type="file" id="EditBrandImage" name="EditBrandImage" label={this.state.EditBrandImage} onChange={this.onEditFileImageChange} />
-    //                     </td>
-    //                     <td style={{ fontSize: '14px', }}><input type="text" defaultValue={item.deskripsi} size="4" style={{ fontSize: "13px" }} ref="updatedeskripsi" className="form-control"></input></td>
-    //                     <td className="text-center" style={{ fontSize: '14px', }}>
-    //                         <button className="btn btn-success" title="save" style={{ borderRadius: '30px', height: '30px', width: '30px' }}
-    //                             onClick={() => this.onBtnSaveClick(item.id)}>
-    //                             <i className="fa fa-save" style={{ fontSize: '14px' }}></i>
-    //                         </button>
-    //                         &nbsp;
-    //                     <button className="btn btn-dark" title="cancel" style={{ borderRadius: '30px', height: '30px', width: '30px' }}
-    //                             onClick={() => this.setState({ selectedIdEdit: 0 })}>
-    //                             <i className="fa fa-times" style={{ fontSize: '14px' }}></i>
-    //                         </button>
-    //                     </td>
-    //                 </tr>
-    //             )
-    //         }
+                    // this.state.listProducts.length 
 
-    //         if (this.props.myRole === "SUPERADMIN" || this.props.myRole === 'EDITOR') {
-    //             return (
-    //                 <tr>
-    //                     {/* <td style={{ fontSize: '14px', }}>{item.id}</td> */}
-    //                     <td style={{ fontSize: '14px', }}>{item.nama}</td>
-    //                     <td style={{ fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
-    //                     <td style={{ fontSize: '14px', }}>{item.stok}</td>
-    //                     <td><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{ width: '100px' }} /></td>
-    //                     <td style={{ fontSize: '14px', }}>{item.namacategory}</td>
-    //                     <td style={{ fontSize: '14px', }}>{item.deskripsi}</td>
-    //                     {/* <td style={{ fontSize: '14px', }}>
-    //                     </td> */}
-    //                     <td className="text-center" style={{ fontSize: '14px', }}>
-    //                         <button className="btn btn-info" title="edit" style={{ borderRadius: '30px', height: '30px', width: '30px' }}
-    //                             onClick={() => this.setState({ selectedIdEdit: item.id })}>
-    //                             <i className="fa fa-edit" style={{ fontSize: '14px' }}></i>
-    //                         </button>
-    //                         &nbsp;
-    //                     <button className="btn btn-danger" title="delete" style={{ borderRadius: '30px', height: '30px', width: '30px' }}
-    //                             onClick={() => this.onBtnDeleteClick(item.id)}>
-    //                             <i className="fa fa-trash" style={{ fontSize: '14px' }}></i>
-    //                         </button>
-    //                     </td>
-    //                 </tr>
-    //             )
-    //         }
+                )
+            }
 
-    //         return true;
+            // if (this.props.myRole === "SUPERADMIN" || this.props.myRole === 'EDITOR') {
+            //     return (
 
-    //     })
+            //         <Modal isOpen={this.state.isModaladdOpen} toggle={this.toogleadd}>
+            //             <ModalHeader toggle={this.toogleadd}>Add data</ModalHeader>
+            //             <ModalBody>
+            //                 <input type="text" ref='addname' placeholder='Product name' className='form-control mt-2 '/>
+            //                 <input type="text" ref='addprice' placeholder='Harga' className='form-control mt-2'/>
+            //                 <input type="number" ref='addstok' placeholder='jumlah stok' className='form-control mt-2'/>
+            //                 <CustomInput type="file" id="AddBrandImage" name="AddBrandImage" label={this.state.AddBrandImage} onChange={this.onAddFileImageChange} />
+            //                 <select ref='addcategory' className='form-control mt-2'>
+            //                     <option value="" hidden>Pilih category</option>
+            //                     {this.rendercategory()}
+            //                 </select>
+            //                 <textarea cols="20" rows="5" ref='adddescription' className='form-control mt-2' placeholder='deskripsi' ></textarea>
+            //             </ModalBody>
+            //             <ModalFooter>
+            //                 <Button color="primary" onClick={this.onBtnAddClick}>Save</Button>
+            //                 <Button color="secondary" onClick={this.toogleadd}>Cancel</Button>
+            //             </ModalFooter>
+            //         </Modal>
+                    
+            //     )
+            // }
 
-    //     return listJSXCategory;
-    // }
+            return true;
 
-    onEditClick=(index)=>{
-        this.setState({indexedit:index,isModaleditopen:true})
+        })
+
+        return listJSXCategory;
+    }
+
+    onEditClick = (index) => {
+        this.setState({ indexedit: index.id, isModaleditopen: true })
     }
 
     render() {
-        const {indexedit,listProducts}=this.state 
+        const { indexedit, listProducts } = this.state
+        var id = this.state.listCategory.id
         if (this.props.username !== "" && (this.props.myRole === "SUPERADMIN" || this.props.myRole === 'EDITOR')) {
 
             return (
@@ -374,10 +401,11 @@ class ProductsList extends Component {
                 //         </div>
                 //     </div>
                 // </div>
+                
                 <div className='pt-5'>
                     <div className="col-lg-3 pb-5">
-                         <form>
-                     <input type="text" className="form-control" style={{ fontSize: "12px" }}
+                        <form>
+                            <input type="text" className="form-control" style={{ fontSize: "12px" }}
                                 placeholder="Search by name"
                                 ref="searchbyname" onKeyUp={this.onBtnSearchClick} />
                         </form>
@@ -402,36 +430,19 @@ class ProductsList extends Component {
                     </Modal>
                     {
                     this.state.listProducts.length?
-                    <Modal isOpen={this.state.isModaleditopen} toggle={this.toggleedit}>
-                        <ModalHeader toggle={this.toggleedit}>edit data {listProducts[indexedit].name}</ModalHeader>
-                        <ModalBody>
-                            <input type="text" ref='updatenama' defaultValue={listProducts[indexedit].name} placeholder='Product name' className='form-control mt-2 '/>
-                            <input type="text" ref='updateprice' defaultValue={listProducts[indexedit].image} placeholder='Url Image' className='form-control mt-2'/>
-                            <input type="number" ref='updatestok' defaultValue={listProducts[indexedit].stok} placeholder='jumlah stok' className='form-control mt-2'/>
-                            <CustomInput type="file" id="AddBrandImage" name="AddBrandImage" label={this.state.EditBrandImage} onChange={this.onAddFileImageChange} />
-                            <select ref='updatecategory' defaultValue={listProducts[indexedit].kategoriId} className='form-control mt-2'>
-                                <option value="" hidden>Pilih category</option>
-                                {this.rendercategory()}
-                            </select>
-                            <input type="number" defaultValue={listProducts[indexedit].harga} ref='updatedesc' placeholder='Harga ' className='form-control mt-2'/>
-                            <textarea cols="20" rows="5" defaultValue={listProducts[indexedit].deskripsi} ref='updatedeskripsi' className='form-control mt-2' placeholder='deskripsi' ></textarea>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="primary" onClick={this.onBtnSaveClick}>Save</Button>
-                            <Button color="secondary" onClick={this.toggleedit}>Cancel</Button>
-                        </ModalFooter>
-                    </Modal>
+                    this.renderListCategory()
                     :
                     null
                     }
+
                     <button className='btn btn-primary' onClick={this.toogleadd}>Add data</button>
                     <Table striped>
                         <thead>
                             <tr>
-                                <th>No</th>
+                                {/* <th>No</th> */}
                                 <th>Name</th>
                                 <th>Harga</th>
-                                <th>Category</th>                               
+                                <th>Category</th>
                                 <th>Stok</th>
                                 <th>image</th>
                                 <th>Deskripsi</th>
@@ -439,23 +450,23 @@ class ProductsList extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                        {this.renderProduct()}
+                            {this.renderProduct()}
                         </tbody>
                     </Table>
                     <div className="mx-auto">
-                     <Pagination
-                                activePage={this.state.activePage}
-                                itemsCountPerPage={this.state.itemPerPage}
-                                totalItemsCount={this.state.searchListProducts.length}
-                                pageRangeDisplayed={5}
-                                onChange={this.handlePageChange.bind(this)}
-                            />
-                        </div>
-    
+                        <Pagination
+                            activePage={this.state.activePage}
+                            itemsCountPerPage={this.state.itemPerPage}
+                            totalItemsCount={this.state.searchListProducts.length}
+                            pageRangeDisplayed={5}
+                            onChange={this.handlePageChange.bind(this)}
+                        />
+                    </div>
+
                 </div>
-             );
-                
-            
+            );
+
+
         } else {
             return (
                 <Redirect to="/login" />

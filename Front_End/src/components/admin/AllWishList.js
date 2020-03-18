@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { convertToIDR } from '../../actions';
 import Pagination from 'react-js-pagination';
+import { APIURL } from '../../supports/APiUrl';
 
 const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 class AllWishList extends Component {
@@ -26,7 +27,7 @@ class AllWishList extends Component {
     }
 
     allWishlist = () => {
-        axios.get('http://localhost:2002/wishlist/allwishlist')
+        axios.get(`${APIURL}/wishlist/allwishlist`)
             .then((res) => {
                 this.setState({
                     wishlist: res.data
@@ -38,7 +39,7 @@ class AllWishList extends Component {
 
     btnDeleteClick = (id) => {
         if (window.confirm('Are you sure want to delete:?')) {
-            axios.delete("http://localhost:2002/deletewishlist/deletewishlist/" + id)
+            axios.delete(`${APIURL}/deletewishlist/deletewishlist/` + id)
                 .then((res) => {
                     console.log(res);
                     this.usersWishlist();
@@ -60,7 +61,7 @@ class AllWishList extends Component {
                         {/* <td className="text-center" style={{ fontSize: '14px', }}><center>{item.id}</center></td> */}
                         <td style={{ fontSize: '14px', }}>{item.Nama_product}</td>
                         <td style={{ fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
-                        <td><center><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}} /></center></td>
+                        <td><center><img src={`${APIURL}${item.image}`} alt={item.image} style={{width:'100px'}} /></center></td>
                         <td style={{ fontSize: '14px', }}>{item.username}</td>
                         <td>
                             <center>

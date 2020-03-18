@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Pagination from 'react-js-pagination';
+import { APIURL } from '../supports/APiUrl';
 
 class ProductsListView extends Component {
 
@@ -33,7 +34,7 @@ class ProductsListView extends Component {
     }
 
     showJoinProduct = () => {
-    axios.get('http://localhost:2002/join/getjoinproduct')
+    axios.get(`${APIURL}/join/getjoinproduct`)
             .then((res) => {
                 console.log(res);
                 this.setState({ 
@@ -47,7 +48,7 @@ class ProductsListView extends Component {
     }
 
     showProduct = () => {
-        axios.get('http://localhost:2002/product/listproduct')
+        axios.get(`${APIURL}/product/listproduct`)
             .then((res) => {
                 this.setState({
                     listProduct: res.data
@@ -67,7 +68,7 @@ class ProductsListView extends Component {
     }
 
     showCategories = () => {
-        axios.get('http://localhost:2002/product/listcategories')
+        axios.get(`${APIURL}/product/listcategories`)
         .then((res) => {
             this.setState({
                 listCategories: res.data
@@ -90,7 +91,7 @@ class ProductsListView extends Component {
         const product = this.refs.product.value;
         const category = this.refs.categories.value;
         if( product && category !== "") {
-            axios.post('http://localhost:2002/join/addjoinproduct', {
+            axios.post(`${APIURL}/join/addjoinproduct`, {
                 product,
                 category
             }).then((res) => {
@@ -105,7 +106,7 @@ class ProductsListView extends Component {
     onBtnSaveClick = (id) => {
         const product = this.refs.updateproduct.value;
         const category = this.refs.updatecategories.value;
-        axios.put('http://localhost:2002/join/editjoinproduct/' + id, {
+        axios.put(`${APIURL}/join/editjoinproduct/` + id, {
             product,
             category
         }).then((res) => {
@@ -118,7 +119,7 @@ class ProductsListView extends Component {
 
     onBtnDeleteClick = (id) => {
         if(window.confirm('Are you sure want to delete?')) {
-            axios.delete('http://localhost:2002/join/deletejoinproduct/' + id)
+            axios.delete(`${APIURL}/join/deletejoinproduct/` + id)
                 .then((res) => {
                     console.log(res);
                     this.showJoinProduct();
@@ -218,7 +219,7 @@ class ProductsListView extends Component {
                             {this.renderIDProduct()}
                         </select> </td>
                     <td>{item.harga}</td>
-                    <td><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100} /></td>
+                    <td><img src={`${APIURL}${item.image}`} alt={item.image} width={100} /></td>
                     <td>{item.deskripsi}</td>
                     <td>
                         <select  defaultValue={item.category} ref="updatecategories" className="custom-select" style={{ fontSize: "12px" }}>
@@ -250,7 +251,7 @@ class ProductsListView extends Component {
                         {/* <td style={{ fontSize: "13px" }}>{item.idproduct}</td> */}
                         <td style={{ fontSize: "13px" }}>{item.nama}</td>
                         <td style={{ fontSize: "13px" }}>{item.harga}</td>
-                        <td style={{ fontSize: "13px" }}><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100} /></td>
+                        <td style={{ fontSize: "13px" }}><img src={`${APIURL}${item.image}`} alt={item.image} width={100} /></td>
                         <td style={{ fontSize: "13px" }}>{item.deskripsi}</td>
                         <td style={{ fontSize: "13px" }}>{item.category}</td>
                         <td>

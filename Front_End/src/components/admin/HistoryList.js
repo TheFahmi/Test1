@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { convertdate } from '../../actions';
 import Pagination from 'react-js-pagination';
+import { APIURL } from '../../supports/APiUrl';
 
 const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 class HistoryList extends Component {
@@ -30,7 +31,7 @@ class HistoryList extends Component {
     }
 
     showOrders = () => {
-        axios.get('http://localhost:2002/orders/daftarorder?username=' + this.props.username)
+        axios.get(`${APIURL}/orders/daftarorder?username=` + this.props.username)
             .then((res) => {
                 this.setState({
                     listOrders: res.data,
@@ -43,7 +44,7 @@ class HistoryList extends Component {
     }
 
     showOrdersAdmin = () => {
-        axios.get('http://localhost:2002/trx/trxlist')
+        axios.get(`${APIURL}/trx/trxlist`)
                 .then((res) => {
                     console.log(res);
                     this.setState({ 
@@ -56,7 +57,7 @@ class HistoryList extends Component {
     }
 
     adminDeleteTrx = (id) => {
-        axios.delete('http://localhost:2002/trx/deletetrx/' + id)
+        axios.delete(`${APIURL}/trx/deletetrx/` + id)
             .then((res) => {
                 console.log(res);
                 this.showOrdersAdmin();
@@ -66,7 +67,7 @@ class HistoryList extends Component {
     }
 
     deleteTrx = (id) => {
-        axios.delete('http://localhost:2002/trx/deletetrx/' + id)
+        axios.delete(`${APIURL}/trx/deletetrx/` + id)
             .then((res) => {
                 console.log(res);
                 this.showOrders();
@@ -76,7 +77,7 @@ class HistoryList extends Component {
     }
 
     userOrderDetails = (id) => {
-        axios.get('http://localhost:2002/orderdetail/orderdetail?idtrx=' + id)
+        axios.get(`${APIURL}/orderdetail/orderdetail?idtrx=` + id)
             .then((res) => {
                 this.setState({ listUserOrderDetails: res.data })
                 console.log(res.data)
@@ -151,7 +152,7 @@ class HistoryList extends Component {
                     <td className="text-center" style={{fontSize: '14px', }}>{item.namaproduk}</td>
                     <td className="text-center" style={{ fontSize: '14px', }}>{myCurrency.format(item.hargaproduk)}</td>
                     <td className="text-center" style={{fontSize: '14px', }}>Qty: {item.kuantiti}</td>
-                    <td className="text-center" style={{fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}}/>{item.gambar}</td>
+                    <td className="text-center" style={{fontSize: '14px', }}><img src={`${APIURL}${item.image}`} alt={item.image} style={{width:'100px'}}/>{item.gambar}</td>
                 </tr>
             )
 

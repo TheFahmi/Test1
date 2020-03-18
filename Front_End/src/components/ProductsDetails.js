@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { select_products } from '../actions';
 import queryString from 'query-string';
+import { Redirect } from 'react-router-dom';
 import { Button, InputGroup, InputGroupAddon } from 'reactstrap';
 import { toast } from 'react-toastify'
 // import { Redirect } from 'react-router-dom';
+import { APIURL } from '../supports/APiUrl';
 const rupiah = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 
 class ProductsDetails extends Component {
@@ -22,7 +24,7 @@ class ProductsDetails extends Component {
         var params = queryString.parse(this.props.location.search);
         var id = params.id;
         // console.log('Params id = ' + id)
-        axios.get('http://localhost:2002/productdetail/productdetail', {
+        axios.get(`${APIURL}/productdetail/productdetail`, {
             params: {
                 id
             }
@@ -38,19 +40,19 @@ class ProductsDetails extends Component {
     onBtnAddToCart = (harga, id) => {
         if (this.props.username === "") {
             alert("Please Login First!");
-            window.location = "/login"
+            window.location ="/login";
         } else {
 
             var kuantiti = this.refs.quantity.value;
             var total_harga = kuantiti * harga
-            axios.get('http://localhost:2002/cart/cartproduct', {
+            axios.get(`${APIURL}/cart/cartproduct`, {
                 params: {
                     username: this.props.username,
                     product_id: id,
                 }
             }).then((res) => {
                 if (res.data.length > 0) {
-                    axios.put("http://localhost:2002/editcart/protectcart/" + res.data[0].id, {
+                    axios.put(`${APIURL}/editcart/protectcart/` + res.data[0].id, {
                         user_id: this.props.id,
                         product_id: id,
                         kuantiti,
@@ -69,7 +71,7 @@ class ProductsDetails extends Component {
                     window.location = "/cart";
 
                 } else {
-                    axios.post("http://localhost:2002/cartplus/cartplus", {
+                    axios.post(`${APIURL}/cartplus/cartplus`, {
                         user_id: this.props.id,
                         product_id: id,
                         kuantiti,
@@ -106,16 +108,16 @@ class ProductsDetails extends Component {
         // + " " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
         if (this.props.username === "") {
             alert("Please Login First!");
-            window.location = "/login"
+            window.location ="/login";
         } else {
-            axios.get('http://localhost:2002/wishlist/getprotectwishlist', {
+            axios.get(`${APIURL}/wishlist/getprotectwishlist`, {
                 params: {
                     username: this.props.username,
                     product_id: id,
                 }
             }).then((res) => {
                 if (res.data.length > 0) {
-                    axios.put("http://localhost:2002/editcart/protectwishlist/" + res.data[0].id, {
+                    axios.put(`${APIURL}/editcart/protectwishlist/` + res.data[0].id, {
                         user_id: this.props.id,
                         product_id: id,
                         date
@@ -127,7 +129,7 @@ class ProductsDetails extends Component {
                     alert('Succes add to wishlist!')
                     window.location = "/wishlist";
                 } else {
-                    axios.post("http://localhost:2002/wishlist/addwishlist", {
+                    axios.post(`${APIURL}/wishlist/addwishlist`, {
                         user_id: this.props.id,
                         product_id: id,
                         date
@@ -159,7 +161,7 @@ class ProductsDetails extends Component {
             // <h1 className="section-subheading text-center font-weight-bold" style={{ color: "black" }}>{nama}</h1>
             // <div className="row" style={{paddingTop: '30px'}}>
             //     <div className="col-8 col-sm-6 bg-" style={{height: '300px'}}>
-            //         <img src={`http://localhost:2002${image}`} alt={image} height="250px" className="float-right"/>
+            //         <img src={`${APIURL}${image}`} alt={image} height="250px" className="float-right"/>
             //     </div>
             //     <div className="col-4 col-sm-6" style={{height: 'auto'}}>
             //     <div style={{width: "380px"}}>
@@ -187,11 +189,11 @@ class ProductsDetails extends Component {
             
 
             <div className="container" style={{paddingTop: '100px'}}>
-                <div className="col-sm-10 bg" style={{ height: '500px', paddingTop: '30px', paddingBottom: '30px' }}>
+                <div className="col-sm-10 bg" style={{ height: '600px', paddingTop: '30px', paddingBottom: '30px' }}>
                     <div className="row row-top row-bottom" >
                         <div className="card col-5 mx-auto" style={{height: '350px'}}>
                             <div className="row" >
-                                <img src={`http://localhost:2002${image}`} alt={image}style={{height: 'auto', width: 'auto'}}className="col-12" />
+                                <img src={`${APIURL}${image}`} alt={image}style={{height: '300px', width: '300px'}}className="col-12" />
                             </div>
                         </div>
                         <div className="col-7 product-data">

@@ -1,6 +1,13 @@
 var express = require('express')
 var router = express.Router()
-var { allUser } = require('../controllers');
+var { allUser,loginController } = require('../controllers');
+
+
+router.post('/user', loginController.user);
+router.get('/keeplogin', loginController.keeplogin)
+
+router.post('/register', loginController.register);
+router.post('/verified', loginController.verified);
 
 // user
 router.get('/listusers', allUser.getUsers);

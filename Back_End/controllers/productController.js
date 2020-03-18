@@ -13,6 +13,15 @@ module.exports = {
             res.send(result);
         })
     },
+
+    getNamaCat: (req, res) => {
+        var sql = `SELECT nama FROM category`;
+        
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            res.send(result);
+        })
+    },
     
     productdetail: (req, res) => {
         var product = req.query.id
@@ -32,9 +41,59 @@ module.exports = {
         })
     },
 
+    getDataPenjualan: (req, res) => {
+        var sql = `(select sum(dor.totalprice) as total, date as waktu from detailorder dtl
+        join daftarorder dor
+        on dtl.idtrx = dor.id
+        join products p
+        on dtl.idproduct = p.id
+        join category c
+        on p.idcategory = c.id
+        
+         where status='sent'
+         group by waktu
+         limit 7)
+         order by waktu ASC`;
+         db.query(sql, (err, result) => {
+            if (err) throw err;
+            res.send(result);
+        })
+    },
+
+    getJoinCategory: (req, res) => {
+        var sql = `select p.id as id,p.nama as nama,harga,image,deskripsi,stok, c.nama as namacategory from products p 
+        join category c 
+        on p.idcategory = c.id`;
+
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            res.send(result);
+        })
+
+    },
+
+    getDataCart: (req,res) => {
+        var sql = `select sum(dor.totalquantity) as total, c.nama as nama from detailorder dtl
+        join daftarorder dor
+        on dtl.idtrx = dor.id
+        join products p
+        on dtl.idproduct = p.id
+        join category c
+        on p.idcategory = c.id
+        
+         where status='sent'
+         group by nama
+         
+         `;
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            res.send(result);
+        })
+    },
+
 
     ManageProducts: (req, res) => {
-        var sql = `select p.id as id, p.nama as nama, deskripsi, image, stok, harga, c.nama as namacategory, c.id as idcat from products p 
+        var sql = `select p.id as id, p.nama as nama, deskripsi, image, stok, harga, rating, c.nama as namacategory, c.id as idcat from products p 
         join category c 
         on p.idcategory = c.id`;
         db.query(sql, (err, result) => {
@@ -132,13 +191,23 @@ module.exports = {
     
                     try {
                         if(imagePath) {
+                            data.image = imagePath
+                            
                             sql = `update products set ? where id = ${brandId};`
                             db.query(sql, data, (err1,results1) => {
                                 if(err1) {
-                                    fs.unlinkSync('./public' + imagePath);
+                                    if(imagePath){
+                                        fs.unlinkSync('./public' + imagePath);
+
+                                    }
                                     return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
                                 }
-                                fs.unlinkSync('./public' + results[0].image);
+                                if(imagePath){
+                                    if(results[0].image){
+                                        fs.unlinkSync('./public' + results[0].image);
+                                    }
+                                }
+                                                               
                                 sql = `select * from products;`;
                                 db.query(sql, (err2,results2) => {
                                     if(err2) {

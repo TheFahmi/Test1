@@ -5,6 +5,7 @@ import { onUserRegister } from '../actions';
 import { Button } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import Spinner from './Spinner';
+import { APIURL } from '../supports/APiUrl';
 
 const cookies = new Cookies();
 

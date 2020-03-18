@@ -4,6 +4,7 @@ import { Row, Col } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Pagination from 'react-js-pagination';
+import { APIURL } from '../../supports/APiUrl';
 
 class UsersList extends Component {
 
@@ -30,7 +31,7 @@ class UsersList extends Component {
 
     showUsers = () => {
     // axios.get(API_URL_1 + '/users')
-        axios.get('http://localhost:2002/users/listusers')
+        axios.get(`${APIURL}/users/listusers`)
             .then((res) => {
                 console.log(res);
                 this.setState({ 
@@ -53,7 +54,7 @@ class UsersList extends Component {
             const status = this.refs.addverifie.value;
 
         if(username && role && email && status ) {
-            axios.post('http://localhost:2002/users/adduser', {
+            axios.post(`${APIURL}/users/adduser`, {
                 username, password, role, email, status
             }).then((res) => {
                 console.log(res);
@@ -73,7 +74,7 @@ class UsersList extends Component {
         // const phone = this.refs.phoneupdate.value;
         const status = this.refs.statusupdate.value;
 
-        axios.put('http://localhost:2002/users/edituser/' + id, {
+        axios.put(`${APIURL}/users/edituser/` + id, {
             username, password, role, email, status
         }).then((res) => {
             console.log(res);
@@ -85,7 +86,7 @@ class UsersList extends Component {
 
     onBtnDeleteClick = (id) => {
         if(window.confirm('Are you sure want to delete?')) {
-            axios.delete('http://localhost:2002/users/deleteuser/' + id)
+            axios.delete(`${APIURL}/users/deleteuser/` + id)
                 .then((res) => {
                     console.log(res);
                     this.showUsers();
@@ -113,7 +114,7 @@ class UsersList extends Component {
     }
 
     adminAddAction = () => {
-        if(this.props.myRole === 'SUPERADMIN' || this.props.myRole === 'EDITOR') {
+        if(this.props.myRole === 'SUPERADMIN') {
             return(
                 <tfoot>
                     <tr>
@@ -126,7 +127,7 @@ class UsersList extends Component {
                             <select ref="addrole" className="custom-select" style={{ fontSize: "12px" }}>
                                 <option>SUPERADMIN</option>
                                 <option>MEMBER</option>
-                                <option>EDITOR</option>
+                                <option>EDITOR</option>e
                                 <option>ADMIN PAYMENT</option>
                             </select>
                         </td>

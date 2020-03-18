@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {APIURL} from '../supports/APiUrl'
 import { 
     AUTH_LOGIN_SUCCESS,
     AUTH_REGISTER_SUCCESS,
@@ -15,7 +16,7 @@ export const onUserLogin = ({ username, password }) => {
     return ( dispatch ) => {
 
         dispatch({ type: AUTH_LOADING });
-        axios.post("http://localhost:2002/user/user", {
+        axios.post(`${APIURL}/user/user`, {
                 username: username,
                 password: password
          })
@@ -54,7 +55,7 @@ export const onUserLogin = ({ username, password }) => {
         if(username === '' || email === '' || password === '') {
             dispatch({ type: AUTH_REGISTER_ERROR, payload: 'Semua form wajib diisi' });
         } else {
-            axios.post('http://localhost:2002/auth/register', {
+            axios.post(`${APIURL}/auth/register`, {
                 username: username,
                 email: email,
                 // phone: phone,
@@ -75,8 +76,14 @@ export const onUserLogin = ({ username, password }) => {
 export const keepLogin = (username) => {
 
     return (dispatch) => {
-
-        axios.get("http://localhost:2002/keeplogin/keeplogin", {
+        const token=localStorage.getItem('token')
+        console.log(token)
+        const headers={
+            headers:{
+                'Authorization':`Bearer ${token}`
+            }
+        }
+        axios.get(`${APIURL}/keeplogin/keeplogin`, {
             params: {
                 username
             }
@@ -94,7 +101,13 @@ export const keepLogin = (username) => {
                      }
                 })
             }
-        })
+        }).catch((err)=>{
+                        // console.log(err.response.data)
+                        localStorage.removeItem('token')
+                        dispatch({
+                            type:LOGOUT
+                        })
+                    })
 
     }
 

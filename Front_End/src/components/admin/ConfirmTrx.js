@@ -30,7 +30,7 @@ class ConfirmTrx extends Component {
         return (
           <div className="" style={{ padding: "20px", fontSize: "13px", height: '700px' }}>
             <div className="row">
-              <div className="col-lg-2" style={{ marginBottom: "20px"}}>
+            <div className="col-lg-2" style={{ marginBottom: "20px", marginTop: "50px"}}>
                 <div className="list-group">
                     <a href="/admin/Dashboard" className="list-group-item">Dashboard</a>
                     <a href="/admin/confirmtransaction" className="list-group-item active">Transactions Confirmation</a>
@@ -38,6 +38,8 @@ class ConfirmTrx extends Component {
                     <a href="/admin/manageusers" className="list-group-item">Manage Users</a>
                     <a href="/admin/managetrx" className="list-group-item">Manage Transactions</a>
                     <a href="/admin/managewishlist" className="list-group-item">See Wishlist</a>
+                    <a href="/admin/pagereport" className="list-group-item">See Report</a>
+                    
                 </div>
                 </div>
                 <div className="col-lg-10 card bg-light border">

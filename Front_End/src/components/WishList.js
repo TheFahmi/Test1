@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Pagination from 'react-js-pagination';
+import { APIURL } from '../supports/APiUrl';
 
 const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 class WIshlistCart extends Component {
@@ -27,7 +28,7 @@ class WIshlistCart extends Component {
     }
 
     // allWishlist = () => {
-    //     axios.get('http://localhost:2002/wishlist/allwishlist')
+    //     axios.get('${APIURL}/wishlist/allwishlist')
     //         .then((res) => {
     //             this.setState({
     //                 wishlist: res.data
@@ -38,7 +39,7 @@ class WIshlistCart extends Component {
     // }
 
     usersWishlist = () => {
-        axios.get("http://localhost:2002/wishlist/wishlist?username=" + this.props.username)
+        axios.get(`${APIURL}/wishlist/wishlist?username=` + this.props.username)
                 .then((res) => {
                     console.log(res);
                     this.setState({ 
@@ -51,7 +52,7 @@ class WIshlistCart extends Component {
 
     btnDeleteClick = (id) => {
         if(window.confirm('Are you sure want to delete:?')) {
-            axios.delete("http://localhost:2002/deletewishlist/deletewishlist/" + id)
+            axios.delete(`${APIURL}/deletewishlist/deletewishlist/` + id)
                 .then((res) => {
                     console.log(res);
                     this.usersWishlist();
@@ -64,7 +65,7 @@ class WIshlistCart extends Component {
 
     // btnAllDeleteClick = (id) => {
     //     if(window.confirm('Are you sure want to delete:?')) {
-    //         axios.delete("http://localhost:2002/deletewishlist/deleteallwishlist/" + id)
+    //         axios.delete("${APIURL}/deletewishlist/deleteallwishlist/" + id)
     //             .then((res) => {
     //                 console.log(res);
     //                 window.location = '/productsgridview'
@@ -83,14 +84,14 @@ class WIshlistCart extends Component {
             
             var kuantiti = 1;
             var total_harga = kuantiti * harga
-            axios.get('http://localhost:2002/cart/cartproduct', {
+            axios.get(`${APIURL}/cart/cartproduct`, {
                 params: {
                     username: this.props.username,
                     product_id,
                 }
             }).then((res) => {
                 if (res.data.length > 0) {
-                    axios.put("http://localhost:2002/editcart/protectcart/" + res.data[0].id, {
+                    axios.put(`${APIURL}/editcart/protectcart/` + res.data[0].id, {
                         user_id : this.props.id,
                         product_id,
                         kuantiti,
@@ -100,7 +101,7 @@ class WIshlistCart extends Component {
                     }).catch((err) => {
                         console.log(err);
                     })
-                    axios.delete("http://localhost:2002/deletewishlist/deletewishlist/" + id)
+                    axios.delete(`${APIURL}/deletewishlist/deletewishlist/ ` + id)
                     .then((res) => {
                         console.log(res);
                         this.usersWishlist();
@@ -111,7 +112,7 @@ class WIshlistCart extends Component {
                     alert('Succes move to cart!')
                     window.location = "/cart";
                 } else {
-                    axios.post("http://localhost:2002/cartplus/cartplus", {
+                    axios.post(`{APIURL}/cartplus/cartplus`, {
                         user_id : this.props.id,
                         product_id,
                         kuantiti,
@@ -124,7 +125,7 @@ class WIshlistCart extends Component {
                         console.log(err);
                         alert(`Failed move to cart`);
                     })
-                    axios.delete("http://localhost:2002/deletewishlist/deletewishlist/" + id)
+                    axios.delete(`${APIURL}/deletewishlist/deletewishlist/` + id)
                         .then((res) => {
                             console.log(res);
                             this.usersWishlist();
@@ -182,7 +183,7 @@ class WIshlistCart extends Component {
             //             <td className="text-center" style={{ fontSize: '14px', }}><center>{item.id}</center></td>
             //             <td className="text-center" style={{ fontSize: '14px', }}>{item.Nama_product}</td>
             //             <td className="text-center" style={{ fontSize: '14px', }}>IDR. {item.harga}</td>
-            //             <td><center><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100}/></center></td>
+            //             <td><center><img src={`${APIURL}${item.image}`} alt={item.image} width={100}/></center></td>
             //             <td className="text-center" style={{ fontSize: '14px', }}>{item.username}</td>
             //             <td>
             //                 <center>
@@ -199,7 +200,7 @@ class WIshlistCart extends Component {
                     <tr>
                     <td style={{ fontSize: '14px', }}>{item.Nama_product}</td>
                     <td style={{ fontSize: '14px', }}>{myCurrency.format(item.harga)}</td>
-                        <td><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}} /></td>
+                        <td><img src={`${APIURL}${item.image}`} alt={item.image} style={{width:'100px'}} /></td>
                     <td>
                         <center>
                             <button className="btn btn-danger" style={{borderRadius: '30px', height: '30px', width: '30px'}}
@@ -233,15 +234,11 @@ class WIshlistCart extends Component {
             if(this.props.status === 'Verified'){
                 if(this.state.wishlist.length > 0){
                     return (
-                        <article className="card-body mx-auto" style={{height: "700px"}}>
-                            <div className="col-lg-12 text-center">
-                                <h2 className="section-heading text-uppercase">Wishlist</h2>
-                                <br />
-                            </div>
-                            <br />
-                            <div className="full-width-div table-responsive card shadow mb-5 bg-white rounded pt-5" style={{ marginTop: '-20px' }}>
-                            <h2 className="section-heading text-uppercase text-center">WIshlist</h2>
-                                <table align="center" className="table table-striped table-hover bordered shadow col-lg-8 justify-content-center mt-5">
+                        <article className="card-body mx-auto" style={{height: "700px",marginTop:"100px"}}>
+                            <h2 className="section-heading text-uppercase text-center">Wishlist</h2>
+                            <div className="row justify-content-center">
+
+                                <table align="center" className="table table-striped table-hover bordered shadow col-lg-8  mt-5">
                                     <thead className="thead-dark">
                                         <tr>
                                             {/* <th scope="col" className="font-weight-bold" style={{ fontSize: '16px', }}><center>ID</center></th> */}
@@ -256,7 +253,8 @@ class WIshlistCart extends Component {
                                         {this.renderWishlist()}
                                     </tbody>
                                 </table>
-                                <div className="mx-auto">
+                            </div>
+                                <div className=" row justify-content-center">
                                     <Pagination
                                         activePage={this.state.activePage}
                                         itemsCountPerPage={this.state.itemPerPage}
@@ -265,12 +263,12 @@ class WIshlistCart extends Component {
                                         onChange={this.handlePageChange.bind(this)}
                                     />
                                 </div>
-                            </div>
+                            {/* </div> */}
                         </article>
                     )
                 } else {
                     return (
-                        <div  style={{height: '239px'}}>
+                        <div  style={{height: '600px'}}>
                         <div className="d-flex justify-content-center" style={{marginTop: '130px'}}>
                             <div className="alert alert-warning col-md-4 mt-5 border shadow-lg" style={{ fontSize: "20px" }}>
                                 <center><b>Upps, Your wishlist is empty!!!</b><br/></center>

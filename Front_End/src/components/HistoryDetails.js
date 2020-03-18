@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 // import { API_URL_1 } from '../supports/api-url/apiurl';
 import { Redirect } from 'react-router-dom';
 import queryString from 'query-string';
+import { APIURL } from '../supports/APiUrl';
 
 class HistoryDetails extends Component {
 
@@ -28,7 +29,7 @@ class HistoryDetails extends Component {
     // }
 
     userOrderDetails = () => {
-        axios.get(`http://localhost:2002/orderdetail/orderdetail`, {
+        axios.get(`${APIURL}/orderdetail/orderdetail`, {
             idtrx: this.id()
         }).then((res) => {
             this.setState({ listUserOrderDetails: res.data })

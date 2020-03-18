@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { APIURL } from '../../supports/APiUrl';
 
 class HomeDashboard extends Component {
     state = {
@@ -23,7 +24,7 @@ class HomeDashboard extends Component {
     }
 
     totalUsers = () => {
-        axios.get('http://localhost:2002/dashboard/getusers')
+        axios.get(`${APIURL}/dashboard/getusers`)
             .then((res) => {
                 console.log(res);
                 this.setState({ 
@@ -35,7 +36,7 @@ class HomeDashboard extends Component {
     }
 
     totalProducts = () => {
-        axios.get('http://localhost:2002/dashboard/getproducts')
+        axios.get(`${APIURL}/dashboard/getproducts`)
             .then((res) => {
                 console.log(res);
                 this.setState({ products: res.data });
@@ -45,7 +46,7 @@ class HomeDashboard extends Component {
     }
 
     totalOrder = () => {
-        axios.get('http://localhost:2002/dashboard/getorder')
+        axios.get(`${APIURL}/dashboard/getorder`)
             .then((res) => {
                 console.log(res);
                 this.setState({ order: res.data });
@@ -55,7 +56,7 @@ class HomeDashboard extends Component {
     }
 
     // totalSales = () => {
-    //     axios.get('http://localhost:2002/dashboard/getorder')
+    //     axios.get('${APIURL}/dashboard/getorder')
     //         .then((res) => {
     //             console.log(res);
     //             var price = 0;
@@ -71,7 +72,7 @@ class HomeDashboard extends Component {
     // }
 
     totalOrderNeedConfirm = () => {
-        axios.get('http://localhost:2002/dashboard/getconfirm')
+        axios.get(`${APIURL}/dashboard/getconfirm`)
             .then((res) => {
                 console.log(res);
                 this.setState({ confirm: res.data });
@@ -81,7 +82,7 @@ class HomeDashboard extends Component {
     }
 
     totalWishlist = () => {
-        axios.get('http://localhost:2002/dashboard/getwishlist')
+        axios.get(`${APIURL}/dashboard/getwishlist`)
             .then((res) => {
                 console.log(res);
                 this.setState({ wishlist: res.data });
@@ -91,7 +92,7 @@ class HomeDashboard extends Component {
     }
 
     orderSuccess = () => {
-        axios.get('http://localhost:2002/dashboard/ordersuccess')
+        axios.get(`${APIURL}/dashboard/ordersuccess`)
             .then((res) => {
                 console.log(res);
                 this.setState({ ordersuccess: res.data });
@@ -148,8 +149,8 @@ class HomeDashboard extends Component {
                 </div>
                 <div className="col-md-4 pt-5">
                 <div className="card border-info bg-info mx-sm-1 p-3 shadow" style={{height: '200px', borderRadius: '10px'}}>
-                    <a href="/admin/managetrx">
-                    <div className="card border-info shadow text-info p-3 my-card bg-light" style={{borderRadius: '7px'}}><h3 className="text-center text-uppercase">See Orders Success</h3></div></a>
+                    {/* <a href="/admin/managetrx"> */}
+                    <div className="card border-info shadow text-info p-3 my-card bg-light" style={{borderRadius: '7px'}}><h3 className="text-center text-uppercase">Orders Success</h3></div>
                     <div className="text-info text-center mt-2 pt-4"><h1 className="text-light">Total Order Success</h1></div>
                     <div className="text-info text-center mt-2"><h1><button className="btn btn-light" style={{height: '50px', width: '50px', borderRadius: '50px', fontSize: '20px'}}>{this.state.ordersuccess.length}</button></h1></div>
                 </div>

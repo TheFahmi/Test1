@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { convertToIDR, convertdate } from '../../actions';
 import Pagination from 'react-js-pagination';
-
+import { APIURL } from '../../supports/APiUrl';
 // var locales = ['ban', 'id-u-co-pinyin', 'de-ID'];
 // var options = { localeMatcher: 'lookup' };
 // const date = new Intl.DateTimeFormat.supportedLocalesOf(locales, options).join(', ');
@@ -30,7 +30,7 @@ class ListConfirm extends Component {
     }
 
     showListConfirm = () => {
-    axios.get('http://localhost:2002/confirm/getconfirm')
+    axios.get(`${APIURL}/confirm/getconfirm`)
             .then((res) => {
                 console.log(res);
                 this.setState({ 
@@ -50,7 +50,7 @@ class ListConfirm extends Component {
             const status = this.refs.editStatus.value
             const email = this.state.listConfirm[i].email
             const invoice = this.state.listConfirm[i].invoice
-            axios.put(`http://localhost:2002/confirm/editadmin/${id}`, {
+            axios.put(`${APIURL}/confirm/editadmin/${id}`, {
                 status, invoice, email
             }).then((res) => {
                 this.showListConfirm()
@@ -64,7 +64,7 @@ class ListConfirm extends Component {
 
     onBtnDeleteClick = (idConfirm) => {
         if(window.confirm('Are you sure want to delete?')) {
-            axios.delete('http://localhost:2002/confirm/deleteorderbyadmin/' + idConfirm)
+            axios.delete(`${APIURL}/confirm/deleteorderbyadmin/` + idConfirm)
                 .then((res) => {
                     console.log(res);
                     this.showListConfirm();
@@ -102,7 +102,7 @@ class ListConfirm extends Component {
                     <td style={{ fontSize: '14px', }}>{item.idConfirm}</td> */}
                     <td style={{ fontSize: '14px', }}>{item.nama}</td>
                     <td style={{ fontSize: '14px', }}>{item.email}</td>
-                    <td style={{ fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} width={100}/></td>
+                    <td style={{ fontSize: '14px', }}><img src={`${APIURL}${item.image}`} alt={item.image} width={100}/></td>
                     <td style={{ fontSize: '14px', }}>{item.invoice}</td>
                     <td style={{ fontSize: '14px', }}>{this.props.convertdate(item.date)}</td>
                     <td style={{ fontSize: '14px', }}>{item.totalquantity}</td>
@@ -135,7 +135,7 @@ class ListConfirm extends Component {
                     <td className="text-center" style={{ fontSize: '14px', }}>{item.idConfirm}</td> */}
                     <td style={{ fontSize: '14px', }}>{item.nama}</td>
                     <td style={{ fontSize: '14px', }}>{item.email}</td>
-                    <td style={{ fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{width:'100px'}}/></td>
+                    <td style={{ fontSize: '14px', }}><img src={`${APIURL}${item.image}`} alt={item.image} style={{width:'100px'}}/></td>
                     <td style={{ fontSize: '14px', }}>{item.invoice}</td>
                     <td style={{ fontSize: '14px', }}>{this.props.convertdate(item.date)}</td>
                     <td style={{ fontSize: '14px', }}>{item.totalquantity}</td>

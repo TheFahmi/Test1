@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Pagination from 'react-js-pagination';
+import { APIURL } from '../../supports/APiUrl';
 
 class CategoryList extends Component {
 
@@ -31,7 +32,7 @@ class CategoryList extends Component {
     }
 
     showCategory = () => {
-    axios.get('http://localhost:2002/category/categories')
+    axios.get(`${APIURL}/category/categories`)
             .then((res) => {
                 console.log(res);
                 this.setState({ 
@@ -48,7 +49,7 @@ class CategoryList extends Component {
         const jenis = this.refs.addcategories.value;
         console.log(jenis)
         if(jenis) {
-            axios.post('http://localhost:2002/category/addcategories', {
+            axios.post(`${APIURL}/category/addcategories`, {
                 jenis
             }).then((res) => {
                 console.log(res);
@@ -67,7 +68,7 @@ class CategoryList extends Component {
         const jenis = this.refs.updatecategory.value;
         console.log(jenis)
         // axios.put(API_URL_1 + '/category/' + id, {
-        axios.put(`http://localhost:2002/category/editcategory/${id}`, {
+        axios.put(`${APIURL}/category/editcategory/${id}`, {
             jenis
         }).then((res) => {
             console.log(res);
@@ -82,7 +83,7 @@ class CategoryList extends Component {
     onBtnDeleteClick = (id, jenis) => {
         if(window.confirm('Are you sure want to delete: ' + jenis + ' ?')) {
             // axios.delete(API_URL_1 + '/category/' + id)
-            axios.delete('http://localhost:2002/category/catdelete/' + id)
+            axios.delete(`${APIURL}/category/catdelete/` + id)
                 .then((res) => {
                     console.log(res);
                     //=======> Activity Log
