@@ -206,7 +206,7 @@ class ProductsDetails extends Component {
                             </h3>
                             <hr style={{width:'auto'}}></hr>
                             <h3 className="mt-5 mb-2">Deskripsi</h3>
-                            <p className="mt-1 mb-4" style={{height: '300px'}}>{deskripsi}</p>
+                            <p className="mt-1 mb-4 p_warp" id="arsh" style={{height: '300px'}}>{deskripsi}</p>
                             <div className="row">
                                 <div className="col-3">
                                     

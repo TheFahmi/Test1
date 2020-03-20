@@ -153,7 +153,7 @@ class ConcessionListView extends Component {
     // }
 
     onBtnCS = () => {
-        return window.location = '/productsgridview';
+        return window.location = '/products';
     }
 
     btnCustom = () => {

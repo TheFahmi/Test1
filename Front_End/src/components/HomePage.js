@@ -13,7 +13,7 @@ import { BukanHome, IniHome } from '../actions'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import LazyLoad from 'react-lazyload';
-import Slider from 'react-slick'
+import Slider from 'react-slick';
 import { APIURL } from '../supports/APiUrl';
 import { MDBCarousel, MDBCarouselInner, MDBCarouselItem, MDBView, MDBMask } from "mdbreact";
 
@@ -110,7 +110,7 @@ class HomePage extends Component {
       )
     } else if (this.props.myRole === 'MEMBER') {
       return (
-        <ProductsGridView />
+        <Redirect to="/products" />
       )
     } else {
 
@@ -138,7 +138,7 @@ class HomePage extends Component {
       return (
 
 
-        <div>
+        <div style={{marginRight:"-15px", marginLeft:"-15px"}}>
           
           <MDBCarousel
             activeItem={1}
@@ -152,7 +152,7 @@ class HomePage extends Component {
             </MDBCarouselInner>
           </MDBCarousel>
           <div className='px-5 pt-3'>
-            <div>iPhone Product <FaArrowAltCircleRight /></div>
+            <div style={{marginLeft: "15px", marginTop:"20px"}}><h1>Our new Product <FaArrowAltCircleRight /></h1> </div>
 
             <div className=' justify-content-center'>
               {

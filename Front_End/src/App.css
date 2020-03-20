@@ -24,6 +24,10 @@
 
 .show { opacity: 1; }
 
+#arsh {
+  white-space: pre-wrap;
+}
+
 .text-orange {
   color: #ff5722!important
 }
@@ -153,3 +157,4 @@
 .warnatext{
   color: black !important
 }
+

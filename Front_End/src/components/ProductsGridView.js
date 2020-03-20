@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import ProductsItems from './ProductsItems';
 import Pagination from 'react-js-pagination';
 import { APIURL } from '../supports/APiUrl';
+import queryString from 'query-string';
 
 class ProductsGridView extends Component {
 
@@ -26,7 +27,9 @@ class ProductsGridView extends Component {
     }
 
     componentDidMount() {
-        this.showProducts();
+        // this.showProducts();
+        // this.onTestSearch();
+        this.onTestRender();
         console.log(this.state.test)
     }
 
@@ -46,7 +49,7 @@ class ProductsGridView extends Component {
                 console.log(err);
             })
 
-            axios.get(`${APIURL}/category/getcategory`)
+        axios.get(`${APIURL}/category/getcategory`)
             .then((res) => {
                 console.log(res);
                 this.setState({
@@ -56,30 +59,85 @@ class ProductsGridView extends Component {
                 console.log(err);
             })
 
-            axios.get(`${APIURL}/category/getjoincategory`)
+        // var params = queryString.parse(this.props.location.search)
+        // console.log(params)
+        // var search = params.search;
+        // var category = params.category;
+
+        // axios.get(`${APIURL}/category/getjoincategory?search=${search}&category=${category}`)
+        // .then((res) => {
+        //     console.log(res);
+        //     this.setState({
+        //         join: res.data,
+        //     });
+        // }).catch((err) => {
+        //     console.log(err);
+        // })
+
+    }
+    // function untuk search produk berdasarkan nama
+
+    onTestSearch = () => {
+        // var nama = this.props.search
+        // var namacategory = this.props.choose
+
+        //     var arrSearch = this.state.join.filter((item) => {
+        //         return item.nama.toLowerCase()
+        //             && item.namacategory.toLowerCase()
+        //     }
+        //     )
+        // this.setState({ searchProducts: arrSearch })
+
+
+        var params = queryString.parse(this.props.location.search)
+        console.log(params)
+        var search = params.search;
+        var category = params.category;
+
+        axios.get(`${APIURL}/category/getjoincategory?search=${search}&category=${category}`)
             .then((res) => {
                 console.log(res);
                 this.setState({
-                    join: res.data,
+                    searchProducts: res.data,
                 });
             }).catch((err) => {
                 console.log(err);
             })
+
+            
     }
-    // function untuk search produk berdasarkan nama
+
+    routeCondition = () => {
+        var route = this.props.location.search
+        if (route !== '') {
+            return route.split('?')[1].split('=')[0]
+        }
+        return ''
+
+
+    }
+
+    onTestRender = () => {
+        if(this.routeCondition() === 'search'){
+            this.onTestSearch()
+
+        }else{
+            this.showProducts()
+        }
+    }
+
     onBtnSearchClick = () => {
         var nama = this.refs.produk.value;
-        var namacategory = (this.state.test)
-        // var merk = this.refs.merk.value;
+
+        var namacategory = this.state.test
         var hargaMin = this.refs.hargaMinSearch.value;
         var hargaMax = this.refs.hargaMaxSearch.value;
 
         var arrSearch = this.state.Products.filter((item) => {
             return item.nama.toLowerCase().includes(nama.toLowerCase())
                 && item.nama.toLowerCase().includes(namacategory.toLowerCase())
-                ||
-                item.harga >= hargaMin && item.harga <= hargaMax
-                // && item.merk.toLowerCase().includes(merk.toLowerCase());
+                || item.harga >= hargaMin && item.harga <= hargaMax
+            // && item.merk.toLowerCase().includes(merk.toLowerCase());
             // return item.nama.toLowerCase().includes(nama.toLowerCase())
         })
 
@@ -108,60 +166,64 @@ class ProductsGridView extends Component {
             hasilSort = this.state.searchProducts.sort((a, b) => {
                 return b.harga - a.harga
             })
+        } else if (e.target.value === "rating") {
+            hasilSort = this.state.searchProducts.sort((a, b) => {
+                return b.rating - a.rating
+            })
         } else if (e.target.value === "relevance") {
             hasilSort = this.state.searchProducts.sort((a, b) => {
                 return a.id - b.id
             })
         }
-        this.setState({searchProducts: hasilSort})
+        this.setState({ searchProducts: hasilSort })
     }
 
 
 
-    handleSelectChange = (event) => {
-        if(event.target.value === "Pilih category"){
-            return this.state.searchProducts
-        }
-        else if(event.target.value === "Semua Product"){
-            return this.showProducts()
-        }
-        
-        this.setState({
-          test: event.target.value
-        })
-      }
+    // handleSelectChange = (event) => {
+    //     if (event.target.value === "Pilih category") {
+    //         return this.state.searchProducts
+    //     }
+    //     else if (event.target.value === "Semua Product") {
+    //         return this.showProducts()
+    //     }
 
-    onCatSearchClick = () => {
-        // var nama = ;
+    //     this.setState({
+    //         test: event.target.value
+    //     })
+    // }
 
-
-        
-        var namacategory = (this.state.test)
-        
-        // console.log(this.state.test)
-        // var hargaMin = this.refs.hargaMinSearch.value;
-        // var hargaMax = this.refs.hargaMaxSearch.value;
-        // if(event.target.value === "Pilih category"){
-        //     return this.showProducts()
-        // }
-        
-
-        var arrSearch = this.state.join.filter((item) => {
-            return item.nama.toLowerCase().includes(namacategory.toLowerCase());
-            // return item.nama.toLowerCase().includes(nama.toLowerCase())
-        })
-
-        this.setState({ searchProducts: arrSearch })
-    }
+    // onCatSearchClick = () => {
+    //     // var nama = ;
 
 
+
+    //     var namacategory = (this.state.test)
+
+    //     // console.log(this.state.test)
+    //     // var hargaMin = this.refs.hargaMinSearch.value;
+    //     // var hargaMax = this.refs.hargaMaxSearch.value;
+    //     // if(event.target.value === "Pilih category"){
+    //     //     return this.showProducts()
+    //     // }
+
+
+    //     var arrSearch = this.state.join.filter((item) => {
+    //         return item.nama.toLowerCase().includes(namacategory.toLowerCase());
+    //         // return item.nama.toLowerCase().includes(nama.toLowerCase())
+    //     })
+
+    //     this.setState({ searchProducts: arrSearch })
+    // }
+
+   
     rendercategory = () => {
         console.log(this.state.test)
         return this.state.Categories.map((item, index) => {
             return <option key={index} ref="category" style={{ fontSize: "20px" }} value={item.nama}>{item.nama}</option>
-            
-            
-            
+
+
+
         })
     }
     // render produk dengan isi yang diimport dari file productitem
@@ -212,30 +274,31 @@ class ProductsGridView extends Component {
                         <div className="col-lg-3 col-md-4 col-sm-12">
 
                         </div>
-                        
+
                     </div>
-                    <div>
-                    <select onClick={this.onBtnSearchClick} className='form-control' onChange={this.handleSelectChange}>
-                        <option disabled style={{ fontSize: '20px' }} >Pilih category</option>
-                        <option style={{ fontSize: '20px' }} >Semua Product</option>
-                        {this.rendercategory()}
-                        
-                    </select>
-                    
+                    {/* <div>
+                        <select onClick={this.onBtnSearchClick} className='form-control' onChange={this.handleSelectChange} style={{ height: '40px', fontSize: '15px' }}>
+                            <option disabled style={{ fontSize: '20px' }} >Pilih category</option>
+                            <option style={{ fontSize: '20px' }} >Semua Product</option>
+                            {this.rendercategory()}
+
+                        </select>
+
                     </div>
-                    <input type="text" ref="produk" className="form-control" placeholder="products" aria-label="products" aria-describedby="basic-addon1" style={{ fontSize: '20px',width: '200px'}} onKeyUp={this.onBtnSearchClick} />
-                    <div class="input-group-text" id="basic-addon1" style={{ fontSize: '16px' }}><i class="fa fa-search"></i></div>
+                    <input type="text" ref="produk" className="form-control" placeholder="products" aria-label="products" aria-describedby="basic-addon1" style={{ fontSize: '20px', width: '200px', height: '40px' }} onKeyUp={this.onBtnSearchClick} />
+                    <div class="input-group-text" id="basic-addon1" style={{ fontSize: '16px', color: 'black' }}><i class="fa fa-search" style={{ color: 'black', }}></i></div> */}
                 </div>
-                
-                <div className="text-right mb-3" style={{fontSize: '20px',marginRight:'155px', marginTop:"30px" }}>
-                                Sort by
-                                <select className="ml-3" onChange = {this.onSelectChange}>
-                                    <option value="relevance">Relevance</option>
-                                    <option value="name">Name</option>
-                                    <option value="lowest">Lowest Price</option>
-                                    <option value="highest">Highest Price</option>
-                                </select>
-                            </div>
+
+                <div className="text-right mb-3" style={{ fontSize: '20px', marginRight: '155px', marginTop: "30px" }}>
+                    Sort by
+                                <select className="ml-3" onChange={this.onSelectChange}>
+                        <option value="relevance">Relevance</option>
+                        <option value="name">Name</option>
+                        <option value="name">Rating</option>
+                        <option value="lowest">Lowest Price</option>
+                        <option value="highest">Highest Price</option>
+                    </select>
+                </div>
 
 
                 <div className="row justify-content-center" style={{ marginTop: "30px" }}>
@@ -244,16 +307,16 @@ class ProductsGridView extends Component {
                 </div>
                 <br /><br />
                 <div className="row justify-content-center">
-                <div className="card filter-position p-4" style={{ width: "300px", height: "150px", marginTop:"30px"}}>
-                    <div className="border-bottom card-title mb-3" >
-                        <h5>Filter Product</h5>
+                    <div className="card filter-position p-4" style={{ width: "300px", height: "150px", marginTop: "30px" }}>
+                        <div className="border-bottom card-title mb-3" >
+                            <h5>Filter Product</h5>
+                        </div>
+                        <form onBlur={this.onFilterBlur}>
+                            <h6>Price</h6>
+                            <input type="text" ref="hargaMinSearch" className="form-control" placeholder="hargaMinSearch" aria-label="hargaMinSearch" aria-describedby="basic-addon1" style={{ fontSize: '15px' }} onKeyUp={this.onBtnSearchClick} />
+                            <input type="text" ref="hargaMaxSearch" className="form-control" placeholder="hargaMaxSearch" aria-label="hargaMaxSearch" aria-describedby="basic-addon1" style={{ fontSize: '15px', marginTop: "15px" }} onKeyUp={this.onBtnSearchClick} />
+                        </form>
                     </div>
-                    <form onBlur={this.onFilterBlur}>
-                        <h6>Price</h6>
-                        <input type="text" ref="hargaMinSearch" className="form-control" placeholder="hargaMinSearch" aria-label="hargaMinSearch" aria-describedby="basic-addon1" style={{ fontSize: '15px' }} onKeyUp={this.onBtnSearchClick} />
-                        <input type="text" ref="hargaMaxSearch" className="form-control" placeholder="hargaMaxSearch" aria-label="hargaMaxSearch" aria-describedby="basic-addon1" style={{ fontSize: '15px',marginTop:"15px" }} onKeyUp={this.onBtnSearchClick} />
-                    </form>
-                </div>
                     <div className="col-lg-8">
                         {this.renderManageProducts()}
                     </div>
@@ -278,7 +341,9 @@ const mapStateToProps = (state) => {
         username: state.auth.username,
         myRole: state.auth.role,
         products: state.selectedProducts,
-        status: state.auth.status
+        status: state.auth.status,
+        search: state.Cart.searchInput,
+        choose: state.Cart.searchChoose
     }
 }
 

@@ -18,6 +18,7 @@ class ProductsList extends Component {
         EditBrandImage: 'Choose Image',
         EditBrandImageFile:'',
         AddBrandImage: 'Choose Image',
+        AddBrandImageFile:'',
         searchListProducts: [],
         filterForm: '',
         value: '',
@@ -83,6 +84,27 @@ class ProductsList extends Component {
         }
       }
 
+      onAddFileImageChange=(event)=>{
+        // console.log(document.getElementById('addImagePost').files[0])
+        console.log(event.target.files[0])
+        var file=event.target.files[0]
+        if(file){
+            this.setState({AddBrandImage:file.name,AddBrandImageFile:event.target.files[0]})
+        }else{
+            this.setState({AddBrandImage:'Select Image...',AddBrandImage:undefined})
+        }
+      }
+
+      onAddFileImageChange = () => {
+        if (document.getElementById("AddBrandImage").files[0] !== undefined) {
+            this.setState({ AddBrandImage: document.getElementById("AddBrandImage").files[0].name })
+             // console.log(document.getElementById('addImagePost').files[0])
+        }
+        else {
+            this.setState({ AddBrandImage: 'Pilih Gambar' })
+        }
+    }
+
     onBtnAddClick = () => {
 
         if (document.getElementById("AddBrandImage").files[0] !== undefined) {
@@ -124,14 +146,7 @@ class ProductsList extends Component {
     
 
 
-    onEditFileImageChange = () => {
-        if (document.getElementById("EditBrandImage").files[0] !== undefined) {
-            this.setState({ EditBrandImage: document.getElementById("EditBrandImage").files[0].name })
-        }
-        else {
-            this.setState({ EditBrandImage: 'Pilih Gambar' })
-        }
-    }
+
 
     onBtnSaveClick = (id) => {
         var formData = new FormData()
@@ -145,7 +160,8 @@ class ProductsList extends Component {
             harga: this.refs.updateharga.value,
             idcategory: this.refs.updatecategory.value,
             deskripsi: this.refs.updatedeskripsi.value,
-            stok: this.refs.updatestok.value
+            stok: this.refs.updatestok.value,
+            rating:"5"
         }
 
         if (document.getElementById('EditBrandImage')) {
@@ -185,15 +201,9 @@ class ProductsList extends Component {
         }
     }
 
-    onAddFileImageChange = () => {
-        if (document.getElementById("AddBrandImage").files[0] !== undefined) {
-            this.setState({ AddBrandImage: document.getElementById("AddBrandImage").files[0].name })
-             // console.log(document.getElementById('addImagePost').files[0])
-        }
-        else {
-            this.setState({ AddBrandImage: 'Pilih Gambar' })
-        }
-    }
+    
+
+    
 
     rendercategory = () => {
         return this.state.listCategory.map((item, index) => {
@@ -364,7 +374,7 @@ class ProductsList extends Component {
 
             return (
                 // <div style={{ fontSize: "13px" }}>
-                //     <div className="col-lg-3 pb-5">
+                //     <div className="col-lg-3 pb-5e">
                 //         <form>
                 //             <input type="text" className="form-control" style={{ fontSize: "12px" }}
                 //                 placeholder="Search by name"
@@ -414,11 +424,11 @@ class ProductsList extends Component {
                         <ModalHeader toggle={this.toogleadd}>Add data</ModalHeader>
                         <ModalBody>
                             <input type="text" ref='addname' placeholder='Product name' className='form-control mt-2 '/>
-                            <input type="text" ref='addprice' placeholder='Url Image' className='form-control mt-2'/>
+                            <input type="number" ref='addprice' placeholder='Harga' className='form-control mt-2'/>
                             <input type="number" ref='addstok' placeholder='jumlah stok' className='form-control mt-2'/>
-                            <CustomInput type="file" id="AddBrandImage" name="AddBrandImage" label={this.state.EditBrandImage} onChange={this.onAddFileImageChange} />
+                            <CustomInput type="file" id="AddBrandImage" name="AddBrandImage" label={this.state.AddBrandImage} onChange={this.onAddFileImageChange} />
                             <select ref='addcategory' className='form-control mt-2'>
-                                <option value="" hidden>Pilih category</option>
+                                <option value="" disabled>Pilih category</option>
                                 {this.rendercategory()}
                             </select>
                             <textarea cols="20" rows="5" ref='adddescription' className='form-control mt-2' placeholder='deskripsi' ></textarea>

@@ -6,6 +6,8 @@ import Pagination from 'react-js-pagination';
 import { convertdate } from '../actions';
 import { CustomInput } from 'reactstrap';
 import { APIURL } from '../supports/APiUrl';
+import Cookies from 'universal-cookie'
+const cookie = new Cookies()
 
 const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 class History extends Component {
@@ -168,7 +170,8 @@ class History extends Component {
                 var formData = new FormData()
                 var headers = {
                     headers:
-                        { 'Content-Type': 'multipart/form-data' }
+                        { 'Content-Type': 'multipart/form-data',
+                        Authorization: cookie.get('token') }
                 }
 
                 var data = {
@@ -212,7 +215,7 @@ class History extends Component {
 
         }
         alert("Payment Confirm Success!!! Please wait few minutes.")
-        window.location = '/'
+        window.location = '/products'
     }
 
     onChangeStatus = (id) => {
@@ -237,9 +240,17 @@ class History extends Component {
         month[10] = "November";
         month[11] = "December";
 
+
+
         var minutes = currentdate.getMinutes();
         
-        minutes = minutes < 10 ? '0' + minutes : minutes;
+        minutes = minutes < 10 ? '0' + minutes : minutes+1;
+
+        console.log(minutes);
+
+        var hours = currentdate.getHours();
+
+        hours = minutes > 59? '00' + hours : hours
 
 
 
@@ -351,13 +362,13 @@ class History extends Component {
                                 <br />
                                 <table align="center" className="col-md-6 table table-striped table-hover border shadow">
                                     <thead className="thead-light">
-                                        {/* <tr className="table table-bordered table-dark text-center text-dark">
-                                            <th scope="col" className="font-weight-bold text-uppercase" >Id</th>
+                                        <tr className="table table-bordered table-dark text-center text-dark">
+                                            {/* <th scope="col" className="font-weight-bold text-uppercase" >Id</th> */}
                                             <th scope="col" className="font-weight-bold text-uppercase" >Nama</th>
                                             <th scope="col" className="font-weight-bold text-uppercase" >Harga</th>
                                             <th scope="col" className="font-weight-bold text-uppercase" >Kuantiti</th>
                                             <th scope="col" className="font-weight-bold text-uppercase" >Image</th>
-                                        </tr> */}
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         {this.renderListDetailOrders()}

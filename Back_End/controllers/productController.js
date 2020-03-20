@@ -61,9 +61,23 @@ module.exports = {
     },
 
     getJoinCategory: (req, res) => {
+        var category = req.query.category
+        var search = req.query.search
+
+        if(!search){
+            search = ''
+        }
         var sql = `select p.id as id,p.nama as nama,harga,image,deskripsi,stok, c.nama as namacategory from products p 
         join category c 
-        on p.idcategory = c.id`;
+        on p.idcategory = c.id
+        where p.nama LIKE '%${search}%'`
+
+        if(category != '' ){
+            var sql = `select p.id as id,p.nama as nama,harga,image,deskripsi,stok, c.nama as namacategory from products p 
+            join category c 
+            on p.idcategory = c.id
+            where p.nama LIKE '%${search}%' and c.nama = '${category}'`
+        }
 
         db.query(sql, (err, result) => {
             if (err) throw err;

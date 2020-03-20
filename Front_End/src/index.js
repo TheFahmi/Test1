@@ -31,6 +31,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import registerServiceWorker from './registerServiceWorker'
 // import './supports/css/bodybackground.css';
 
+
 const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
 ReactDOM.render(

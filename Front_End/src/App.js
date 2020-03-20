@@ -63,7 +63,7 @@ class App extends Component {
         <Route path="/waitingverification" component={WaitingVerification} />
         <Route path="/verified" component={Verified}/>
         {/* <Route path="/productslistview" component={ProductsListView}/> */}
-        <Route path="/productsgridview" component={ProductsGridView}/>
+        <Route path="/products" component={ProductsGridView}/>
         <Route path="/productsdetails" component={ProductsDetails}/>
         <Route path="/cart" component={Cart} />
         <Route path="/wishlist" component={WishListCart}/>
