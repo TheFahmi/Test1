@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy  } from 'react';
 import { Route, withRouter, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Cookies from 'universal-cookie';
@@ -7,7 +7,7 @@ import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import Header from './components/Header';
-import ProductsListView from './components/ProductsListView';
+// import ProductsListView from './components/ProductsListView';
 import ProductsGridView from './components/ProductsGridView';
 import ProductsDetails from './components/ProductsDetails';
 import Cart from './components/Cart';

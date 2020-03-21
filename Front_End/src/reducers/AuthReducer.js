@@ -14,7 +14,7 @@ const INITIAL_STATE = {
                         username: '', 
                         role: '',
                         email: '', 
-                        // phone: '',
+                        alamat: '',
                         status: '',
                         errorSystem: '', 
                         errorRegister: '',
@@ -34,6 +34,7 @@ export default (state = INITIAL_STATE, action) => {
                     role: action.payload.role,
                     email: action.payload.email, 
                     status: action.payload.status,
+                    alamat: action.payload.alamat,
                     // phone: action.payload.phone, 
                     cookie: true };
 
@@ -44,6 +45,7 @@ export default (state = INITIAL_STATE, action) => {
                 email: action.payload.email, 
                 // phone: action.payload.phone, 
                 status: action.payload.status,
+                alamat: action.payload.alamat,
                 cookie: true };
 
         case AUTH_SYSTEM_ERROR:

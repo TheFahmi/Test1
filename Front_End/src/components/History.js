@@ -80,9 +80,15 @@ class History extends Component {
                     month[10] = "November";
                     month[11] = "December";
 
+                    var minutes = currentdate.getMinutes();
+        
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+            
+            
+                    var waktuakhir = `${currentdate.getDate()}-${month[(currentdate.getMonth())]}-${currentdate.getFullYear()} ${currentdate.getHours()}:${minutes}`
 
 
-                    var waktuakhir = `${currentdate.getDate()}-${month[(currentdate.getMonth())]}-${currentdate.getFullYear()} ${currentdate.getHours()}:${currentdate.getMinutes()}`
+                 
 
                     if (waktuakhir === expired) {
                         axios.put(`${APIURL}/order/tambahStock`, {

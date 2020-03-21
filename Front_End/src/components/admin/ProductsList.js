@@ -112,7 +112,8 @@ class ProductsList extends Component {
             var headers = {
                 headers:
                     { 'Content-Type': 'multipart/form-data',
-                    Authorization: cookie.get('token') }
+                    Authorization: cookie.get('token') 
+                }
             }
 
             var data = {

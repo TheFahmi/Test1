@@ -107,13 +107,13 @@ class Header extends Component {
         })
     }
 
-    onSearchSubmit = (e) => {
-        e.preventDefault()
-        this.props.searchKeyword(this.keyword.value)
-        // if (this.keyword.value) {
-        //     this.props.history.push("/productsgridview")
-        // }
-    }
+    // onSearchSubmit = (e) => {
+    //     e.preventDefault()
+    //     this.props.searchKeyword(this.keyword.value)
+    //     // if (this.keyword.value) {
+    //     //     this.props.history.push("/productsgridview")
+    //     // }
+    // }
 
     handleSelectChange = (event) => {
         this.props.searchKeyword(this.state.keywordCat)
@@ -147,6 +147,22 @@ class Header extends Component {
                     <MDBNavbarBrand href='/'>
                         <strong className={'white-text'}>pStore</strong>
                     </MDBNavbarBrand>
+                    <div style={{marginLeft:"200px", width:"160px"}}>
+                        <select ref='searchChoose' className='form-control' onChange={(e)=> this.props.customerChoose(e.target.value)}>
+                            <option disabled style={{ fontSize: '20px' }} >Pilih category</option>
+                            <option value ='' style={{ fontSize: '20px' }} >Semua category</option>
+                            {this.rendercategory()}
+
+                        </select>
+
+                    </div>
+                    <input  ref='searchInput' onChange={(e)=> this.props.customerSearching(e.target.value)}  type="text" className="form-control" placeholder="products" aria-label="products" aria-describedby="basic-addon1" style={{ fontSize: '20px', width: '500px' }} />
+                    <div>
+
+                    <a href={`/products?search=${this.props.search}&category=${this.props.choose}`}>
+                    <i class="fa fa-search" style={{fontSize:"20px", marginLeft:"10px", fontColor:"white"}}></i>
+                    </a>
+                    </div>
                     <MDBNavbarToggler onClick={this.toggleCollapse} />
                     {/* <form className="input-group input-search" onSubmit={this.onSearchSubmit} style={{width:"700px", marginLeft:"300px"}}>
                                     <input ref={(input) => { this.keyword = input }} type="text" className="form-control" placeholder="Search product" id="search-input" />

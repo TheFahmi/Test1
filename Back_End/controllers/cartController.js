@@ -6,13 +6,13 @@ var { uploader } = require('../helpers/uploader');
 module.exports = {
     cart: (req, res) => {
         var user = req.query.username;
-        var sql = `select u.username as Username, p.id as idproduct, p.nama as Nama_product, kuantiti, harga, total_harga as Total, image, stok,
+        var sql = `select u.username as Username, p.id as idproduct, p.nama as Nama_product, kuantiti, harga, total_harga as Total, image, stok,u.alamat as alamat,
                     c.id as id from cart c
                     join user u 
                     on c.user_id = u.id
                     join products p 
                     on c.product_id = p.id
-                    where username = '${user}';`
+                    where username = '${user}'`
         db.query(sql, (err, result) => {
             if (err) throw err;
             res.send(result)

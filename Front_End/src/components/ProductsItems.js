@@ -56,7 +56,7 @@ class ProductsItems extends Component {
         console.log(this.props.products)
         return (
             <div className="col-md-4" >
-                <div className="card card-product card-plain">
+                <div className="card card-product card-plain" style={{height:"500px"}}>
                     <div className="card-image" style={{ height: "300px" }}>
                         {/* <Link to="#" onClick={this.onItemClick}>*/}
                         <b style={{ fontSize: 'medium' }}>
@@ -73,16 +73,16 @@ class ProductsItems extends Component {
 
                     <div className="card-content">
                         <h4 className="card-title">
-                            <h4 className="card-title">{nama}</h4>
+                            <h4 className="card-title" style={{height:"50px"}}>{nama}</h4>
                         </h4>
                         <p className="card-description">Bergaransi Resmi iBox Indonesia selama 1 Tahun, Dapatkan segera</p>
-                        <div className="footer">
+                        <div className="footer" >
                             <div className="price-container" style={{marginLeft:"20px"}}>
 
                                 <span className="price price-new">{rupiah.format(harga)}</span>
                             </div>
                             <div className="stats">
-                            <div style={{marginRight:"30px",color:"gold"}}>
+                            <div style={{marginRight:"30px",color:"gold", marginTop:"40px"}}>
                             <Rating 
                                   initialRating={rating}
                                   emptySymbol="fa fa-star-o fa-2x"

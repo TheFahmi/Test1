@@ -5,6 +5,11 @@ import { connect } from 'react-redux';
 import Pagination from 'react-js-pagination';
 import { CartAction } from '../actions';
 import { APIURL } from '../supports/APiUrl';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import { CustomInput, Modal, ModalBody, ModalFooter, ModalHeader, Button, Table } from 'reactstrap';
+
+const MySwal = withReactContent(Swal)
 
 const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 class ConcessionListView extends Component {
@@ -17,7 +22,8 @@ class ConcessionListView extends Component {
         Promo: [],
         kode: '',
         namapromo: '',
-        totalpotongan: 0
+        totalpotongan: 0,
+        alamatuser: ''
     }
 
     handlePageChange(pageNumb) {
@@ -28,7 +34,7 @@ class ConcessionListView extends Component {
     componentDidMount() {
         this.showCart();
         // this.CheckPromo();
-
+        console.log(this.props.alamat)
         console.log(this.state.kode)
     }
 
@@ -40,9 +46,17 @@ class ConcessionListView extends Component {
         axios.get(`${APIURL}/cart/cart?username=` + this.props.username)
             .then((res) => {
                 console.log(res);
+                var alamat = ''
+
+                res.data.forEach(element => {
+                    alamat = element.alamat
+                })
+                console.log(alamat)
+
                 this.setState({
                     listCart: res.data,
-                    selectedIdEdit: 0
+                    selectedIdEdit: 0,
+                    alamatuser: alamat
                 });
                 this.props.CartAction(this.state.listCart.length);
             }).catch((err) => {
@@ -52,22 +66,23 @@ class ConcessionListView extends Component {
 
     totalPrice = () => {
         var totalx = 0
-        for (let i = 0; i < this.state.listCart.length; i++) { ;
+        for (let i = 0; i < this.state.listCart.length; i++) {
+            ;
             totalx += this.state.listCart[i].kuantiti * this.state.listCart[i].harga
         }
         return totalx;
-        
+
     }
 
     totalPotong = () => {
         var totalpotong = 0;
         var promo = this.state.totalpotongan
         for (let i = 0; i < this.state.listCart.length; i++) {
-            totalpotong += this.state.listCart[i].kuantiti * this.state.listCart[i].harga * (promo/100) ;
+            totalpotong += this.state.listCart[i].kuantiti * this.state.listCart[i].harga * (promo / 100);
 
-            
+
         }
-        
+
         return totalpotong
 
     }
@@ -77,7 +92,7 @@ class ConcessionListView extends Component {
         var totaly = 0
         var promo = this.state.totalpotongan
         for (let i = 0; i < this.state.listCart.length; i++) {
-            totalpotong += this.state.listCart[i].kuantiti * this.state.listCart[i].harga * (promo/100) ;
+            totalpotong += this.state.listCart[i].kuantiti * this.state.listCart[i].harga * (promo / 100);
             totaly += this.state.listCart[i].kuantiti * this.state.listCart[i].harga - totalpotong
         }
         return totaly;
@@ -106,37 +121,60 @@ class ConcessionListView extends Component {
     }
 
     onBtnDeleteClick = (id) => {
-        if (window.confirm('Are you sure want to delete:?')) {
+        
+        MySwal.fire({
+            title: `Are you sure wanna delete?`,
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.value) {
             axios.delete(`${APIURL}/deletecart/deletecart/` + id)
                 .then((res) => {
+                    MySwal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                      )
                     console.log(res);
                     this.showCart();
                 })
-                .catch((err) => {
-                    console.log(err);
-                })
-        }
+                
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
     }
+
+    // 
+
 
     CheckPromo = () => {
 
-        axios.get(`${APIURL}/order/getpromo?namapromo=`+this.state.namapromo
-
-        )
+        axios.get(`${APIURL}/order/getpromo?namapromo=` + this.state.namapromo)
             .then((res) => {
-                
                 var potongan = 0
-                
                 res.data.forEach(element => {
                     potongan = element.jenis
+
+                    MySwal.fire(
+                        'Success!',
+                        `You got discount ${potongan}% `,
+                        'success'
+                    )
+
+
                 });
                 this.setState({
-                    Promo: res.data, 
+                    Promo: res.data,
                     totalpotongan: potongan
                 });
             }).catch((err) => {
                 console.log(err);
-                
+
             })
 
     }
@@ -161,21 +199,50 @@ class ConcessionListView extends Component {
         if (!this.state.listCart.length) {
             btnCustom = <button className="btn btn-success" style={{ fontSize: "13px" }} onClick={() => this.onBtnCS()}>Shop Again?</button>
         } else {
-            btnCustom = 
-            <div>
-                <button className="btn btn-info btn-lg btn-block" style={{ fontSize: "13px" }} onClick={() => this.onBtnCS()}>Buy other products?</button>
-                <br />
-                <input onChange={e => this.setState({namapromo: e.target.value})} defaultValue={this.props.namapromo} onKeyUp={this.CheckPromo} type="text" className="form-control" style={{ fontSize: "15px" }}
-                                placeholder="Kode Promo"
-                                ref="kode" />
-                                <br/>
-                                
-                <button className="btn btn-success btn-lg btn-block" style={{ fontSize: "13px" }} onClick={() => this.onBtnCheckout()}>Pay</button>
-            </div>
+            btnCustom =
+                <div>
+                    <button className="btn btn-info btn-lg btn-block" style={{ fontSize: "13px" }} onClick={() => this.onBtnCS()}>Buy other products?</button>
+                    <br />
+                    <input onChange={e => this.setState({ namapromo: e.target.value })} defaultValue={this.props.namapromo} onKeyUp={this.CheckPromo} type="text" className="form-control" style={{ fontSize: "15px" }}
+                        placeholder="Kode Promo"
+                        ref="kode" />
+                    <br />
+
+                    <button className="btn btn-success btn-lg btn-block" style={{ fontSize: "13px" }} onClick={() => this.onBtnCheckout()}>Pay</button>
+                </div>
         }
         return btnCustom;
     }
 
+    toogleadd = () => {
+        this.setState({ isModaladdOpen: !this.state.isModaladdOpen })
+    }
+
+    toggleedit = () => {
+        this.setState({ isModaleditopen: !this.state.isModaleditopen })
+    }
+
+    renderalamat = () => {
+
+        
+       
+        var alamat = this.state.alamatuser
+
+        if (alamat){
+            return (
+            <tr>
+                <td className="text-center" style={{ fontSize: '14px', }}>{alamat}</td>
+                <td>
+                        <button className='btn btn-primary' onClick={() => this.setState({isModaleditopen: true})}  >Edit</button>
+                        <button className='btn btn-danger' onClick={() => this.onBtnDeleteClick}>Delete</button>
+                </td>
+            </tr>
+            
+
+            )
+        }
+
+    }
     renderListCart = () => {
         var lastIndex = this.state.activePage * this.state.itemPerPage;
         var firstIndex = lastIndex - this.state.itemPerPage;
@@ -242,6 +309,9 @@ class ConcessionListView extends Component {
 
     render() {
 
+        
+        var alamat = this.props.alamat
+        console.log(this.props.alamat)
         if (this.props.username !== '') {
             if (this.props.status === 'Verified') {
                 if (this.state.listCart.length > 0) {
@@ -251,7 +321,7 @@ class ConcessionListView extends Component {
                             <h2 className="section-heading text-center text-uppercase" style={{ marginTop: '50px' }}>Hello, {this.props.username}</h2>
                             <h3 className="section-subheading text-muted text-center pb-5">Happy Shopping</h3>
                             <div className="row justify-content-center">
-                                <table className="col-md-7 table table-striped table-hover border shadow">
+                                <table className="col-md-7 table table-striped table-hover border shadow" style={{marginRight:"480px",marginBottom:"-200px"}}>
                                     <thead className="thead-light">
                                         <tr>
                                             <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Product</center></th>
@@ -266,6 +336,26 @@ class ConcessionListView extends Component {
                                         {this.renderListCart()}
                                     </tbody>
                                 </table>
+                                <table className="col-md-7 table table-striped table-hover border shadow" style={{marginTop:"200px"}} >
+                                    <thead className="thead-light">
+                                        <tr>
+                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Alamat</center></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            alamat === '1' ?
+                                            
+                                                <button className='btn btn-danger' onClick={() => this.onBtnDeleteClick}>{this.props.alamat}</button>
+                                            
+                                            :
+                                            // this.renderalamat()
+                                            
+                                                <button className='btn btn-danger' onClick={() => this.onBtnDeleteClick}>2</button>
+                                          
+                                        }
+                                    </tbody>
+                                </table>
                                 <div className="col-lg-3">
                                     <table className="table table-striped table-hover bordered shadow">
                                         <thead className="thead-light">
@@ -277,19 +367,19 @@ class ConcessionListView extends Component {
                                             <td colSpan="8">
                                                 <div className="text-center" style={{ fontSize: '14px', }}>Total Harga : {myCurrency.format(this.totalPrice())}</div>
                                             </td>
-                                            
+
                                         </tr>
                                         <tr>
-                                        <td colSpan="8">
+                                            <td colSpan="8">
                                                 <div className="text-center" style={{ fontSize: '14px', }}>Total Potongan : {myCurrency.format(this.totalPotong())}</div>
                                             </td>
                                         </tr>
                                         <tr>
-                                        <td colSpan="8">
+                                            <td colSpan="8">
                                                 <div className="text-center" style={{ fontSize: '14px', }}>Subtotal : {myCurrency.format(this.totalSubtotal())}</div>
                                             </td>
                                         </tr>
-                                        
+
                                         {/* <tr>
                                             <td colSpan="8">
                                                 <input type="text" className="form-control" style={{ fontSize: "12px" }}
@@ -347,6 +437,7 @@ const mapStateToProps = (state) => {
         username: state.auth.username,
         myRole: state.auth.role,
         status: state.auth.status,
+        alamat: state.auth.alamat,
         Cart: state.Cart.cart,
         totalpotongan: state.Cart.totalpotongan
     }

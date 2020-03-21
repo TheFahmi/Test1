@@ -98,19 +98,19 @@ class HomePage extends Component {
 
     if (this.props.myRole === 'SUPERADMIN') {
       return (
-        <Dashboard />
+        <Redirect to='/admin/Dashboard' />
       )
     } else if (this.props.myRole === 'ADMIN PAYMENT') {
       return (
-        <ConfirmTrx />
+        <Redirect to='/admin/Dashboard' />
       )
     } else if (this.props.myRole === 'EDITOR') {
       return (
-        <ManageProducts />
+        <Redirect to='/admin/Dashboard' />
       )
-    } else if (this.props.myRole === 'MEMBER') {
+    } else if (this.props.myRole === 'MEMBER' && this.props.username == '') {
       return (
-        <Redirect to="/products" />
+        <Redirect to="/products" /> 
       )
     } else {
 

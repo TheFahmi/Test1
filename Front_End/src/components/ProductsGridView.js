@@ -27,7 +27,7 @@ class ProductsGridView extends Component {
     }
 
     componentDidMount() {
-        // this.showProducts();
+        this.showProducts();
         // this.onTestSearch();
         this.onTestRender();
         console.log(this.state.test)
@@ -112,7 +112,12 @@ class ProductsGridView extends Component {
         if (route !== '') {
             return route.split('?')[1].split('=')[0]
         }
+        else if(route == '/') {
+            return route.split('/')[2].split('?')[1].split('=')[0]
+        }
+        console.log(route)
         return ''
+        
 
 
     }
@@ -120,23 +125,34 @@ class ProductsGridView extends Component {
     onTestRender = () => {
         if(this.routeCondition() === 'search'){
             this.onTestSearch()
-
-        }else{
+        }
+        else if(this.routeCondition() === 'products'){
+            this.showProducts()
+        }
+        else{
             this.showProducts()
         }
     }
 
     onBtnSearchClick = () => {
-        var nama = this.refs.produk.value;
+        // var nama = this.refs.produk.value;
 
-        var namacategory = this.state.test
+        // var namacategory = this.state.test
         var hargaMin = this.refs.hargaMinSearch.value;
         var hargaMax = this.refs.hargaMaxSearch.value;
 
+        if (isNaN(hargaMin)) {
+            hargaMin = 0
+        }
+
+        if (isNaN(hargaMax)) {
+            hargaMax = Infinity
+        }
+
         var arrSearch = this.state.Products.filter((item) => {
-            return item.nama.toLowerCase().includes(nama.toLowerCase())
-                && item.nama.toLowerCase().includes(namacategory.toLowerCase())
-                || item.harga >= hargaMin && item.harga <= hargaMax
+            // return item.nama.toLowerCase().includes(nama.toLowerCase())
+            //     && item.nama.toLowerCase().includes(namacategory.toLowerCase())
+                return item.harga >= hargaMin && item.harga <= hargaMax
             // && item.merk.toLowerCase().includes(merk.toLowerCase());
             // return item.nama.toLowerCase().includes(nama.toLowerCase())
         })
@@ -260,9 +276,7 @@ class ProductsGridView extends Component {
 
         if (this.props.myRole === "SUPERADMIN" || this.props.myRole === 'EDITOR' || this.props.myRole === 'ADMIN PAYMENT') {
             var changeToListView = <div className="btn-group" role="group" aria-label="Basic example">
-                <button type="button" style={{ fontSize: "13px" }}
-                    onClick={() => { this.adminToManage() }}
-                    className="btn btn-info">Manage Products</button>
+                <Redirect to="/admin/Dashboard" />
             </div>
                 ;
         }
@@ -291,10 +305,10 @@ class ProductsGridView extends Component {
 
                 <div className="text-right mb-3" style={{ fontSize: '20px', marginRight: '155px', marginTop: "30px" }}>
                     Sort by
-                                <select className="ml-3" onChange={this.onSelectChange}>
+                    <select className="ml-3" onChange={this.onSelectChange}>
                         <option value="relevance">Relevance</option>
-                        <option value="name">Name</option>
-                        <option value="name">Rating</option>
+                        {/* <option value="name">Name</option>
+                        <option value="name">Rating</option> */}
                         <option value="lowest">Lowest Price</option>
                         <option value="highest">Highest Price</option>
                     </select>

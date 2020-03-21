@@ -30,6 +30,7 @@ export const onUserLogin = ({ username, password }) => {
                                 role: res.data[0].role, 
                                 email: res.data[0].email,
                                 status: res.data[0].status,
+                                alamat: res.data[0].alamat
                                 // phone: res.data[0].phone 
                             }
                         });
@@ -97,6 +98,7 @@ export const keepLogin = (username) => {
                         role: res.data[0].role,
                         email: res.data[0].email,
                         status: res.data[0].status,
+                        alamat: res.data[0].alamat,
                         // phone: res.data[0].phone
                      }
                 })
