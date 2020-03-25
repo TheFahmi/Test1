@@ -50,11 +50,11 @@ class HomeCard extends Component {
         console.log(this.props.products)
         return (
             <div className="col-md-12">
-                <div className="card card-product card-plain">
+                <div className="card card-product card-plain" style={{height:"450px"}}>
                     <div className="card-image" style={{ height: "300px" }}>
                         {/* <Link to="#" onClick={this.onItemClick}>*/}
                         <b style={{ fontSize: 'medium' }}>
-                            <img src={`${APIURL}${image}`} style={{ height: "300px" }} alt={image} className="img-responsive" />
+                            <img src={`http://localhost:2002${image}`} style={{ height: "300px" }} alt={image} className="img-responsive" />
                             <div className='kotakhitam'>
                                 <Link to="" onClick={this.onItemClick} className='tombolebuynow'>
                                     <button className='tomboldalam' ><FaCartPlus /></button>
@@ -65,8 +65,8 @@ class HomeCard extends Component {
                     {/* </Link> */}
 
                     <div className="card-content">
-                        <h4 className="card-title">
-                            <h4 className="card-title">{nama}</h4>
+                    <h4 className="card-title">
+                            <h4 className="card-title" style={{height:"50px"}}>{nama}</h4>
                         </h4>
                         <p className="card-description">Bergaransi Resmi iBox Indonesia selama 1 Tahun, Dapatkan segera</p>
                         <div className="footer">
@@ -89,6 +89,7 @@ class HomeCard extends Component {
                         </div>
                     </div>
                 </div>
+                
 
             </div>
         )

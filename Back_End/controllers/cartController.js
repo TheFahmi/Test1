@@ -6,7 +6,7 @@ var { uploader } = require('../helpers/uploader');
 module.exports = {
     cart: (req, res) => {
         var user = req.query.username;
-        var sql = `select u.username as Username, p.id as idproduct, p.nama as Nama_product, kuantiti, harga, total_harga as Total, image, stok,u.alamat as alamat,
+        var sql = `select u.username as Username, p.id as idproduct, p.nama as Nama_product, kuantiti, harga, image, stok,u.alamat as alamat, u.phone as phone,
                     c.id as id from cart c
                     join user u 
                     on c.user_id = u.id
@@ -27,6 +27,8 @@ module.exports = {
             res.send(results)
         })
     },
+
+    
 
     invoice: (req, res) => {
         var user = req.query.username;
@@ -77,6 +79,23 @@ module.exports = {
         })
     },
 
+    tambahRating: (req,res) => {
+        var { idproduct, iduser, idtrx, rating } = req.body;
+        var data = {
+            idproduct,
+            iduser,
+            idtrx,
+            rating
+        }
+        var sql = `insert into rating set ? ;`
+        db.query(sql, data, (err, result) => {
+            if (err) throw err;
+            res.send(result)
+            console.log("SUKSES RATING")
+        })
+        
+    },
+
     TambahStock: (req, res) => {
         var { id, stok } = req.body;
         var sql = `update products set stok = ${stok} where id = ${id}`;
@@ -92,6 +111,7 @@ module.exports = {
         db.query(sql, (err, results) => {
             if (err) throw err;
             res.send(results)
+            console.log("SUKSES STATUS")
         })
     },
 
@@ -197,16 +217,17 @@ module.exports = {
         //     alert("Copied the text: " + copyText.value);
         // }
 
-        var { username, date, totalprice, totalquantity, invoice, status, email, waktuexp } = req.body;
+        var { username, date, subtotal, totalquantity, invoice, status, email, waktuexp, totalpotongan } = req.body;
         var data = {
             username,
             date,
-            totalprice,
+            subtotal,
             totalquantity,
             invoice,
             status,
             email,
-            waktuexp
+            waktuexp,
+            totalpotongan
         }
         var sql = `insert into daftarorder set ? ;`
         db.query(sql, data, (err, result) => {
@@ -214,11 +235,12 @@ module.exports = {
 
             var paymentinvoice = invoice;
             var mailOptions = {
-                from: 'iGadget Store <hello.fahmihassan@gmail.com>',
+                from: 'Fahmi Store <email.punya.fahmi@gmail.com>',
                 to: email,
                 subject: 'Email For Payment Confirmation',
                 html: `berikut ini adalah kode invoice kamu. <br/> <h1 color="blue">${paymentinvoice}</h1>
-                <br/> Gunakan kode invoice tersebut untuk konfirmasi pembayaran!`
+                <br/> Gunakan kode invoice tersebut untuk konfirmasi pembayaran!
+                <br/> Mohon untuk membayar sebelum ${waktuexp}`
             }
 
             transporter.sendMail(mailOptions, (err2, res2) => {
@@ -227,7 +249,7 @@ module.exports = {
                     throw err2;
                 }
                 else {
-                    console.log('Success!')
+                    console.log('Success belanja')
                     res.send(result)
                 }
             })
@@ -371,7 +393,9 @@ module.exports = {
         products.harga AS hargaproduk,
         products.image AS image,
         products.stok as stok,
-        detailorder.qty AS kuantiti
+        daftarorder.status as status,
+        detailorder.qty AS kuantiti,
+        daftarorder.id as idtrx
         FROM products
         JOIN detailorder ON detailorder.idproduct = products.id
         JOIN daftarorder ON daftarorder.id = detailorder.idtrx
@@ -420,7 +444,7 @@ module.exports = {
 
     getConfirm: (req, res) => {
         var sql = `SELECT konfirmasiorder.username AS nama, konfirmasiorder.id AS idConfirm, image, status,
-        daftarorder.id AS id, daftarorder.invoice AS invoice, date, totalquantity, totalprice,email
+        daftarorder.id AS id, daftarorder.invoice AS invoice, date, totalquantity, subtotal,email
         FROM daftarorder
         JOIN konfirmasiorder ON konfirmasiorder.invoice = daftarorder.invoice
         WHERE STATUS = 'pending'`;
@@ -444,11 +468,11 @@ module.exports = {
                     res.send(results)
 
                     var mailOptions = {
-                        from: 'iGadget Store <hello.fahmihassan@gmail.com>',
+                        from: 'Fahmi Store <email.punya.fahmi@gmail.com>',
                         to: email,
                         subject: 'Your order has been sent',
                         html: `berikut ini adalah kode invoice kamu. <br/> <h1 color="blue">${invoice}</h1>
-                        <br/> Gunakan kode invoice tersebut untuk konfirmasi pembayaran!`
+                        <br/> Kami sudah mengirimkan nya`
                     }
 
                     transporter.sendMail(mailOptions, (err2, res2) => {

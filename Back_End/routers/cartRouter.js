@@ -31,6 +31,7 @@ router.put('/editStock',cartController.editStock)
 router.put('/tambahStock',cartController.TambahStock)
 router.get('/getdaftarorder',cartController.getDaftarorder)
 router.get('/getpromo',cartController.getPromo)
+router.post('/tambahrating', cartController.tambahRating);
 // router.get('/invoice',cartController.invoice)
 
 module.exports = router;

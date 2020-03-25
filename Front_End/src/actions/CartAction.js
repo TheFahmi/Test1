@@ -1,12 +1,14 @@
 import { 
+  CART,
   SEARCH_BOX_CHANGE,
-  SEARCH_PILIH_CHANGE
+  SEARCH_PILIH_CHANGE,
+  CART_ADDED
 } from './types';
 
 
 export const CartAction = (totalcart)=>{
     return {
-      type: 'CART',
+      type: CART,
         payload: totalcart
     }
   }
@@ -24,4 +26,11 @@ export const CartAction = (totalcart)=>{
       type: SEARCH_PILIH_CHANGE,
       payload: text
     }
+}
+
+export const customerDiskon = (text) => {
+  return {
+    type: CART_ADDED,
+    payload: text
+  }
 }

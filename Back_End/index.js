@@ -57,6 +57,7 @@ app.use('/confirm', cartRouter);
 app.use('/confirmtrx', cartRouter);
 app.use('/invoice',cartRouter);
 app.use('/order',cartRouter);
+app.use('rating', cartRouter);
 // app.use('/category', categoryRouter);
 app.use('/users', userRouter);
 app.use('/trx', transRouter);
@@ -67,6 +68,7 @@ app.use('/productlist', productRouter);
 app.use('/category', productRouter);
 // dashboard
 app.use('/dashboard', dashboardRouter);
+
 
 app.listen(port, () => console.log('API jalan  di port ' + port));
 

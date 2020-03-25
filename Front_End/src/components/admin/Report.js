@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import { Doughnut,Line,Bar } from 'react-chartjs-2';
 import { APIURL } from '../../supports/APiUrl';
+
+const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 export class Report extends Component {
   constructor(props) {
     super(props);

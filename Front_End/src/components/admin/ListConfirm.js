@@ -106,7 +106,7 @@ class ListConfirm extends Component {
                     <td style={{ fontSize: '14px', }}>{item.invoice}</td>
                     <td style={{ fontSize: '14px', }}>{this.props.convertdate(item.date)}</td>
                     <td style={{ fontSize: '14px', }}>{item.totalquantity}</td>
-                    <td style={{ fontSize: '14px', }}>{rupiah.format(item.totalprice)}</td>
+                    <td style={{ fontSize: '14px', }}>{rupiah.format(item.subtotal)}</td>
                     <td style={{ fontSize: '14px', }}>
                         <select ref="editStatus">
                             <option>Pending</option>
@@ -139,7 +139,7 @@ class ListConfirm extends Component {
                     <td style={{ fontSize: '14px', }}>{item.invoice}</td>
                     <td style={{ fontSize: '14px', }}>{this.props.convertdate(item.date)}</td>
                     <td style={{ fontSize: '14px', }}>{item.totalquantity}</td>
-                    <td style={{ fontSize: '14px', }}>{rupiah.format(item.totalprice)}</td>
+                    <td style={{ fontSize: '14px', }}>{rupiah.format(item.subtotal)}</td>
                     <td style={{ fontSize: '14px', }}>{item.status}</td>
                     <td>
                         <button className="btn btn-info" title="confirm" style={{borderRadius: '30px', height: '30px', width: '30px'}}

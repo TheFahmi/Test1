@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
 import { convertdate } from '../actions';
-import { CustomInput } from 'reactstrap';
 import { APIURL } from '../supports/APiUrl';
 import Cookies from 'universal-cookie'
+import moment from 'moment'
+import Rating from 'react-rating'
+import { CustomInput, Modal, ModalBody, ModalFooter, ModalHeader, Button, Table } from 'reactstrap';
 const cookie = new Cookies()
 
 const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
@@ -18,6 +20,8 @@ class History extends Component {
         listUserOrderDetails: [],
         activePage: 1,
         itemPerPage: 5,
+        RatingVal: '0',
+        isModalDetailOpen: false
     }
 
     handlePageChange(pageNumber) {
@@ -29,6 +33,12 @@ class History extends Component {
         this.showOrders();
         this.checkexpired();
         // this.onBtnConfirm();
+
+
+    }
+    toogleadd = (id) => {
+        console.log(id)
+        this.setState({ currentId: id, isModalDetailOpen: !this.state.isModalDetailOpen })
     }
 
     showOrders = () => {
@@ -63,33 +73,36 @@ class History extends Component {
                     idtrx = element.idtrans
 
 
+                    
+                    // var currentdate = new Date();
+
+                    // var month = new Array();
+                    // month[0] = "January";
+                    // month[1] = "February";
+                    // month[2] = "March";
+                    // month[3] = "April";
+                    // month[4] = "May";
+                    // month[5] = "June";
+                    // month[6] = "July";
+                    // month[7] = "August";
+                    // month[8] = "September";
+                    // month[9] = "October";
+                    // month[10] = "November";
+                    // month[11] = "December";
+
+                    // var minutes = currentdate.getMinutes();
+
+                    // minutes = minutes < 10 ? '0' + minutes : minutes;
+
+
+                    // var waktuakhir = `${currentdate.getDate()}-${month[(currentdate.getMonth())]}-${currentdate.getFullYear()} ${currentdate.getHours()}:${minutes}`
+                    
+
+
+
                     hasil = stock + kuantiti
-                    var currentdate = new Date();
-
-                    var month = new Array();
-                    month[0] = "January";
-                    month[1] = "February";
-                    month[2] = "March";
-                    month[3] = "April";
-                    month[4] = "May";
-                    month[5] = "June";
-                    month[6] = "July";
-                    month[7] = "August";
-                    month[8] = "September";
-                    month[9] = "October";
-                    month[10] = "November";
-                    month[11] = "December";
-
-                    var minutes = currentdate.getMinutes();
-        
-                    minutes = minutes < 10 ? '0' + minutes : minutes;
-            
-            
-                    var waktuakhir = `${currentdate.getDate()}-${month[(currentdate.getMonth())]}-${currentdate.getFullYear()} ${currentdate.getHours()}:${minutes}`
-
-
-                 
-
+                    var waktuakhir = `${moment(new Date()).format('DD-MMMM-YYYY HH:mm')}`
+                    console.log(waktuakhir)
                     if (waktuakhir === expired) {
                         axios.put(`${APIURL}/order/tambahStock`, {
 
@@ -101,20 +114,20 @@ class History extends Component {
                             console.log(err);
                         })
 
-                        // axios.put(`${APIURL}/confirm/editstatusexpired/`, {
-                        //     id: idtrx,
-                        //     status: "EXPIRED"
-                        // }).then((res) => {
-                        //     console.log(res)
-                        // }).catch((err) => {
-                        //     console.log(err);
-                        // })
+                        axios.put(`${APIURL}/confirm/editstatusexpired/`, {
+                            id: idtrx,
+                            status: "EXPIRED"
+                        }).then((res) => {
+                            console.log(res)
+                        }).catch((err) => {
+                            console.log(err);
+                        })
 
                     }
 
                 })
 
-                this.setState({ listJoinOrders: res.data, Invoice: invoice })
+                this.setState({ listJoinOrders: res.data })
                 console.log(res.data);
             }).catch((err) => {
                 console.log(err)
@@ -152,8 +165,8 @@ class History extends Component {
     userOrderDetails = (id) => {
         axios.get(`${APIURL}/orderdetail/orderdetail?idtrx=` + id)
             .then((res) => {
-
-                this.setState({ listUserOrderDetails: res.data })
+                console.log(id);
+                this.setState({ listUserOrderDetails: res.data, isModalDetailOpen: true })
                 console.log(res.data)
             }).catch((err) => {
                 console.log(err)
@@ -176,8 +189,10 @@ class History extends Component {
                 var formData = new FormData()
                 var headers = {
                     headers:
-                        { 'Content-Type': 'multipart/form-data',
-                        Authorization: cookie.get('token') }
+                    {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: cookie.get('token')
+                    }
                 }
 
                 var data = {
@@ -228,39 +243,76 @@ class History extends Component {
 
     }
 
-    renderListOrders = () => {
+    handleRatingChange = (rating) => {
+        this.setState({ RatingVal: rating });
+        console.log(rating);
+    }
 
-        var currentdate = new Date();
+    onClickRating = () => {
 
-        var month = new Array();
-        month[0] = "January";
-        month[1] = "February";
-        month[2] = "March";
-        month[3] = "April";
-        month[4] = "May";
-        month[5] = "June";
-        month[6] = "July";
-        month[7] = "August";
-        month[8] = "September";
-        month[9] = "October";
-        month[10] = "November";
-        month[11] = "December";
+       
+        for(let i = 0;i < this.state.listUserOrderDetails.length; i++){
 
+            // axios.post(`${APIURL}/rating/tambahrating`, {
+            //     idproduct: this.state.listUserOrderDetails[i].idproduct,
+            //     iduser: this.props.iduser,
+            //     idtrx: this.state.listUserOrderDetails[i].idtrx,
+            //     rating: this.state.RatingVal
+           
+                
+            // }).then((res) => {
+            //     console.log(res)
+            // }).catch((err) => {
+            //     console.log(err);
+            // })
+            // console.log(this.state.listUserOrderDetails[i].idtrx)
+            axios.put(`${APIURL}/confirm/editstatus/`, {
+                id: this.state.listUserOrderDetails[i].iddetailorder,
+                status: "completed"
+                
+            }).then((res) => {
+                console.log(res)
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
 
-
-        var minutes = currentdate.getMinutes();
         
-        minutes = minutes < 10 ? '0' + minutes : minutes+1;
 
-        console.log(minutes);
+        
+    }
 
-        var hours = currentdate.getHours();
+    renderListOrders = () => {
+        // const true = (status = 'sudah')
+        // var status = this.state.listOrders
+        // var currentdate = new Date();
 
-        hours = minutes > 59? '00' + hours : hours
+        // var month = new Array();
+        // month[0] = "January";
+        // month[1] = "February";
+        // month[2] = "March";
+        // month[3] = "April";
+        // month[4] = "May";
+        // month[5] = "June";
+        // month[6] = "July";
+        // month[7] = "August";
+        // month[8] = "September";
+        // month[9] = "October";
+        // month[10] = "November";
+        // month[11] = "December";
 
 
+        // var minutes = currentdate.getMinutes();
 
-        var waktuakhir = `${currentdate.getDate()}-${month[(currentdate.getMonth())]}-${currentdate.getFullYear()} ${currentdate.getHours()}:${minutes}`
+        // minutes = minutes < 10 ? '0' + minutes : minutes + 1;
+
+        // console.log(minutes);
+
+        // var hours = currentdate.getHours();
+
+        // hours = minutes > 59 ? '00' + hours : hours
+
+        var waktuakhir = `${moment(new Date()).format('DD-MMMM-YYYY HH:mm')}`
         console.log(waktuakhir)
         if (this.props.myRole === 'MEMBER') {
             var indexOfLastTodo = this.state.activePage * this.state.itemPerPage;
@@ -274,17 +326,13 @@ class History extends Component {
                         <td style={{ fontSize: '14px', }}>{item.invoice}</td>
                         <td style={{ fontSize: '14px', }}>{this.props.convertdate(item.date)}</td>
                         <td style={{ fontSize: '14px', }}>{item.totalquantity}</td>
-                        <td style={{ fontSize: '14px', }}>{myCurrency.format(item.totalprice)}</td>
+                        <td style={{ fontSize: '14px', }}>{myCurrency.format(item.subtotal)}</td>
                         <td style={{ fontSize: '14px', }}>{item.status}</td>
                         {
                             waktuakhir >= item.waktuexp ?
                                 <td style={{ fontSize: '14px' }}>***</td>
                                 :
                                 <td style={{ fontSize: '14px', }}>{item.waktuexp}</td>
-
-
-
-
                         }
 
                         <td>
@@ -293,7 +341,7 @@ class History extends Component {
                         </td>
                         <td>
                             {
-                                waktuakhir >= item.waktuexp ?
+                                waktuakhir >= item.waktuexp || item.status === 'pending' ?
                                     null
                                     :
                                     <div>
@@ -305,8 +353,11 @@ class History extends Component {
                                         </td>
                                     </div>
                                 // this.adminAddAction(item.id) 
+                                
 
                             }
+
+
 
 
                         </td>
@@ -316,24 +367,104 @@ class History extends Component {
             return listJSXOrders;
         }
     }
+    renderIsiModal = (id) => {
+
+        var statusx = ''
+
+        for (let i = 0; i < this.state.listOrders.length; i++) {
+            statusx = this.state.listOrders[i].status
+            console.log(statusx)
+        }
 
 
-    renderListDetailOrders = () => {
-        var listJSXDetailOrders = this.state.listUserOrderDetails.map((item) => {
+        const enabled = statusx = 'sent'
 
-            return (
-                <tr>
-                    {/* <td className="text-center" style={{fontSize: '12px', }}>{item.iddetailorder}</td> */}
+        // var indexOfLastTodo = this.state.activePage * this.state.itemPerPage;
+        // var indexOfFirstTodo = indexOfLastTodo - this.state.itemPerPage;
+        // var sortedListDetailOrders = this.state.listUserOrderDetails.slice(indexOfFirstTodo, indexOfLastTodo);
+        var listJSXDetailOrders = this.state.listUserOrderDetails.map((item,id) => {
+            return(
+
+                <tr key={id}>
+                    {/* <td className="text-center" style={{fontSize: '12px', }}>{}</td> */}
                     <td style={{ fontSize: '14px', }}>{item.namaproduk}</td>
                     <td style={{ fontSize: '14px', }}>{myCurrency.format(item.hargaproduk)}</td>
                     <td style={{ fontSize: '14px', }}>Qty: {item.kuantiti}</td>
                     <td style={{ fontSize: '14px', }}><img src={`http://localhost:2002${item.image}`} alt={item.image} style={{ width: '100px' }} />{item.gambar}</td>
+                    <td> 
+                    {
+
+                        item.status === 'sent' ?
+                            <button disabled={!enabled} onClick={() => this.onClickRating(item.iddetailorder)} style={{ width: '100px' }}>
+                                <Rating name='RatingVal'
+                                    initialRating={this.state.RatingVal}
+                                    emptySymbol="fa fa-star-o fa-2x"
+                                    fullSymbol="fa fa-star fa-2x"
+                                    alt='filled star'
+                                    //   value={}
+                                    onChange={this.handleRatingChange}
+                                 />
+                            </button>
+
+                            :
+                            null
+
+                    }
+
+                    </td>
                 </tr>
             )
-
         })
-
         return listJSXDetailOrders;
+    }
+
+    renderListDetailOrders = () => {
+        
+
+            // var listJSXDetailOrders = this.state.listUserOrderDetails.map((item) => {
+
+            return (
+                <Modal isOpen={this.state.isModalDetailOpen} thistoggle={this.toogleadd} size="lg" style={{ maxWidth: "950px", width: '100%' }}>
+                    <ModalHeader toggle={this.toogleadd}>Detail Data</ModalHeader>
+                    <ModalBody>
+                        <table align="center" className="col-md-6 table table-striped table-hover border shadow" style={{ width: "900px" }}>
+                            <thead className="thead-light">
+                                <tr className="table table-bordered table-dark text-center text-dark">
+                                    {/* <th scope="col" className="font-weight-bold text-uppercase" >Id</th> */}
+                                    <th scope="col" className="font-weight-bold text-uppercase" >Nama</th>
+                                    <th scope="col" className="font-weight-bold text-uppercase" >Harga</th>
+                                    <th scope="col" className="font-weight-bold text-uppercase" >Kuantiti</th>
+                                    <th scope="col" className="font-weight-bold text-uppercase" >Image</th>
+                                    <th scope="col" className="font-weight-bold text-uppercase" >Option</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.renderIsiModal()}
+                            </tbody>
+                        </table>
+                        <br />
+
+                    </ModalBody>
+                    <ModalFooter>
+                        <div >
+                            {/* <Pagination
+                                activePage={this.state.activePage}
+                                itemsCountPerPage={this.state.itemPerPage}
+                                totalItemsCount={this.state.listOrders.length}
+                                pageRangeDisplayed={5}
+                                onChange={this.handlePageChange.bind(this)}
+                            /> */}
+                        </div>
+                        <Button color="secondary" onClick={this.toogleadd}>Cancel</Button>
+                    </ModalFooter>
+                </Modal>
+
+
+            )
+
+        
+
+     
     }
 
     render() {
@@ -366,21 +497,8 @@ class History extends Component {
                                     </tbody>
                                 </table>
                                 <br />
-                                <table align="center" className="col-md-6 table table-striped table-hover border shadow">
-                                    <thead className="thead-light">
-                                        <tr className="table table-bordered table-dark text-center text-dark">
-                                            {/* <th scope="col" className="font-weight-bold text-uppercase" >Id</th> */}
-                                            <th scope="col" className="font-weight-bold text-uppercase" >Nama</th>
-                                            <th scope="col" className="font-weight-bold text-uppercase" >Harga</th>
-                                            <th scope="col" className="font-weight-bold text-uppercase" >Kuantiti</th>
-                                            <th scope="col" className="font-weight-bold text-uppercase" >Image</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {this.renderListDetailOrders()}
-                                    </tbody>
-                                </table>
 
+                                {this.renderListDetailOrders()}
                             </div>
                             <div className=" row justify-content-center">
                                 <Pagination
@@ -422,6 +540,7 @@ class History extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        userid: state.auth.id,
         username: state.auth.username,
         myRole: state.auth.role,
         status: state.auth.status,

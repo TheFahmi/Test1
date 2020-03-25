@@ -8,6 +8,10 @@ import { Button, InputGroup, InputGroupAddon } from 'reactstrap';
 import { toast } from 'react-toastify'
 // import { Redirect } from 'react-router-dom';
 import { APIURL } from '../supports/APiUrl';
+
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
 const rupiah = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 
 class ProductsDetails extends Component {
@@ -39,7 +43,11 @@ class ProductsDetails extends Component {
     // function untuk menambahkan produk ke cart, jika user memasukan product yang sma yang sudah ada dalam cart, maka otomatis barang tersebut akan ditimpa
     onBtnAddToCart = (harga, id) => {
         if (this.props.username === "") {
-            alert("Please Login First!");
+            MySwal.fire(
+                'LOGIN FIRST!!',
+                'You must login first!!',
+                'danger'
+              );
             window.location ="/login";
         } else {
 
@@ -63,11 +71,13 @@ class ProductsDetails extends Component {
                     }).catch((err) => {
                         console.log(err);
                     })
-                    toast(`Success add to cart`, {
-                        position: toast.POSITION.BOTTOM_CENTER,
-                        className: 'toast-container'
-
-                    })
+                    MySwal.fire(
+                        'Success!',
+                        'Your item has been moved to cart.',
+                        'success',
+                        3000
+                        
+                      )
                     window.location = "/cart";
 
                 } else {
@@ -78,11 +88,21 @@ class ProductsDetails extends Component {
                         total_harga
                     }).then((res) => {
                         console.log(res);
-                        alert(`Success add to cart!`);
+                        MySwal.fire(
+                            'Success!',
+                            'Your item has been moved to cart.',
+                            'success',
+                            3000
+                            
+                          )
                         window.location = "/cart";
                     }).catch((err) => {
                         console.log(err);
-                        alert(`Failed add to cart`);
+                        MySwal.fire(
+                            'Failed!',
+                            'Your item failed moved to cart',
+                            'danger'
+                          )
                     })
                 }
             }).catch((err) => {
@@ -189,7 +209,7 @@ class ProductsDetails extends Component {
             
 
             <div className="container" style={{paddingTop: '100px'}}>
-                <div className="col-sm-10 bg" style={{ height: '600px', paddingTop: '30px', paddingBottom: '30px' }}>
+                <div className="col-sm-10 bg" style={{ height: '750px', paddingTop: '30px', paddingBottom: '30px' }}>
                     <div className="row row-top row-bottom" >
                         <div className="card col-5 mx-auto" style={{height: '350px'}}>
                             <div className="row" >
@@ -206,8 +226,8 @@ class ProductsDetails extends Component {
                             </h3>
                             <hr style={{width:'auto'}}></hr>
                             <h3 className="mt-5 mb-2">Deskripsi</h3>
-                            <p className="mt-1 mb-4 p_warp" id="arsh" style={{height: '300px'}}>{deskripsi}</p>
-                            <div className="row">
+                            <p className="mt-1 mb-4 p_warp" id="arsh" style={{height: '400px', fontSize:"13px"}}>{deskripsi}</p>
+                            <div className="row" style={{marginTop:"150px"}}>
                                 <div className="col-3">
                                     
                                     <InputGroup size="lg">

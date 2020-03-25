@@ -112,7 +112,7 @@ class ProductsGridView extends Component {
         if (route !== '') {
             return route.split('?')[1].split('=')[0]
         }
-        else if(route == '/') {
+        else if(route === '/') {
             return route.split('/')[2].split('?')[1].split('=')[0]
         }
         console.log(route)

@@ -69,7 +69,8 @@ module.exports = {
                     // phone,
                     role: 'MEMBER',
                     status: 'UNVERIFIED',
-                    alamat: '0'
+                    alamat: '0',
+                    phone: '0'
                 }
                 sql = `insert into user set ? `;
                 db.query(sql, dataUser, (err1, results1) => {

@@ -116,10 +116,10 @@ class Header extends Component {
     // }
 
     handleSelectChange = (event) => {
-        this.props.searchKeyword(this.state.keywordCat)
-        if (this.state.keywordcat) {
-            this.props.history.push("/search-results")
-        }
+        // this.props.searchKeyword(this.state.keywordCat)
+        // if (this.state.keywordcat) {
+        //     this.props.history.push("/search-results")
+        // }
         
         if(event.target.value === "Pilih category"){
             return this.state.searchProducts
@@ -145,7 +145,7 @@ class Header extends Component {
             return (
                 <MDBNavbar color="black" transparent={this.state.belumscroll} scrolling className='bordernav' dark fixed='top' expand="md" style={{ fontSize: 27 }} >
                     <MDBNavbarBrand href='/'>
-                        <strong className={'white-text'}>pStore</strong>
+                        <strong className={'white-text'}>Fahmi Store</strong>
                     </MDBNavbarBrand>
                     <div style={{marginLeft:"200px", width:"160px"}}>
                         <select ref='searchChoose' className='form-control' onChange={(e)=> this.props.customerChoose(e.target.value)}>
@@ -225,9 +225,9 @@ class Header extends Component {
             return (
 
                 <MDBNavbar color="black" transparent={false} scrolling className='bordernav' dark fixed='top' expand="md">
-                    <MDBNavbarBrand href='/products'>
+                    <a href='/'>
                         <strong className={'white-text'}>pStore</strong>
-                    </MDBNavbarBrand>
+                    </a>
                     <div style={{marginLeft:"200px", width:"160px"}}>
                         <select ref='searchChoose' className='form-control' onChange={(e)=> this.props.customerChoose(e.target.value)}>
                             <option disabled style={{ fontSize: '20px' }} >Pilih category</option>
@@ -264,13 +264,11 @@ class Header extends Component {
                                 <MDBDropdown >
                                     <MDBDropdownToggle nav className='warnanav' >
                                         <FaUserCircle /> hallo, {this.props.username}
-                                    </MDBDropdownToggle>
-                                    <MDBDropdownMenu className='dropdown1'  >
-                                        <MDBDropdownItem href="wishlist" style={{ fontSize: 15 }}>Wishlist</MDBDropdownItem>
+                                    </MDBDropdownToggle  >
+                                    <MDBDropdownMenu className='dropdown1'   >
+                                        <MDBDropdownItem href="wishlist" style={{ fontSize: 15}}>Wishlist</MDBDropdownItem>
                                         <MDBDropdownItem href="history" style={{ fontSize: 15 }}>History</MDBDropdownItem>
-
-                                        <MDBDropdownItem href="confirmorder" >Confirm Order</MDBDropdownItem>
-                                        <MDBDropdownItem onClick={this.onLogoutSelect} >Logout</MDBDropdownItem>
+                                        <MDBDropdownItem onClick={this.onLogoutSelect} style={{ fontSize: 15}}>Logout</MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </MDBNavItem>
@@ -280,7 +278,7 @@ class Header extends Component {
             )
         } else {
             return (
-                <MDBNavbar color="black" transparent={this.state.belumscroll} scrolling className='bordernav' dark fixed='top' expand="md">
+                <MDBNavbar color="black" transparent={false} scrolling className='bordernav' dark fixed='top' expand="md">
                     <MDBNavbarBrand href='/'>
                         <strong className={'white-text'}>pStore</strong>
                     </MDBNavbarBrand>

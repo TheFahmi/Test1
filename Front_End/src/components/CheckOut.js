@@ -4,6 +4,9 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import { APIURL } from '../supports/APiUrl';
+import { customerDiskon } from '../actions';
+import moment from 'moment'
+import queryString from 'query-string';
 
 const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 class CheckOut extends Component {
@@ -12,24 +15,82 @@ class CheckOut extends Component {
         cartList: [],
         selectedIdEdit: 0,
         totalPrice: 0,
-        totalQty: 0
+        totalQty: 0,
+        totalharga: 0,
+        totalpotongan: 0,
+        totalpot: 0,
+        subtotal: 0
+
+        
+
     }
 
     componentDidMount() {
         this.getCartList();
+        this.onTestRender();
+        // console.log(this.props.diskon)
+    }
+
+    routeCondition = () => {
+        var route = this.props.location.search
+        if (route !== '') {
+            return route.split('?')[1].split('=')[0]
+        }
+        console.log(route)
+        return ''
+        
+
+
+    }
+    onTestRender = () => {
+        if(this.routeCondition() === 'promo'){
+            this.CheckPromo()
+        }
+        else{
+            this.getCartList()
+        }
+    }
+
+    CheckPromo = () => {
+        var params = queryString.parse(this.props.location.search)
+        console.log(params)
+        var promo = params.promo;
+        axios.get(`${APIURL}/order/getpromo?namapromo=${promo}`)
+            .then((res) => {
+                var potongan = 0
+                res.data.forEach(element => {
+                    potongan = element.jenis
+
+                });
+                this.setState({
+                    Promo: res.data,
+                    totalpotongan: potongan
+                });
+
+            }).catch((err) => {
+                console.log(err);
+
+            })
+
     }
 
     getCartList = () => {
         axios.get(`${APIURL}/cart/cart?username=` + this.props.username)
 
             .then((res) => {
-                var harga = 0;
+                var totalhrg = 0;
                 var kuantiti = 0;
+
+               
                 res.data.forEach(element => {
-                    harga += (element.kuantiti * element.harga);
+                    totalhrg += (element.kuantiti * element.harga);
                     kuantiti += element.kuantiti;
+
+
                 });
-                this.setState({ cartList: res.data, selectedIdEdit: 0, totalPrice: harga, totalQty: kuantiti })
+
+                
+                this.setState({ cartList: res.data, selectedIdEdit: 0, totalQty: kuantiti, totalharga: totalhrg})
                 // console.log(this.state.cartList)
                 console.log(this.state.cartList[0])
 
@@ -38,47 +99,68 @@ class CheckOut extends Component {
             })
     }
 
-    getPromo = () => {
-
+    onHitungPotongan = () =>{
+        let promo = this.state.totalpotongan
+        let totalharga = this.state.totalharga
+        var potongan = 0
+        potongan = totalharga * (promo/100)
+        console.log(promo)
+        return potongan
     }
+
+    onHitungSubtotal = () =>{
+        let potongan = this.onHitungPotongan()
+        let totalharga = this.state.totalharga
+        var subtotal = 0
+        subtotal = totalharga - potongan
+        console.log(subtotal)
+        return subtotal
+    }
+
+    
 
     onBtnPayment = () => {
         var currentdate = new Date();
-        var month = new Array();
-        month[0] = "January";
-        month[1] = "February";
-        month[2] = "March";
-        month[3] = "April";
-        month[4] = "May";
-        month[5] = "June";
-        month[6] = "July";
-        month[7] = "August";
-        month[8] = "September";
-        month[9] = "October";
-        month[10] = "November";
-        month[11] = "December";
-        var date = `${currentdate.getDate()}-${month[(currentdate.getMonth())]}-${currentdate.getFullYear()}`
+        // var month = new Array();
+        // month[0] = "January";
+        // month[1] = "February";
+        // month[2] = "March";
+        // month[3] = "April";
+        // month[4] = "May";
+        // month[5] = "June";
+        // month[6] = "July";
+        // month[7] = "August";
+        // month[8] = "September";
+        // month[9] = "October";
+        // month[10] = "November";
+        // month[11] = "December";
+        // var date = `${currentdate.getDate()}-${month[(currentdate.getMonth())]}-${currentdate.getFullYear()}`
         // + " " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
 
+        // var test = moment().format('MMMM Do YYYY, h:mm:ss a').add(1,'mm')
+        // console.log(test);
 
-        var minutes = currentdate.getMinutes()+5;
-        
-        minutes = minutes < 10 ? '0' + minutes : minutes;
+        // var minutes = currentdate.getMinutes() + 5;
+
+        // minutes = minutes < 10 ? '0' + minutes : minutes;
 
 
-        var waktuexp = `${currentdate.getDate()}-${month[(currentdate.getMonth())]}-${currentdate.getFullYear()} ${currentdate.getHours()}:${minutes}`
+        // var waktuexp = `${currentdate.getDate()}-${month[(currentdate.getMonth())]}-${currentdate.getFullYear()} ${currentdate.getHours()}:${minutes}`
+        var waktuexp = `${moment(new Date()).add(1, 'm').format('DD-MMMM-YYYY HH:mm')}` 
+        var date = `${moment(new Date()).format('DD-MMMM-YYYY HH:mm')}` 
 
         var invoice = `INV-${currentdate.getFullYear()}${(currentdate.getMonth() + 1)}${currentdate.getDate()}${currentdate.getHours()}${currentdate.getMinutes()}${currentdate.getSeconds()}-${this.state.cartList[0].id}`;
 
         axios.post(`${APIURL}/listorder/listorder`, {
             username: this.props.username,
             date,
-            totalprice: this.state.totalPrice,
+            subtotal: this.onHitungSubtotal(),
             totalquantity: this.state.totalQty,
             status: "unpaid",
             invoice,
             email: this.props.email,
-            waktuexp
+            waktuexp,
+            totalpotongan: this.onHitungPotongan()
 
         }).then((res) => {
             console.log(res.data.insertId)
@@ -122,7 +204,7 @@ class CheckOut extends Component {
 
             }
             alert('Checkout Success Please Confirm Payment!')
-            window.location="/history";
+            window.location = "/history";
 
         }).catch((err) => {
             console.log(err);
@@ -181,7 +263,9 @@ class CheckOut extends Component {
                                     <tr>
                                         <td colSpan="4">
                                             <div className="text-center">
-                                                <h1>TOTAL PRICE : {myCurrency.format(this.state.totalPrice)}</h1>
+                                                <h1>TOTAL PRICE : {myCurrency.format(this.state.totalharga)}</h1>
+                                                <h2>TOTAL POTONGAN : {myCurrency.format(this.onHitungPotongan())}</h2>
+                                                <h2>SUB TOTAL : {myCurrency.format(this.onHitungSubtotal())}</h2>
                                                 <Button color="primary" size="lg" block style={{ fontSize: "14px" }}
                                                     onClick={() => this.onBtnPayment()}>
                                                     &nbsp; Pay
@@ -223,8 +307,9 @@ const mapStateToProps = (state) => {
         username: state.auth.username,
         email: state.auth.email,
         myRole: state.auth.role,
-        id: state.auth.id
+        id: state.auth.id,
+        diskon: state.Cart.hasilDiskon
     }
 }
 
-export default connect(mapStateToProps)(CheckOut);
+export default connect(mapStateToProps, { customerDiskon })(CheckOut);

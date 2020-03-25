@@ -3,7 +3,8 @@ import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Pagination from 'react-js-pagination';
-import { CartAction } from '../actions';
+import { CartAction, customerDiskon } from '../actions';
+
 import { APIURL } from '../supports/APiUrl';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -12,7 +13,7 @@ import { CustomInput, Modal, ModalBody, ModalFooter, ModalHeader, Button, Table 
 const MySwal = withReactContent(Swal)
 
 const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
-class ConcessionListView extends Component {
+class Cart extends Component {
 
     state = {
         listCart: [],
@@ -23,7 +24,9 @@ class ConcessionListView extends Component {
         kode: '',
         namapromo: '',
         totalpotongan: 0,
-        alamatuser: ''
+        alamatuser: '',
+        isModalAlamatOpen: false,
+        isModalAlamatEdit: false
     }
 
     handlePageChange(pageNumb) {
@@ -35,11 +38,22 @@ class ConcessionListView extends Component {
         this.showCart();
         // this.CheckPromo();
         console.log(this.props.alamat)
+
         console.log(this.state.kode)
     }
 
+    toogleadd = () => {
+        this.setState({ isModalAlamatOpen: !this.state.isModalAlamatOpen })
+    }
+
+    toggleedit = () => {
+        this.setState({ isModalAlamatEdit: !this.state.isModalAlamatEdit })
+    }
+
     onBtnCheckout = () => {
-        window.location = "/checkout"
+        this.props.customerDiskon(this.state.totalpotongan)
+
+        window.location = `/checkout?promo=${this.state.namapromo}`
     }
 
     showCart = () => {
@@ -47,16 +61,18 @@ class ConcessionListView extends Component {
             .then((res) => {
                 console.log(res);
                 var alamat = ''
-
+                var phone = ''
                 res.data.forEach(element => {
                     alamat = element.alamat
+                    phone = element.phone
                 })
                 console.log(alamat)
 
                 this.setState({
                     listCart: res.data,
                     selectedIdEdit: 0,
-                    alamatuser: alamat
+                    alamatuser: alamat,
+                    phoneuser: phone
                 });
                 this.props.CartAction(this.state.listCart.length);
             }).catch((err) => {
@@ -67,7 +83,7 @@ class ConcessionListView extends Component {
     totalPrice = () => {
         var totalx = 0
         for (let i = 0; i < this.state.listCart.length; i++) {
-            ;
+
             totalx += this.state.listCart[i].kuantiti * this.state.listCart[i].harga
         }
         return totalx;
@@ -75,15 +91,22 @@ class ConcessionListView extends Component {
     }
 
     totalPotong = () => {
-        var totalpotong = 0;
-        var promo = this.state.totalpotongan
+        let totalpotongan = 0;
+        let promo = this.state.totalpotongan
+        console.log(promo)
+
         for (let i = 0; i < this.state.listCart.length; i++) {
-            totalpotong += this.state.listCart[i].kuantiti * this.state.listCart[i].harga * (promo / 100);
+            totalpotongan += this.state.listCart[i].kuantiti * this.state.listCart[i].harga * (promo / 100);
 
 
         }
-
-        return totalpotong
+        // console.log(this.props.customerDiskon(totalpotongan))
+        // this.props.customerDiskon(totalpotongan)
+        // console.log(this.props.TotalDiskon)
+        console.log(totalpotongan)
+        this.props.customerDiskon(totalpotongan)
+        console.log(this.props.diskon)
+        return totalpotongan
 
     }
 
@@ -91,8 +114,9 @@ class ConcessionListView extends Component {
         var totalpotong = 0;
         var totaly = 0
         var promo = this.state.totalpotongan
+
         for (let i = 0; i < this.state.listCart.length; i++) {
-            totalpotong += this.state.listCart[i].kuantiti * this.state.listCart[i].harga * (promo / 100);
+            totalpotong = this.state.listCart[i].kuantiti * this.state.listCart[i].harga * (promo / 100);
             totaly += this.state.listCart[i].kuantiti * this.state.listCart[i].harga - totalpotong
         }
         return totaly;
@@ -121,7 +145,7 @@ class ConcessionListView extends Component {
     }
 
     onBtnDeleteClick = (id) => {
-        
+
         MySwal.fire({
             title: `Are you sure wanna delete?`,
             text: "You won't be able to revert this!",
@@ -130,19 +154,19 @@ class ConcessionListView extends Component {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, delete it!'
-          }).then((result) => {
+        }).then((result) => {
             if (result.value) {
-            axios.delete(`${APIURL}/deletecart/deletecart/` + id)
-                .then((res) => {
-                    MySwal.fire(
-                        'Deleted!',
-                        'Your file has been deleted.',
-                        'success'
-                      )
-                    console.log(res);
-                    this.showCart();
-                })
-                
+                axios.delete(`${APIURL}/deletecart/deletecart/` + id)
+                    .then((res) => {
+                        MySwal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
+                        console.log(res);
+                        this.showCart();
+                    })
+
             }
         }).catch((err) => {
             console.log(err);
@@ -172,6 +196,7 @@ class ConcessionListView extends Component {
                     Promo: res.data,
                     totalpotongan: potongan
                 });
+
             }).catch((err) => {
                 console.log(err);
 
@@ -214,30 +239,25 @@ class ConcessionListView extends Component {
         return btnCustom;
     }
 
-    toogleadd = () => {
-        this.setState({ isModaladdOpen: !this.state.isModaladdOpen })
-    }
-
-    toggleedit = () => {
-        this.setState({ isModaleditopen: !this.state.isModaleditopen })
-    }
 
     renderalamat = () => {
 
-        
-       
-        var alamat = this.state.alamatuser
 
-        if (alamat){
+
+        var alamat = this.state.alamatuser
+        var phone = this.state.phoneuser
+
+        if (alamat) {
             return (
-            <tr>
-                <td className="text-center" style={{ fontSize: '14px', }}>{alamat}</td>
-                <td>
-                        <button className='btn btn-primary' onClick={() => this.setState({isModaleditopen: true})}  >Edit</button>
+                <tr>
+                    <td className="text-center" style={{ fontSize: '14px', }}>{alamat}</td>
+                    <td className="text-center" style={{ fontSize: '14px', }}>{phone}</td>
+                    <td>
+                        <button className='btn btn-primary' onClick={() => this.setState({ isModaleditopen: true })}  >Edit</button>
                         <button className='btn btn-danger' onClick={() => this.onBtnDeleteClick}>Delete</button>
-                </td>
-            </tr>
-            
+                    </td>
+                </tr>
+
 
             )
         }
@@ -309,19 +329,22 @@ class ConcessionListView extends Component {
 
     render() {
 
-        
+
         var alamat = this.props.alamat
         console.log(this.props.alamat)
         if (this.props.username !== '') {
             if (this.props.status === 'Verified') {
                 if (this.state.listCart.length > 0) {
                     return (
+
+
                         <div full-width-div table-responsive card shadow col-md-12 style={{ height: "700px", marginTop: "100px" }}>
 
-                            <h2 className="section-heading text-center text-uppercase" style={{ marginTop: '50px' }}>Hello, {this.props.username}</h2>
+                            <h2 className="section-heading text-center text-uppercase" style={{ marginTop: '150px' }}>Hello, {this.props.username}</h2>
                             <h3 className="section-subheading text-muted text-center pb-5">Happy Shopping</h3>
-                            <div className="row justify-content-center">
-                                <table className="col-md-7 table table-striped table-hover border shadow" style={{marginRight:"480px",marginBottom:"-200px"}}>
+                            <div className="row ">
+                                {/*  */}
+                                <table className="col-md-7 table table-striped table-hover border shadow" style={{ marginLeft: "150px" }}>
                                     <thead className="thead-light">
                                         <tr>
                                             <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Product</center></th>
@@ -336,27 +359,7 @@ class ConcessionListView extends Component {
                                         {this.renderListCart()}
                                     </tbody>
                                 </table>
-                                <table className="col-md-7 table table-striped table-hover border shadow" style={{marginTop:"200px"}} >
-                                    <thead className="thead-light">
-                                        <tr>
-                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Alamat</center></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            alamat === '1' ?
-                                            
-                                                <button className='btn btn-danger' onClick={() => this.onBtnDeleteClick}>{this.props.alamat}</button>
-                                            
-                                            :
-                                            // this.renderalamat()
-                                            
-                                                <button className='btn btn-danger' onClick={() => this.onBtnDeleteClick}>2</button>
-                                          
-                                        }
-                                    </tbody>
-                                </table>
-                                <div className="col-lg-3">
+                                <div className="col-xs-3">
                                     <table className="table table-striped table-hover bordered shadow">
                                         <thead className="thead-light">
                                             <tr>
@@ -394,6 +397,46 @@ class ConcessionListView extends Component {
                                         </tr>
                                     </table>
                                 </div>
+                                <table className="col-md-7 table table-striped table-hover border shadow" style={{ marginLeft: "150px" }} >
+                                    <thead className="thead-light">
+                                        <tr>
+                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Alamat</center></th>
+                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Phone</center></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            alamat === '0' ?
+                                                <div>
+
+                                                    <button className='btn btn-primary' onClick={this.toogleadd}>Add data</button>
+                                                    <Modal isOpen={this.state.isModalAlamatOpen} toggle={this.toogleadd}>
+                                                        <ModalHeader toggle={this.toogleadd}>Add data</ModalHeader>
+                                                        <ModalBody>
+                                                            <textarea className="form-control"type="text" ref='addalamat' placeholder='Masukkan Alamat' className='form-control mt-4 ' />
+                                                            <input type="text" ref='addphone' placeholder='No Telepon' className='form-control mt-2' />
+
+                                                        </ModalBody>
+                                                        <ModalFooter>
+                                                            <Button color="primary" onClick={this.onBtnAddClick}>Save</Button>
+                                                            <Button color="secondary" onClick={this.toogleadd}>Cancel</Button>
+                                                        </ModalFooter>
+                                                    </Modal>
+
+
+                                                </div>
+
+
+
+                                                :
+                                                this.renderalamat()
+
+                                            // <button className='btn btn-danger' onClick={() => this.onBtnDeleteClick}>2</button>
+
+                                        }
+                                    </tbody>
+                                </table>
+
                             </div>
                             <div className="row justify-content-center">
                                 <Pagination
@@ -435,12 +478,14 @@ class ConcessionListView extends Component {
 const mapStateToProps = (state) => {
     return {
         username: state.auth.username,
+        phone: state.auth.phone,
         myRole: state.auth.role,
         status: state.auth.status,
         alamat: state.auth.alamat,
         Cart: state.Cart.cart,
-        totalpotongan: state.Cart.totalpotongan
+        diskon: state.Cart.hasilDiskon
+        // totalpotongan: state.Cart.totalpotongan
     }
 }
 
-export default connect(mapStateToProps, { CartAction })(ConcessionListView);
+export default connect(mapStateToProps, { CartAction, customerDiskon })(Cart);

@@ -42,7 +42,7 @@ module.exports = {
     },
 
     getDataPenjualan: (req, res) => {
-        var sql = `(select sum(dor.totalprice) as total, date as waktu from detailorder dtl
+        var sql = `(select sum(dor.subtotal) as total, date as waktu from detailorder dtl
         join daftarorder dor
         on dtl.idtrx = dor.id
         join products p

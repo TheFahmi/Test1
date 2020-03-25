@@ -9,6 +9,8 @@ export const COOKIE_CHECKED = 'Cookie checked';
 export const SELECTED_PRODUCTS = 'Selected products';
 export const CONVERT_TO_IDR = 'Convert to IDR';
 export const CONVERT_DATE = 'Convert date';
+export const CART = 'CART';
 export const SEARCH_BOX_CHANGE = 'SEARCH_BOX_CHANGE' 
 export const SEARCH_PILIH_CHANGE = 'SEARCH_PILIH_CHANGE' 
+export const CART_ADDED = 'CART_ADDED' 
 
