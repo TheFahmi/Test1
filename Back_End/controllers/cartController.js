@@ -28,6 +28,20 @@ module.exports = {
         })
     },
 
+    editAlamat: (req, res) => {
+        var { id, alamat, phone } = req.body;
+        var data = {
+            alamat,
+            phone
+
+        }
+        var sql = `update user set ? where id = '${id}'`;
+        db.query(sql,data,(err, results) => {
+            if (err) throw err;
+            res.send(results)
+        })
+    },
+
     
 
     invoice: (req, res) => {

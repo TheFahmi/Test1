@@ -36,6 +36,7 @@ class Cart extends Component {
 
     componentDidMount() {
         this.showCart();
+        
         // this.CheckPromo();
         console.log(this.props.alamat)
 
@@ -48,6 +49,40 @@ class Cart extends Component {
 
     toggleedit = () => {
         this.setState({ isModalAlamatEdit: !this.state.isModalAlamatEdit })
+    }
+
+    onBtnAddClick = () => {
+
+        axios.put(`${APIURL}/cart/editalamat`,{
+            id : this.props.userid,
+            alamat : this.refs.addalamat.value,
+            phone : this.refs.addphone.value
+            
+        }).then((res) => {
+            this.showCart();
+            this.setState({ isModalAlamatOpen: false })
+        }).catch((err) => {
+            console.log(err);
+        })
+
+       window.location = '/cart'
+    }
+
+    onBtnEditClick = () => {
+
+        axios.put(`${APIURL}/cart/editalamat`,{
+            id : this.props.userid,
+            alamat : this.refs.editalamat.value,
+            phone : this.refs.editphone.value
+            
+        }).then((res) => {
+            this.showCart();
+            this.setState({ isModalAlamatOpen: false })
+        }).catch((err) => {
+            console.log(err);
+        })
+
+       window.location = '/cart'
     }
 
     onBtnCheckout = () => {
@@ -250,11 +285,22 @@ class Cart extends Component {
         if (alamat) {
             return (
                 <tr>
+                    <Modal isOpen={this.state.isModalAlamatEdit} toggle={this.toogle}>
+                        <ModalHeader toggle={this.toggleedit}>Edit data</ModalHeader>
+                        <ModalBody>
+                            <textarea className="form-control" type="text" ref='editalamat' defaultValue={alamat} placeholder='Masukkan Alamat' className='form-control mt-2 ' style={{ height: "200px" }} />
+                            <input type="text" ref='editphone' defaultValue={phone} placeholder='No Telepon' className='form-control mt-2' />
+
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={this.onBtnEditClick}>Save</Button>
+                            <Button color="secondary" onClick={this.toggleedit}>Cancel</Button>
+                        </ModalFooter>
+                    </Modal>
                     <td className="text-center" style={{ fontSize: '14px', }}>{alamat}</td>
                     <td className="text-center" style={{ fontSize: '14px', }}>{phone}</td>
                     <td>
-                        <button className='btn btn-primary' onClick={() => this.setState({ isModaleditopen: true })}  >Edit</button>
-                        <button className='btn btn-danger' onClick={() => this.onBtnDeleteClick}>Delete</button>
+                        <button className='btn btn-primary' onClick={this.toggleedit}>Edit data</button>
                     </td>
                 </tr>
 
@@ -402,6 +448,7 @@ class Cart extends Component {
                                         <tr>
                                             <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Alamat</center></th>
                                             <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Phone</center></th>
+                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Action</center></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -413,7 +460,7 @@ class Cart extends Component {
                                                     <Modal isOpen={this.state.isModalAlamatOpen} toggle={this.toogleadd}>
                                                         <ModalHeader toggle={this.toogleadd}>Add data</ModalHeader>
                                                         <ModalBody>
-                                                            <textarea className="form-control"type="text" ref='addalamat' placeholder='Masukkan Alamat' className='form-control mt-4 ' />
+                                                            <textarea className="form-control"type="text" ref='addalamat' placeholder='Masukkan Alamat' className='form-control mt-2 ' style={{height:"200px"}} />
                                                             <input type="text" ref='addphone' placeholder='No Telepon' className='form-control mt-2' />
 
                                                         </ModalBody>
@@ -478,6 +525,7 @@ class Cart extends Component {
 const mapStateToProps = (state) => {
     return {
         username: state.auth.username,
+        userid: state.auth.id,
         phone: state.auth.phone,
         myRole: state.auth.role,
         status: state.auth.status,

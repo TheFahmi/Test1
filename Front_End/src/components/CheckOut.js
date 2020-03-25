@@ -147,7 +147,7 @@ class CheckOut extends Component {
 
         // var waktuexp = `${currentdate.getDate()}-${month[(currentdate.getMonth())]}-${currentdate.getFullYear()} ${currentdate.getHours()}:${minutes}`
         var waktuexp = `${moment(new Date()).add(1, 'm').format('DD-MMMM-YYYY HH:mm')}` 
-        var date = `${moment(new Date()).format('DD-MMMM-YYYY HH:mm')}` 
+        var date = `${moment(new Date()).format('DD-MMMM-YYYY')}` 
 
         var invoice = `INV-${currentdate.getFullYear()}${(currentdate.getMonth() + 1)}${currentdate.getDate()}${currentdate.getHours()}${currentdate.getMinutes()}${currentdate.getSeconds()}-${this.state.cartList[0].id}`;
 
