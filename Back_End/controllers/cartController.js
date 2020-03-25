@@ -41,6 +41,15 @@ module.exports = {
             res.send(results)
         })
     },
+    
+    getAlamat: (req,res) => {
+        var username = req.query.username
+        var sql = `select alamat, phone from user where username = '${username}'`
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            res.send(result)
+        })
+    },
 
     
 
@@ -222,6 +231,112 @@ module.exports = {
 
         })
     },
+
+    postPromo: (req, res) => {
+        var data = req.body
+        var sql = `insert into promo set ? `
+        db.query(sql, data, (err, result) => {
+            if (err) throw err;
+            res.send(result)
+        })
+    },
+
+    editPromo: (req, res) => {
+        var { id, namapromo, jenis } = req.body;
+        var data = {
+            namapromo,
+            jenis
+
+        }
+        var sql = `update promo set ? where id = '${id}'`;
+        db.query(sql,data,(err, results) => {
+            if (err) throw err;
+            res.send(results)
+        })
+    },
+
+    getAllPromo: (req, res) => {
+        var sql = `select * from promo`
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+
+            res.send(result);
+
+
+        })
+    },
+
+    deletePromo: (req, res) => {
+        var deleteid = req.params.id;
+        var sql = `select * from promo where id = ${deleteid}`;
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            if (result.length > 0) {
+                var sql = `delete from promo where id = ${deleteid}`;
+                db.query(sql, (err1, result1) => {
+                    if (err1) throw err1;
+                    res.send(result);
+                    console.log('SUKSES DELETE PROMO')
+                })
+            } else {
+                res.send('Data not exist')
+            }
+        })
+    },
+
+    deleteCategory: (req, res) => {
+        var deleteid = req.params.id;
+        var sql = `select * from category where id = ${deleteid}`;
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            if (result.length > 0) {
+                var sql = `delete from category where id = ${deleteid}`;
+                db.query(sql, (err1, result1) => {
+                    if (err1) throw err1;
+                    res.send(result);
+                })
+            } else {
+                res.send('Data not exist')
+            }
+        })
+    },
+
+
+    postCategory: (req, res) => {
+        var data = req.body
+        var sql = `insert into category set ? `
+        db.query(sql, data, (err, result) => {
+            if (err) throw err;
+            res.send(result)
+        })
+    },
+
+    editCategory: (req, res) => {
+        var { id, namapromo, jenis } = req.body;
+        var data = {
+            namapromo,
+            jenis
+
+        }
+        var sql = `update category set ? where id = '${id}'`;
+        db.query(sql,data,(err, results) => {
+            if (err) throw err;
+            res.send(results)
+        })
+    },
+
+    getAllCategory: (req, res) => {
+        var sql = `select * from category`
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+
+            res.send(result);
+
+
+        })
+    },
+
+
 
     daftarOrder: (req, res) => {
         // copyFuncion = () => {

@@ -34,7 +34,7 @@ class HomePage extends Component {
   }
 
   showProducts = () => {
-    axios.get(`${APIURL}/product/getproducts`)
+    axios.get(`${APIURL}/product/getproducthome`)
       .then((res) => {
         console.log(res);
         this.setState({
@@ -102,11 +102,11 @@ class HomePage extends Component {
       )
     } else if (this.props.myRole === 'ADMIN PAYMENT') {
       return (
-        <Redirect to='/admin/Dashboard' />
+        <Redirect to='/admin/confirmtransaction' />
       )
     } else if (this.props.myRole === 'EDITOR') {
       return (
-        <Redirect to='/admin/Dashboard' />
+        <Redirect to='/admin/manageproducts' />
       )
     } else if (this.props.myRole === 'MEMBER' && this.props.username == '') {
       return (
@@ -165,16 +165,26 @@ class HomePage extends Component {
             </div>
           </div>
          
-
-            <div className="row mt-5">
-                <div className="col col-md-6 bg-light border">
-                    <h1 className="text-center text-uppercase bold" style={{paddingTop: '100px'}}>iWatch </h1>
-                    <h5 className="text-center" style={{fontSize: '18px', fontFamily: 'calibri', paddingLeft: '30px', paddingRight: '30px', paddingTop: '10px'}}>One of the most prominent Japanese streetwear brands, A Bathing Ape, aka Bape, is dropping collaborative Camo adidas NMDs.  Bape was founded in 1993 by designer and all around creative, Nigo. Through limited releases and unprecedented collaborative partnerships, A Bathing Ape grew to become one of the most popular streetwear brands of the 1990s and 2000s.</h5>
-                    <center style={{paddingTop: '10px'}}><button type="button" className="btn btn-primary btn-lg" style={{width: '150px', paddingTop: '10px'}}>Buy Now</button></center>
-                </div>
-                <div className="col col-md-6 firstBackground2" style={{height: '400px'}}>
-                </div>
-            </div>  
+          <div className="row mt-5">
+          
+            <div className="col col-md-6 firstBackground2" style={{ height: '400px' }}>
+            </div>
+            <div className="col col-md-6 bg-light border">
+              <h1 className="text-center text-uppercase bold" style={{ paddingTop: '100px' }}>iPhone'</h1>
+              <h5 className="text-center" style={{ fontSize: '18px', fontFamily: 'calibri', paddingLeft: '10px', paddingRight: '10px', paddingTop: '10px' }}>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</h5>
+              <center style={{ paddingTop: '10px' }}><button type="button" className="btn btn-primary btn-lg" style={{ width: '150px', paddingTop: '10px' }}>Buy Now</button></center>
+            </div>
+            
+          </div>
+          <div className="row mt-6">
+            <div className="col col-md-6 bg-light border">
+              <h1 className="text-center text-uppercase bold" style={{ paddingTop: '100px' }}>iWatch </h1>
+              <h5 className="text-center" style={{ fontSize: '18px', fontFamily: 'calibri', paddingLeft: '10px', paddingRight: '10px', paddingTop: '10px' }}>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</h5>
+              <center style={{ paddingTop: '10px' }}><button type="button" className="btn btn-primary btn-lg" style={{ width: '150px', paddingTop: '10px' }}>Buy Now</button></center>
+            </div>
+            <div className="col col-md-6 firstBackground" style={{ height: '400px', }}>
+            </div>            
+          </div>  
         </div>
 
       )

@@ -98,7 +98,7 @@ class HistoryList extends Component {
                         <td style={{fontSize: '14px', }}>{item.username}</td>
                         <td style={{fontSize: '14px', }}>{this.props.convertdate(item.date)}</td>
                         <td style={{fontSize: '14px', }}>{item.totalquantity}</td>
-                        <td style={{fontSize: '14px', }}>{myCurrency.format(item.totalprice)}</td>
+                        <td style={{fontSize: '14px', }}>{myCurrency.format(item.subtotal)}</td>
                         <td style={{fontSize: '14px' }}>{item.status}</td>
                         <td>
                             <button className="btn btn-success" title="see detail" style={{borderRadius: '30px', height: '30px', width: '30px'}} onClick={() => this.userOrderDetails(item.id)}><i className="fa fa-info fa-md" style={{fontSize: '14px', }}></i></button>
@@ -125,7 +125,7 @@ class HistoryList extends Component {
                         <td style={{fontSize: '14px', }}>{item.username}</td>
                         <td style={{fontSize: '14px', }}>{this.props.convertdate(item.date)}</td>
                         <td style={{fontSize: '14px', }}>{item.totalquantity}</td>
-                        <td style={{ fontSize: '14px', }}>{myCurrency.format(item.totalprice)}</td>
+                        <td style={{ fontSize: '14px', }}>{myCurrency.format(item.subtotal)}</td>
                         <td style={{fontSize: '14px', }}>{item.status}</td>
                         <td>
                             <button className="btn btn-success" title="see detail" style={{borderRadius: '30px', height: '30px', width: '30px'}} onClick={() => this.userOrderDetails(item.id)}><i className="fa fa-info" style={{fontSize: '14px', }}></i></button>

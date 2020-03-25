@@ -38,6 +38,8 @@ class ManageTrx extends Component {
                   <a href="/admin/confirmtransaction" className="list-group-item">Transactions Confirmation</a>
                   <a href="/admin/manageproducts" className="list-group-item">Manage Products</a>
                   <a href="/admin/manageusers" className="list-group-item">Manage Users</a>
+                  <a href="/admin/managepromo" className="list-group-item">Manage Promo</a>
+                  <a href="/admin/managecategory" className="list-group-item">Manage Category</a>
                   <a href="/admin/managetrx" className="list-group-item active">Manage Transactions</a>
                   <a href="/admin/managewishlist" className="list-group-item">See Wishlist</a>
                   <a href="/admin/pagereport" className="list-group-item">See Report</a>

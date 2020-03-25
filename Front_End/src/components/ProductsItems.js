@@ -83,13 +83,13 @@ class ProductsItems extends Component {
                             </div>
                             <div className="stats">
                             <div style={{marginRight:"30px",color:"gold", marginTop:"40px"}}>
-                            <Rating 
+                            {/* <Rating 
                                   initialRating={rating}
                                   emptySymbol="fa fa-star-o fa-2x"
                                   fullSymbol="fa fa-star fa-2x"
                                   alt='filled star'
                                 //   value={}
-                                  readonly />
+                                  readonly /> */}
                             </div>
                                 
                                 {

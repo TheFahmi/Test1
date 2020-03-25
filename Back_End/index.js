@@ -54,6 +54,7 @@ app.use('/order', cartRouter);
 app.use('/orders', cartRouter);
 app.use('/orderdetail', cartRouter);
 app.use('/confirm', cartRouter);
+app.use('/promo', cartRouter);
 app.use('/confirmtrx', cartRouter);
 app.use('/invoice',cartRouter);
 app.use('/order',cartRouter);
@@ -66,6 +67,7 @@ app.use('/join', productRouter);
 // manage products sebelum di join 
 app.use('/productlist', productRouter);
 app.use('/category', productRouter);
+app.use('/cat', cartRouter);
 // dashboard
 app.use('/dashboard', dashboardRouter);
 

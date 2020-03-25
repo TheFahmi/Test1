@@ -7,9 +7,8 @@ import { CartAction, customerDiskon } from '../actions';
 
 import { APIURL } from '../supports/APiUrl';
 import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 import { CustomInput, Modal, ModalBody, ModalFooter, ModalHeader, Button, Table } from 'reactstrap';
-
+import withReactContent from 'sweetalert2-react-content'
 const MySwal = withReactContent(Swal)
 
 const myCurrency = new Intl.NumberFormat('in-Rp', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
@@ -60,12 +59,13 @@ class Cart extends Component {
             
         }).then((res) => {
             this.showCart();
+            this.renderAlamat()
             this.setState({ isModalAlamatOpen: false })
         }).catch((err) => {
             console.log(err);
         })
 
-       window.location = '/cart'
+    //    window.location = '/cart'
     }
 
     onBtnEditClick = () => {
@@ -86,9 +86,16 @@ class Cart extends Component {
     }
 
     onBtnCheckout = () => {
-        this.props.customerDiskon(this.state.totalpotongan)
+        // this.props.customerDiskon(this.state.totalpotongan)
 
-        window.location = `/checkout?promo=${this.state.namapromo}`
+        if(this.state.alamatuser === '0'){
+            window.alert('alamat harus di isi!')
+        }
+        else{
+            window.location = `/checkout?promo=${this.state.namapromo}`
+        }
+
+        
     }
 
     showCart = () => {
@@ -447,8 +454,8 @@ class Cart extends Component {
                                     <thead className="thead-light">
                                         <tr>
                                             <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Alamat</center></th>
-                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Phone</center></th>
-                                            <th scope="col" className="font-weight-bold text-uppercase" style={{ fontSize: '16px', }}><center>Action</center></th>
+                                            <th scope="col" className="font-weight-bold text-uppercase col-xs-3" style={{ fontSize: '16px', }}><center>Phone</center></th>
+                                            <th scope="col" className="font-weight-bold text-uppercase col-xs-1" style={{ fontSize: '16px', }}><center>Action</center></th>
                                         </tr>
                                     </thead>
                                     <tbody>

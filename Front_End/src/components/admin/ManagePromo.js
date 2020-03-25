@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import ListCategory from './ListCategory';
+import ListPromo from './ListPromo';
 
-class ManageCategory extends Component {
+class ManagePromo extends Component {
 
   render() {
 
@@ -17,10 +17,9 @@ class ManageCategory extends Component {
                 <a href="/admin/confirmtransaction" className="list-group-item">Transactions Confirmation</a>
                 <a href="/admin/manageproducts" className="list-group-item">Manage Products</a>
                 <a href="/admin/manageusers" className="list-group-item">Manage Users</a>
-                <a href="/admin/managepromo" className="list-group-item">Manage Promo</a>
-                <a href="/admin/managecategory" className="list-group-item active">Manage Category</a>
+                <a href="/admin/managepromo" className="list-group-item active">Manage Promo</a>
+                <a href="/admin/managecategory" className="list-group-item">Manage Category</a>
                 <a href="/admin/managetrx" className="list-group-item">Manage Transactions</a>
-                <a href="/admin/managepromo" className="list-group-item">Manage Promo</a>
                 <a href="/admin/managewishlist" className="list-group-item">See Wishlist</a>
                 <a href="/admin/pagereport" className="list-group-item">See Report</a>
               </div>
@@ -28,7 +27,7 @@ class ManageCategory extends Component {
             <div className="col-lg-10 card bg-light border">
               <h1 className="text-center pt-5 text-uppercase pb-5">List Products</h1>
               <div>
-                <ListCategory />
+                <ListPromo />
               </div>
             </div>
           </div>
@@ -48,4 +47,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(ManageCategory);
+export default connect(mapStateToProps)(ManagePromo);

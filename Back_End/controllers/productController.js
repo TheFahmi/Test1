@@ -41,6 +41,14 @@ module.exports = {
         })
     },
 
+    getProductHome: (req, res) => {
+        var sql = `select * from products ORDER BY ID DESC LIMIT 6`;
+        db.query(sql, (err, result) => {
+            if (err) throw err;
+            res.send(result);
+        })
+    },
+
     getDataPenjualan: (req, res) => {
         var sql = `(select sum(dor.subtotal) as total, date as waktu from detailorder dtl
         join daftarorder dor
@@ -201,6 +209,7 @@ module.exports = {
                     // console.log(image)
                     const imagePath = image ? path + '/' + image[0].filename : null;
                     const data = JSON.parse(req.body.data);
+                    console.log(data)
                     data.image = imagePath;
     
                     try {
@@ -271,6 +280,7 @@ module.exports = {
                 const { image } = req.files;
                 const imagePath = image ? path + '/' + image[0].filename : null;
                 const data = JSON.parse(req.body.data);
+                console.log(req.body.data)
                 data.image = imagePath;
                 
                 var sql = 'INSERT INTO products SET ?';

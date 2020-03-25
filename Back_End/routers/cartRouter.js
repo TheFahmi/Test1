@@ -34,5 +34,12 @@ router.get('/getpromo',cartController.getPromo)
 router.post('/tambahrating', cartController.tambahRating);
 router.put('/editalamat',cartController.editAlamat)
 // router.get('/invoice',cartController.invoice)
-
+router.get('/getalamat',cartController.getAlamat)
+router.get('/getallpromo',cartController.getAllPromo)
+router.post('/postpromo', cartController.postPromo);
+router.put('/editpromo',cartController.editPromo)
+router.get('/getallcategory',cartController.getAllCategory)
+router.post('/postcategory', cartController.postCategory);
+router.put('/editcategory',cartController.editCategory)
+router.delete('/deletepromo/:id', cartController.deletePromo);
 module.exports = router;

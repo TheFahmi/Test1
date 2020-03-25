@@ -25,5 +25,5 @@ router.get('/getcategory',productController.getCategory)
 router.get('/getdatacart',productController.getDataCart)
 router.get('/getdatapenjualan',productController.getDataPenjualan)
 router.get('/getjoincategory',productController.getJoinCategory) 
-
+router.get('/getproducthome',productController.getProductHome)
 module.exports = router;

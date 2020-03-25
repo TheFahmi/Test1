@@ -16,7 +16,6 @@ import _History from './components/History';
 import ManageUsers from './components/admin/ManageUsers';
 import ManageProducts from './components/admin/ManageProducts';
 import ManageTrx from './components/admin/ManageTrx';
-import ManageCategory from './components/admin/ManageCategory';
 import Spinner from './components/Spinner';
 import AddProduct from './components/admin/AddProduct';
 import WishListCart from './components/WishList';
@@ -27,6 +26,8 @@ import ListProducts from './components/admin/ListProducts';
 import ConfirmOrder from './components/ConfirmOrder';
 import SeeWishlist from './components/admin/SeeWishlist';
 import Dashboard from './components/admin/Dashboard';
+import ManagePromo from './components/admin/ManagePromo';
+import ManageCategory from './components/admin/ManageCategory';
 import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
 import PageReport from './components/admin/PageReport';
@@ -80,6 +81,8 @@ class App extends Component {
         <Route path="/admin/managewishlist" component={SeeWishlist} />
         <Route path="/admin/Dashboard" component={Dashboard} />
         <Route path="/admin/pagereport" component={PageReport} />
+        <Route path="/admin/managepromo" component={ManagePromo} />
+        <Route path="/admin/managecategory" component={ManageCategory} />
         <Route path="/admin/seesuccesstrx" component={SeeSuccessTrx} />
         
         <Route path="*" component={PageNotFound} />

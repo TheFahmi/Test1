@@ -64,6 +64,7 @@ class History extends Component {
                 var hasil = 0
                 var idtrx = ''
                 var invoice = ''
+                var status = ''
                 res.data.forEach(element => {
                     idproduct = element.idprod
                     kuantiti = element.qty
@@ -71,39 +72,15 @@ class History extends Component {
                     expired = element.waktuexp
                     invoice = element.invoice
                     idtrx = element.idtrans
+                    status = element.status
 
-
-                    
-                    // var currentdate = new Date();
-
-                    // var month = new Array();
-                    // month[0] = "January";
-                    // month[1] = "February";
-                    // month[2] = "March";
-                    // month[3] = "April";
-                    // month[4] = "May";
-                    // month[5] = "June";
-                    // month[6] = "July";
-                    // month[7] = "August";
-                    // month[8] = "September";
-                    // month[9] = "October";
-                    // month[10] = "November";
-                    // month[11] = "December";
-
-                    // var minutes = currentdate.getMinutes();
-
-                    // minutes = minutes < 10 ? '0' + minutes : minutes;
-
-
-                    // var waktuakhir = `${currentdate.getDate()}-${month[(currentdate.getMonth())]}-${currentdate.getFullYear()} ${currentdate.getHours()}:${minutes}`
-                    
 
 
 
                     hasil = stock + kuantiti
                     var waktuakhir = `${moment(new Date()).format('DD-MMMM-YYYY HH:mm')}`
                     console.log(waktuakhir)
-                    if (waktuakhir === expired) {
+                    if (waktuakhir === expired && status === 'unpaid') {
                         axios.put(`${APIURL}/order/tambahStock`, {
 
                             id: idproduct,
@@ -253,19 +230,19 @@ class History extends Component {
        
         for(let i = 0;i < this.state.listUserOrderDetails.length; i++){
 
-            // axios.post(`${APIURL}/rating/tambahrating`, {
-            //     idproduct: this.state.listUserOrderDetails[i].idproduct,
-            //     iduser: this.props.iduser,
-            //     idtrx: this.state.listUserOrderDetails[i].idtrx,
-            //     rating: this.state.RatingVal
+            axios.post(`${APIURL}/rating/tambahrating`, {
+                idproduct: this.state.listUserOrderDetails[i].idproduct,
+                iduser: this.props.iduser,
+                idtrx: this.state.listUserOrderDetails[i].idtrx,
+                rating: this.state.RatingVal
            
                 
-            // }).then((res) => {
-            //     console.log(res)
-            // }).catch((err) => {
-            //     console.log(err);
-            // })
-            // console.log(this.state.listUserOrderDetails[i].idtrx)
+            }).then((res) => {
+                console.log(res)
+            }).catch((err) => {
+                console.log(err);
+            })
+            console.log(this.state.listUserOrderDetails[i].idtrx)
             axios.put(`${APIURL}/confirm/editstatus/`, {
                 id: this.state.listUserOrderDetails[i].iddetailorder,
                 status: "completed"
@@ -329,7 +306,7 @@ class History extends Component {
                         <td style={{ fontSize: '14px', }}>{myCurrency.format(item.subtotal)}</td>
                         <td style={{ fontSize: '14px', }}>{item.status}</td>
                         {
-                            waktuakhir >= item.waktuexp ?
+                            waktuakhir >= item.waktuexp || item.status === 'pending' ?
                                 <td style={{ fontSize: '14px' }}>***</td>
                                 :
                                 <td style={{ fontSize: '14px', }}>{item.waktuexp}</td>
@@ -394,7 +371,7 @@ class History extends Component {
                     <td> 
                     {
 
-                        item.status === 'sent' ?
+                        item.status === 'sent'  ?
                             <button disabled={!enabled} onClick={() => this.onClickRating(item.iddetailorder)} style={{ width: '100px' }}>
                                 <Rating name='RatingVal'
                                     initialRating={this.state.RatingVal}

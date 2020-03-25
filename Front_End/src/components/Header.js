@@ -285,22 +285,19 @@ class Header extends Component {
                     <MDBNavbarToggler onClick={this.toggleCollapse} />
                     <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
                         <MDBNavbarNav tag='div' right className='mr-5' >
-                            <MDBNavItem >
+                            {/* <MDBNavItem >
                                 <MDBNavLink to='/'>
                                     manage Admin
                                      </MDBNavLink>
-                            </MDBNavItem>
-                            <MDBNavItem>
+                            </MDBNavItem> */}
+                            <MDBNavItem style={{ fontSize: 27 }} >
 
                                 <MDBDropdown >
                                     <MDBDropdownToggle nav className='warnanav' >
                                         <FaUserCircle /> hallo, {this.props.username}
                                     </MDBDropdownToggle>
                                     <MDBDropdownMenu className='dropdown1' >
-                                        <MDBDropdownItem href="#!">Action</MDBDropdownItem>
-                                        <MDBDropdownItem href="#!">Another Action</MDBDropdownItem>
-                                        <MDBDropdownItem onClick={this.onLogoutSelect} >Logout</MDBDropdownItem>
-                                        <MDBDropdownItem href="#!">Something else here</MDBDropdownItem>
+                                        <MDBDropdownItem onClick={this.onLogoutSelect} style={{ fontSize: 15}}>Logout</MDBDropdownItem>                                   
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </MDBNavItem>

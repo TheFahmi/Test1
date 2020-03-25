@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { convertToIDR, convertdate } from '../../actions';
 import Pagination from 'react-js-pagination';
 import { APIURL } from '../../supports/APiUrl';
+import {  Modal, ModalBody, ModalFooter, ModalHeader, Button,  } from 'reactstrap';
 // var locales = ['ban', 'id-u-co-pinyin', 'de-ID'];
 // var options = { localeMatcher: 'lookup' };
 // const date = new Intl.DateTimeFormat.supportedLocalesOf(locales, options).join(', ');
@@ -14,6 +15,8 @@ class ListConfirm extends Component {
     state = {   
         listConfirm: [],
         selectedIdEdit: 0,
+        listAlamat: [],
+        isModalDetailOpen: false,
         searchList: [],
                 activePage: 1,
                 itemPerPage: 5
@@ -60,6 +63,76 @@ class ListConfirm extends Component {
         }         
        
             
+    }
+
+    
+
+    userAlamat = () => {
+        for(let i = 0; i < this.state.listConfirm.length; i++) {
+        axios.get(`${APIURL}/confirm/getalamat?username=`+ this.state.listConfirm[i].nama)
+            .then((res) => {
+                // console.log(id);
+                this.setState({listAlamat: res.data, isModalDetailOpen: true })
+                console.log(res.data)
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
+    }
+
+    toogleadd = (id) => {
+        console.log(id)
+        this.setState({ currentId: id, isModalDetailOpen: !this.state.isModalDetailOpen })
+    }
+
+    renderIsiModal = () => {
+        var listJSXDetailAlamat = this.state.listAlamat.map((item,id) => {
+            return(
+
+                <tr key={id}>
+                    {/* <td className="text-center" style={{fontSize: '12px', }}>{}</td> */}
+                    <td style={{ fontSize: '14px', }}>{item.alamat}</td>
+                    <td style={{ fontSize: '14px', }}>{item.phone}</td>
+                </tr>
+            )
+        })
+        return listJSXDetailAlamat;
+    }
+
+    renderAlamatUser = () => {
+        return (
+            <Modal isOpen={this.state.isModalDetailOpen} thistoggle={this.toogleadd} size="lg" style={{ maxWidth: "950px", width: '100%' }}>
+                <ModalHeader toggle={this.toogleadd}>Detail Data</ModalHeader>
+                <ModalBody>
+                    <table align="center" className="col-md-6 table table-striped table-hover border shadow" style={{ width: "900px" }}>
+                        <thead className="thead-light">
+                            <tr className="table table-bordered table-dark text-center text-dark">
+                                {/* <th scope="col" className="font-weight-bold text-uppercase" >Id</th> */}
+                                <th scope="col" className="font-weight-bold text-uppercase" >Alamat</th>
+                                <th scope="col" className="font-weight-bold text-uppercase col-xs-2" >Phone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.renderIsiModal()}
+                        </tbody>
+                    </table>
+                    <br />
+
+                </ModalBody>
+                <ModalFooter>
+                    <div >
+                        {/* <Pagination
+                            activePage={this.state.activePage}
+                            itemsCountPerPage={this.state.itemPerPage}
+                            totalItemsCount={this.state.listOrders.length}
+                            pageRangeDisplayed={5}
+                            onChange={this.handlePageChange.bind(this)}
+                        /> */}
+                    </div>
+                    <Button color="secondary" onClick={this.toogleadd}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+        )
     }
 
     onBtnDeleteClick = (idConfirm) => {
@@ -114,6 +187,7 @@ class ListConfirm extends Component {
                         </select>
                     </td>
                     <td style={{ fontSize: '14px', }}>
+                    
                         <button className="btn btn-success" title="save" style={{borderRadius: '30px', height: '30px', width: '30px'}}
                             onClick={() => this.adminConfirm(item.id)}>
                             <i className="fa fa-save" style={{fontSize: '14px'}}></i>
@@ -142,6 +216,10 @@ class ListConfirm extends Component {
                     <td style={{ fontSize: '14px', }}>{rupiah.format(item.subtotal)}</td>
                     <td style={{ fontSize: '14px', }}>{item.status}</td>
                     <td>
+                    <button className="btn btn-info" style={{ borderRadius: '30px', height: '30px', width: '30px' }} title="see alamat" 
+                        onClick={() => this.userAlamat(item.id)}>
+                        <i className="fa fa-info fa-md" style={{ fontSize: '14px', }}></i>
+                    </button>
                         <button className="btn btn-info" title="confirm" style={{borderRadius: '30px', height: '30px', width: '30px'}}
                             onClick={() => this.setState({ selectedIdEdit: item.id })}>
                             <i className="fa fa-check" style={{fontSize: '14px'}}></i>
@@ -206,6 +284,7 @@ class ListConfirm extends Component {
                                 {this.renderListCategory()}
                             </tbody>
                         </table>
+                        {this.renderAlamatUser()}
                         <div className="mx-auto">
                             <Pagination
                                 activePage={this.state.activePage}
